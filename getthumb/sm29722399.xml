@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29722399</video_id>
+    <title>【 Cover 】 涙の誓い 【 歌手音ピコ 】</title>
+    <description>☆　アクセスありがとうございます！☆　☆　原曲：涙の誓い☆　　　　アリス☆　作詞：谷村新司☆　作曲：谷村新司☆　☆　ハモリでりおんちゃんです♪☆　☆　製作：PressureRain</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29722399</thumbnail_url>
+    <first_retrieve>2016-09-26T12:19:23+09:00</first_retrieve>
+    <length>3:24</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7961193</size_high>
+    <size_low>3661541</size_low>
+    <view_counter>66</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>『涙の誓い』です </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29722399</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+      <tag lock="1">歌手音ピコ</tag>
+      <tag lock="1">兎眠りおん</tag>
+    </tags>
+    <user_id>29880993</user_id>
+    <user_nickname>WXYなあなた</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

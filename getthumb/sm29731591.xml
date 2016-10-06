@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29731591</video_id>
+    <title>【葵コルリ連続音】「Under of Fragments」カバー【UTAU】</title>
+    <description>葵コルリ・オオルリ配布七周年という事で、selePの「Under of Fragments」（sm12667135）をカバーさせていただきました。■コルリはg-3。適宜Hフラグを掛けてあります。■作ったもの→mylist/22909777</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29731591</thumbnail_url>
+    <first_retrieve>2016-09-28T00:27:36+09:00</first_retrieve>
+    <length>5:11</length>
+    <movie_type>mp4</movie_type>
+    <size_high>23185006</size_high>
+    <size_low>14446863</size_low>
+    <view_counter>65</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>コルリさん7周年おめ コルリさん麗しい 1 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29731591</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+      <tag lock="1">鳥コンP</tag>
+      <tag lock="1">葵コルリ</tag>
+      <tag>Under_of_Fragments</tag>
+    </tags>
+    <user_id>17490541</user_id>
+    <user_nickname>T.K</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

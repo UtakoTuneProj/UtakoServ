@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29735225</video_id>
+    <title>週刊UTAUオリジナル曲ランキング＃１８６</title>
+    <description>週刊ＵＴＡＵオリジナル曲ランキング、通称（？）うおらん第１８６回です！【イラスト】Haru.jpg 様【まとめ】ar1111714【うおらんまとめ】mylist/36167297【自作品】mylist/28316602sm29676176 ← 前｜次 → sm29764280</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29735225</thumbnail_url>
+    <first_retrieve>2016-09-28T20:35:15+09:00</first_retrieve>
+    <length>10:00</length>
+    <movie_type>mp4</movie_type>
+    <size_high>76479209</size_high>
+    <size_low>30469107</size_low>
+    <view_counter>181</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>9</mylist_counter>
+    <last_res_body>でかい ありがとございます!! うぽつ うぽつ うぽつ かわいいw好きだなw なにこれ?かわいいw うぽつ～ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29735225</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">UTAUオリジナル曲</tag>
+      <tag lock="1">週刊UTAUオリジナル曲ランキング</tag>
+      <tag lock="1">ニコニコランキング</tag>
+      <tag lock="1">うおらん</tag>
+      <tag>UTAUランキング</tag>
+      <tag>三色あやか</tag>
+    </tags>
+    <user_id>421729</user_id>
+    <user_nickname>みんと屋</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/42/421729.jpg?1379934298</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768998</video_id>
+    <title>Hand in Hand</title>
+    <description>使用楽曲Hand in Hand／kz(livetune) #so26654381https://www.youtube.com/watch?v=RKtoreimcQ8動画撮影yoshihiro Obolensky動画編集Lilith Liaセカンドライフのアバターによるダンス動画ですステージライトはBPMにあわせて作動するスクリプトで制御しています※動画は後撮りしたものです2016年8月28日のショーケースの様子はこちらhttps://youtu.be/qCJ1fzVzGsQ?t=9m27sDough-nut&apos;s Town&apos;s Map #sm29768744Starry Sky  #sm29768958</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29768998</thumbnail_url>
+    <first_retrieve>2016-10-04T00:55:20+09:00</first_retrieve>
+    <length>5:48</length>
+    <movie_type>mp4</movie_type>
+    <size_high>70900592</size_high>
+    <size_low>18435591</size_low>
+    <view_counter>76</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>88888888 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29768998</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">#SecondLife</tag>
+      <tag lock="1">HandinHand</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">踊ってみた</tag>
+    </tags>
+    <user_id>57395038</user_id>
+    <user_nickname>りりす</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/5739/57395038.jpg?1462855324</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

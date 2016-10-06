@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29745477</video_id>
+    <title>夢遊病の四月 / GUMI</title>
+    <description>ちゃちゃちゃちゃ～ん!!ちゃんちゃんちゃんちゃちゃちゃちゃ～ん!! 曲・動画　ガソリンと野望　mylist/48182115 @unkosyugiギター　ふじうめ　mylist/47157357　@fuziume ミックス・マスタリング　過糖　mylist/22144111　@sg_P2P_nico</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29745477</thumbnail_url>
+    <first_retrieve>2016-09-30T19:05:00+09:00</first_retrieve>
+    <length>3:20</length>
+    <movie_type>mp4</movie_type>
+    <size_high>49591337</size_high>
+    <size_low>10263466</size_low>
+    <view_counter>179</view_counter>
+    <comment_num>7</comment_num>
+    <mylist_counter>16</mylist_counter>
+    <last_res_body>これでいい これはいい いい 8888888888888888888 うぽつ 良かったです! うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29745477</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">GUMI</tag>
+      <tag lock="1">GUMIオリジナル曲</tag>
+      <tag>ガソリンと野望</tag>
+      <tag>VOCALOID新曲リンク</tag>
+    </tags>
+    <user_id>45874047</user_id>
+    <user_nickname>ガソリンと野望</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4587/45874047.jpg?1475227459</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

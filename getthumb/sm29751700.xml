@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29751700</video_id>
+    <title>Black Hole (黒イ孔) - LUKA MIX - / feat. 巡音ルカV4X</title>
+    <description>やはりルカさんの声はいいですね。元曲を色々といじりなおしました。今回の絵は上手く描けませんでしたが自前です。IAさんのバージョンとは違う音色のアプローチにしています。</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29751700</thumbnail_url>
+    <first_retrieve>2016-10-01T15:59:28+09:00</first_retrieve>
+    <length>5:17</length>
+    <movie_type>mp4</movie_type>
+    <size_high>41649609</size_high>
+    <size_low>17202174</size_low>
+    <view_counter>184</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>5</mylist_counter>
+    <last_res_body>うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29751700</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">巡音ルカ</tag>
+      <tag lock="1">ルカオリジナル曲</tag>
+      <tag lock="1">ボカロ</tag>
+      <tag lock="1">巡音ルカV4X</tag>
+      <tag lock="1">ボカロオリジナル曲</tag>
+    </tags>
+    <user_id>42312537</user_id>
+    <user_nickname>Kaku S</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4231/42312537.jpg?1410599990</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

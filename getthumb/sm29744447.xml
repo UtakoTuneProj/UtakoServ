@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29744447</video_id>
+    <title>【巡音ルカ】メリークリスマス・ミスター・ローレンス【日本語カバー】</title>
+    <description>どうも、アキノと申します。初投稿です。今度は、坂本龍一さんの傑作をオリジナルとして、宇多田ヒカルさんの名曲《メリークリスマス・ミスター・ローレン ス FYI》をレアレンジして、巡音ルカV4Xで日本語バージョンをやってみました。ようやく出来たので嬉し過ぎます。助けてくれた方々、この動画を見てくれ た皆様、どうもありがとうございました。気に入るならコメントを頂戴できましょうか。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29744447</thumbnail_url>
+    <first_retrieve>2016-09-30T13:39:09+09:00</first_retrieve>
+    <length>3:59</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17308705</size_high>
+    <size_low>10957070</size_low>
+    <view_counter>77</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29744447</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">巡音ルカ</tag>
+      <tag lock="1">VOCALOIDカバー</tag>
+      <tag lock="1">ボカローイド</tag>
+      <tag lock="1">ボーカロイドカバー曲</tag>
+    </tags>
+    <user_id>32416785</user_id>
+    <user_nickname>アキノAKIno</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768114</video_id>
+    <title>【 Cover 】 ムーンライト伝説 【 兎眠りおん 】</title>
+    <description>☆　アクセスありがとうございます！☆　☆　原曲：ムーンライト伝説☆　　　　DALI☆　作詞：小田　佳奈子☆　作曲：小諸　鉄也☆　☆　この歌はたくさんの方がカバーなさっていると思いますが☆　りおんちゃんで聴きたかったんだも～ん(爆)☆　☆　製作：PressureRain</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29768114</thumbnail_url>
+    <first_retrieve>2016-10-03T22:42:21+09:00</first_retrieve>
+    <length>2:51</length>
+    <movie_type>mp4</movie_type>
+    <size_high>6959606</size_high>
+    <size_low>5832848</size_low>
+    <view_counter>31</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>はじめてのカラオケボ 『ムーンライトれじぇ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29768114</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+      <tag lock="1">兎眠りおん</tag>
+      <tag>ムーンライト伝説</tag>
+    </tags>
+    <user_id>29880993</user_id>
+    <user_nickname>WXYなあなた</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

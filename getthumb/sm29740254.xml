@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29740254</video_id>
+    <title>【MEIKO】渡し船【オリジナル】</title>
+    <description>なんか変だな</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29740254</thumbnail_url>
+    <first_retrieve>2016-09-29T19:30:08+09:00</first_retrieve>
+    <length>2:01</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7246674</size_high>
+    <size_low>4662573</size_low>
+    <view_counter>100</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>8888888888888888 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29740254</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">MEIKO</tag>
+      <tag lock="1">オリジナル</tag>
+    </tags>
+    <user_id>33677410</user_id>
+    <user_nickname>zukkoke05</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3367/33677410.jpg?1453063727</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

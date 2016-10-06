@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29757544</video_id>
+    <title>【鏡音リンV4X and act1】君は天然色【カバー】</title>
+    <description>声は鏡音リンV4X　と　act1 リンを使用。（ダブリングしています。滑舌と発音が改善するので）イラストはcarp様 の作品をお借りしました。</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29757544</thumbnail_url>
+    <first_retrieve>2016-10-02T11:12:07+09:00</first_retrieve>
+    <length>5:01</length>
+    <movie_type>mp4</movie_type>
+    <size_high>22274300</size_high>
+    <size_low>10282095</size_low>
+    <view_counter>74</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>これはなつい しっぽw </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29757544</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">鏡音リンV4X</tag>
+      <tag lock="1">鏡音リン</tag>
+      <tag>大滝詠一</tag>
+      <tag>君は天然色</tag>
+      <tag>VOCALOIDカバー曲</tag>
+    </tags>
+    <user_id>1235899</user_id>
+    <user_nickname>真砂</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

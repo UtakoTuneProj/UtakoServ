@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29763580</video_id>
+    <title>【VY2V3cover】夢現亂舞抄-game size-【刀劍亂舞OP】</title>
+    <description>你好，我是AY。這是刀劍亂舞OP樂曲”夢現亂舞抄-game size”VY2V3cover。請多指教。mylist/54406385twitter：YK_AYN</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29763580</thumbnail_url>
+    <first_retrieve>2016-10-03T01:43:29+09:00</first_retrieve>
+    <length>1:39</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12263353</size_high>
+    <size_low>5021509</size_low>
+    <view_counter>540</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>19</mylist_counter>
+    <last_res_body>GJ かっこいいー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29763580</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+      <tag lock="1">VY2</tag>
+      <tag lock="1">VY2V3</tag>
+      <tag lock="1">夢現乱舞抄</tag>
+      <tag>海外PのVOCALOID</tag>
+      <tag>刀剣乱舞</tag>
+    </tags>
+    <user_id>28889475</user_id>
+    <user_nickname>AY</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2888/28889475.jpg?1474548548</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

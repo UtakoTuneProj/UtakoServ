@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749842</video_id>
+    <title>【IA】　恋衣 　【オリジナル曲】</title>
+    <description>イラストからイメージを膨らめて歌を作ろうという　ピアプロコラボ=絵先コラボ　制作の初動画化作品で　恋衣(こいごろも)です。ちょっぴりボーイッシュな声のIAさんに歌ってもらいました。是非聴いてください。作画:エリー作曲:taulin(mylist/23913115)作詞:露口いのり歌唱:IA調声:taulin動画:taulin制作:ピアプロコラボ・絵先コラボ</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29749842</thumbnail_url>
+    <first_retrieve>2016-10-01T07:01:09+09:00</first_retrieve>
+    <length>4:37</length>
+    <movie_type>mp4</movie_type>
+    <size_high>49201475</size_high>
+    <size_low>13909124</size_low>
+    <view_counter>101</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>うぽつ〜 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29749842</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">IA</tag>
+      <tag lock="1">ラブソング</tag>
+      <tag lock="1">バラード</tag>
+      <tag lock="1">IAオリジナル曲</tag>
+      <tag>taulin</tag>
+      <tag>昭和91年</tag>
+    </tags>
+    <user_id>5426116</user_id>
+    <user_nickname>taulin&quot;</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

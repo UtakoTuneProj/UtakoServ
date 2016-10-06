@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29733362</video_id>
+    <title>【ニコカラ】ハロ／ハワユ【on vocal】－6キー</title>
+    <description>本家様　sm11448603お借りした動画　sm11550179欲しいキーがあればコメントにて。＋5キー　sm29733348－5キー　sm29733354</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29733362</thumbnail_url>
+    <first_retrieve>2016-09-28T12:53:10+09:00</first_retrieve>
+    <length>4:49</length>
+    <movie_type>mp4</movie_type>
+    <size_high>50885934</size_high>
+    <size_low>14098000</size_low>
+    <view_counter>89</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>カイトになってる 1!めっちゃいいかんじ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29733362</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">ハロ／ハワユ</tag>
+    </tags>
+    <user_id>60996475</user_id>
+    <user_nickname>(´・ω・`)</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

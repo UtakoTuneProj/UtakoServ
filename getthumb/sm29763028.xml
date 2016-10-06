@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29763028</video_id>
+    <title>脱法ロック【を歌ってみたパン屋】</title>
+    <description>初　投　稿　や　き　た　て　★［最初の人］砂糖［次の人]噛んだ</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29763028</thumbnail_url>
+    <first_retrieve>2016-10-03T00:09:16+09:00</first_retrieve>
+    <length>3:07</length>
+    <movie_type>mp4</movie_type>
+    <size_high>10123153</size_high>
+    <size_low>0</size_low>
+    <view_counter>40</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29763028</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">歌ってみた</tag>
+      <tag lock="1">脱法ロック</tag>
+      <tag lock="1">ＶＯＣＡＬＯＩＤ</tag>
+      <tag lock="1">鏡音レン</tag>
+      <tag lock="1">Ｎｅｒｕ</tag>
+    </tags>
+    <user_id>61830607</user_id>
+    <user_nickname>砂糖</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

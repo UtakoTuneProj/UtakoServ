@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29750210</video_id>
+    <title>【ALYS】 Dans mon Monde 【Original】 (Reprint Youtube)</title>
+    <description>ALYS is the first Franco-Japanese virtual singer. It has been developed by VoxWave. She can be seem as a Vocaloid but i prefer say : Voxloid.More Infos on ALYS (EN): http://en.voxwave.fr/Dans mon monde / In my world was ALYS first song, she was still in beta at that time.</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29750210</thumbnail_url>
+    <first_retrieve>2016-10-01T10:01:04+09:00</first_retrieve>
+    <length>1:46</length>
+    <movie_type>mp4</movie_type>
+    <size_high>8639039</size_high>
+    <size_low>5327344</size_low>
+    <view_counter>49</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29750210</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag>ALYS</tag>
+      <tag>ALYSオリジナル曲</tag>
+    </tags>
+    <user_id>61758246</user_id>
+    <user_nickname>Yoru S Nishiby</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

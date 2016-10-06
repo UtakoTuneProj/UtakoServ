@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29730185</video_id>
+    <title>ミクさんで「花咲く乙女」（サクラ大戦の）</title>
+    <description>20周年と聞いて、久しぶりにやってみたいと思ったのですが･･･DCもPS2もとうの昔に処分してしまいました。オケは本物です。画面はず～っとこのままです。SSFを拝借いたしました。オケにテンポ合わせるのより、SSF動かすのに苦労しました･･･</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29730185</thumbnail_url>
+    <first_retrieve>2016-09-27T21:39:28+09:00</first_retrieve>
+    <length>20:49</length>
+    <movie_type>mp4</movie_type>
+    <size_high>72633607</size_high>
+    <size_low>68174226</size_low>
+    <view_counter>34</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29730185</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>0</embeddable>
+    <no_live_play>1</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">サクラ大戦</tag>
+    </tags>
+    <user_id>15273460</user_id>
+    <user_nickname>902102</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

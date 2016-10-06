@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29747756</video_id>
+    <title>【初音ミク・結月ゆかり】White Rose Re:Rose Ver.【オリジナル曲】</title>
+    <description>「私たちはきっと数奇な運命で出会えたから－」こんにちは海Pです。RWBYのルビーとワイスをテーマに書いた曲をセルフアレンジしました。原曲→sm25468450Music:海P→@umiP2525RWBY非公式キャラソンマイリスト→mylist/49060630普段はここで色々やってます→co1575251Illust:いえすぱ→@mojojoj27827860pixiv/id=11262337</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29747756</thumbnail_url>
+    <first_retrieve>2016-09-30T23:00:00+09:00</first_retrieve>
+    <length>4:10</length>
+    <movie_type>mp4</movie_type>
+    <size_high>66718317</size_high>
+    <size_low>12932595</size_low>
+    <view_counter>238</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>6</mylist_counter>
+    <last_res_body>88888888 うぽつ 良いですね </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29747756</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">海P</tag>
+      <tag lock="1">RWBY</tag>
+      <tag lock="1">RWBY非公式キャラソン</tag>
+      <tag lock="1">Whiterose(海P)</tag>
+      <tag>初音ミク</tag>
+      <tag>結月ゆかり</tag>
+      <tag>セルフカバー</tag>
+      <tag>VOCALOID→VOCALOIDカバー</tag>
+      <tag>VOCALOIDアレンジ曲</tag>
+    </tags>
+    <user_id>25125495</user_id>
+    <user_nickname>海P</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2512/25125495.jpg?1457209855</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

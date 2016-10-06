@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29750814</video_id>
+    <title>【ニコカラ】glow れるりりアレンジVer_(on vocal) 【+２】</title>
+    <description>（on vocal）キー【+２】素敵なご本家様：sm11209477れるりりさんの素敵なアレンジ版：sm17065109（off vocal）【+１】⇒ sm29746131     （on vocal）【+１】⇒ sm29750626（off vocal）【+２】⇒ sm29746219     （on vocal）【+２】⇒ sm29750814</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29750814</thumbnail_url>
+    <first_retrieve>2016-10-01T12:28:35+09:00</first_retrieve>
+    <length>4:25</length>
+    <movie_type>mp4</movie_type>
+    <size_high>21622211</size_high>
+    <size_low>14234586</size_low>
+    <view_counter>23</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>おしゃれかよw </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29750814</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">glow</tag>
+      <tag lock="1">れるりりアレンジVer</tag>
+    </tags>
+    <user_id>26885600</user_id>
+    <user_nickname>マーシャル</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2688/26885600.jpg?1376232670</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

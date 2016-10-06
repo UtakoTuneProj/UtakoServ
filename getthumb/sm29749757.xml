@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749757</video_id>
+    <title>【アレンジカバー】zero【初音ミク】</title>
+    <description>多くのファンに惜しまれつつも解散の運びとなったあの伝説のバンド…ヤーマンバンドの言わずと知れた代表曲。【作詞】シンジco2186618【作曲】すけさん。co2692611</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29749757</thumbnail_url>
+    <first_retrieve>2016-10-01T05:54:04+09:00</first_retrieve>
+    <length>1:48</length>
+    <movie_type>mp4</movie_type>
+    <size_high>4235097</size_high>
+    <size_low>1436897</size_low>
+    <view_counter>85</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29749757</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">シンジ(生放送主)</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">DQX</tag>
+      <tag lock="1">ニコ生</tag>
+      <tag lock="1">DQ10</tag>
+    </tags>
+    <user_id>61779813</user_id>
+    <user_nickname>デモナン＝デティンタ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

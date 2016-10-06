@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29762882</video_id>
+    <title>「黄昏時、無人駅ホームにて」 ょぅ feat.初音ミク</title>
+    <description>“忘れないようにおまじない　君と赤い糸が解けぬように”[音楽]ょぅ　mylist/25222273Twitter：@youyou1231[写真]惺羅＠さんから素敵な写真をお借りしましたhttp://piapro.jp/t/VxbN前作→『藍に染まった』(sm29487532)</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29762882</thumbnail_url>
+    <first_retrieve>2016-10-02T23:52:23+09:00</first_retrieve>
+    <length>4:21</length>
+    <movie_type>mp4</movie_type>
+    <size_high>8064983</size_high>
+    <size_low>5488461</size_low>
+    <view_counter>165</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>14</mylist_counter>
+    <last_res_body>GJです いいね うぽつーです 良いね うぽつです うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29762882</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">ょぅ</tag>
+      <tag>VOCAROCK</tag>
+    </tags>
+    <user_id>3275499</user_id>
+    <user_nickname>ょぅ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/327/3275499.jpg?1345099316</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

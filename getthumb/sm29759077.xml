@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29759077</video_id>
+    <title>【KAITO/FUKASE】I&apos;m Waiting For The Day/THE BEACH BOYS【洋楽カバー】</title>
+    <description>ごらんいただき、ありがとうございます五十周年記念　第五弾です</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29759077</thumbnail_url>
+    <first_retrieve>2016-10-02T16:06:05+09:00</first_retrieve>
+    <length>3:20</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7304629</size_high>
+    <size_low>3171810</size_low>
+    <view_counter>69</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>イヤホンいい おおお この曲昔聞いてた 良かった GJ 二人の声が重なって良 いいね 画像かわいい </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29759077</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">音楽</tag>
+      <tag lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO</tag>
+      <tag>ボカロ洋楽カバー</tag>
+      <tag>VOCALOIDFukase</tag>
+      <tag>Fukase_E</tag>
+      <tag>KAITO_ENGLISH</tag>
+    </tags>
+    <user_id>1212540</user_id>
+    <user_nickname>Redbanke16</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

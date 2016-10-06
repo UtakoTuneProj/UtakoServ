@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29754064</video_id>
+    <title>【ＭＭＤ】　ＧＩＦＴ</title>
+    <description>様々な方からお借りしました。有難うございます。</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29754064</thumbnail_url>
+    <first_retrieve>2016-10-01T23:40:00+09:00</first_retrieve>
+    <length>3:07</length>
+    <movie_type>mp4</movie_type>
+    <size_high>69046480</size_high>
+    <size_low>10192874</size_low>
+    <view_counter>146</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>きれいなモデル いいね～ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29754064</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ＭＭＤ</tag>
+      <tag lock="1">ＧＩＦＴ</tag>
+      <tag lock="1">グミ</tag>
+      <tag lock="1">ＧＵＭＩ</tag>
+      <tag lock="1">ままま式</tag>
+      <tag>MikuMikuDance</tag>
+    </tags>
+    <user_id>26930641</user_id>
+    <user_nickname>GRX130</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

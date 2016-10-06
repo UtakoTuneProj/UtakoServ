@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768597</video_id>
+    <title>【花鶏音ひわ】いいや【UTAUカバー】</title>
+    <description>いいのー！ﾐ`θ´ﾐパワータイプが合う曲かなと思いカバーさせていただきました。花鶏音はかわいいなあ。動画お借りしました原曲【sm29378969】USTお借りしました【sm29588317】マイリスト【mylist/42324560】</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29768597</thumbnail_url>
+    <first_retrieve>2016-10-03T23:45:05+09:00</first_retrieve>
+    <length>3:00</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11704875</size_high>
+    <size_low>9349511</size_low>
+    <view_counter>52</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29768597</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">花鶏音ひわ</tag>
+      <tag lock="1">いいや（DECO*27)</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+      <tag lock="1">UTAUカバー曲</tag>
+    </tags>
+    <user_id>910020</user_id>
+    <user_nickname>アトリ科ヒワ属ゲン</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/91/910020.jpg?1427235425</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29737805</video_id>
+    <title>【風音シロ】　いいや　【UTAUカバー】</title>
+    <description>こんにちは今回はDECO*27様のいいやをカバーさせてもらいました本家様：sm29378969ust:akem様mylist/56012368</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29737805</thumbnail_url>
+    <first_retrieve>2016-09-29T05:08:07+09:00</first_retrieve>
+    <length>2:59</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17055335</size_high>
+    <size_low>7417915</size_low>
+    <view_counter>45</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29737805</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+      <tag lock="1">いいや(DECO*27)</tag>
+      <tag lock="1">風音シロ</tag>
+    </tags>
+    <user_id>9584456</user_id>
+    <user_nickname>シロン</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

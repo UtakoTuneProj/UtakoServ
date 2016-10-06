@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29759996</video_id>
+    <title>【MMD】　夜もすがら君想ふ</title>
+    <description>制作協力ありがとうございました！！</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29759996</thumbnail_url>
+    <first_retrieve>2016-10-02T18:27:31+09:00</first_retrieve>
+    <length>4:01</length>
+    <movie_type>mp4</movie_type>
+    <size_high>89239170</size_high>
+    <size_low>12868618</size_low>
+    <view_counter>93</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29759996</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">夜もすがら君想ふ</tag>
+      <tag lock="1">MMD</tag>
+      <tag lock="1">踊ってみた</tag>
+      <tag lock="1">ボカロ</tag>
+      <tag lock="1">mikumikuDance</tag>
+    </tags>
+    <user_id>39518715</user_id>
+    <user_nickname>まっくす</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3951/39518715.jpg?1475483770</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

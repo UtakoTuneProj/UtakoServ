@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29727584</video_id>
+    <title>【ニコカラ】 trick and treat【off vocal】＋3キー</title>
+    <description>本家様　sm5094908お借りした動画　sm5117837＋3キーです－3キー　sm29727595</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29727584</thumbnail_url>
+    <first_retrieve>2016-09-27T09:43:24+09:00</first_retrieve>
+    <length>3:38</length>
+    <movie_type>mp4</movie_type>
+    <size_high>29857040</size_high>
+    <size_low>11302409</size_low>
+    <view_counter>28</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29727584</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">trick_and_treat</tag>
+      <tag lock="1">OSTERカラオケ動画リンク</tag>
+    </tags>
+    <user_id>60996475</user_id>
+    <user_nickname>(´・ω・`)</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

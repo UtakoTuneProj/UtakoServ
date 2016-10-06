@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29730669</video_id>
+    <title>【波音リツ】いいや【UTAUカバー】</title>
+    <description>本家様　sm29378969お借りしたust　akem様MIX・エンコード　沙癒ボーカル　波音リツ</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29730669</thumbnail_url>
+    <first_retrieve>2016-09-27T22:32:18+09:00</first_retrieve>
+    <length>3:19</length>
+    <movie_type>mp4</movie_type>
+    <size_high>4351047</size_high>
+    <size_low>3251241</size_low>
+    <view_counter>204</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>9</mylist_counter>
+    <last_res_body>かっこいい!! かっこいい うぽつです </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29730669</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">波音リツ</tag>
+      <tag lock="1">いいや</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+      <tag lock="1">いいや（DECO*27）</tag>
+    </tags>
+    <user_id>20118169</user_id>
+    <user_nickname>沙癒</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2011/20118169.jpg?1432256535</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29740809</video_id>
+    <title>【初音ミク】ひとりしりとり【オリジナル曲】</title>
+    <description>■お久しぶりです！右投左打です。素敵な歌詞に出会えたので曲を作らさせていただきました。短めの曲なのでぜひ聞いていってください！■作詞：石幾一人さん（mylist/39933084 twitter→@ishiki_57）■イラスト：紺碧☆さん（http://piapro.jp/trueblood）のものをお借りしました。■うｐ主マイリスト…5曲厳選(mylist/31947934)全曲(mylist/11134750)☆前作→sm21732586☆次作→未定</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29740809</thumbnail_url>
+    <first_retrieve>2016-09-29T21:02:32+09:00</first_retrieve>
+    <length>1:54</length>
+    <movie_type>mp4</movie_type>
+    <size_high>5970371</size_high>
+    <size_low>3809731</size_low>
+    <view_counter>224</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>Gj おわりw うぽつーです すき おひさしぶりです </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29740809</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">右投左打(こっそり○○P)</tag>
+      <tag lock="1">石幾一人</tag>
+      <tag lock="1">紺碧☆</tag>
+    </tags>
+    <user_id>2571884</user_id>
+    <user_nickname>右投左打(こっそり○○P)</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

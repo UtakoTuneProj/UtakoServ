@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29745489</video_id>
+    <title>待ちわびた声【IAオリジナル曲】</title>
+    <description>久しぶりに再会した憧れの人に思いを馳せる歌のような気がします。ボーカル　IATwitter　https://twitter.com/hattomotto 前作　sm28598648その他　mylist/36614227　Youtubeはこちら　https://youtu.be/WcH4uwmvFkY　音源、インスト版等の希望がございましたらTwitterアカウント等に直接お申しつけください。</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29745489</thumbnail_url>
+    <first_retrieve>2016-09-30T17:52:45+09:00</first_retrieve>
+    <length>3:51</length>
+    <movie_type>mp4</movie_type>
+    <size_high>18917173</size_high>
+    <size_low>9293928</size_low>
+    <view_counter>114</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29745489</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">IAオリジナル曲</tag>
+      <tag lock="1">IA_-ARIA_ON_THE_PLANETES-</tag>
+      <tag lock="1">はっともっと</tag>
+      <tag>VOCAROCK</tag>
+      <tag>VOCALOID新曲リンク</tag>
+    </tags>
+    <user_id>20952830</user_id>
+    <user_nickname>はっともっと</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2095/20952830.jpg?1410781502</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

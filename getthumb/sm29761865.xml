@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29761865</video_id>
+    <title>宮城道雄 作曲「遠砧」</title>
+    <description>宮城道雄作曲「遠砧」です。筝本手、筝替手、三絃、尺八から構成される合奏曲です。箏、三絃、唄は DTM による完全デジタル演奏です。歌詞は「信濃路の秋」と題する砧を主題にした和歌三首をならべたものです。砧とは「きぬいた（衣板）」の訳された言葉で、板の上に衣類の布を置いて、木の槌でたたいて柔らかくしたり、滑らかにしたりする道具およびその作業のことです。</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29761865</thumbnail_url>
+    <first_retrieve>2016-10-02T22:02:11+09:00</first_retrieve>
+    <length>10:35</length>
+    <movie_type>mp4</movie_type>
+    <size_high>21669951</size_high>
+    <size_low>0</size_low>
+    <view_counter>30</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>オケ本格的ですね </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29761865</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">演奏してみた</tag>
+      <tag lock="1">VOCALOID</tag>
+      <tag lock="1">宮城道雄</tag>
+      <tag lock="1">箏</tag>
+      <tag lock="1">尺八</tag>
+      <tag lock="1">遠砧</tag>
+      <tag>KAITO</tag>
+      <tag>VOCALOIDカバー曲</tag>
+      <tag>VOCALOID和風曲</tag>
+    </tags>
+    <user_id>3369300</user_id>
+    <user_nickname>八休庵</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

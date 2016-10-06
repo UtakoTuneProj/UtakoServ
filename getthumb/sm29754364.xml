@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29754364</video_id>
+    <title>【初音ミク】「思い出星」</title>
+    <description>イラストはpiaproから飴乃子さんからお借り致しました。</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29754364</thumbnail_url>
+    <first_retrieve>2016-10-01T22:22:17+09:00</first_retrieve>
+    <length>2:44</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12282635</size_high>
+    <size_low>7859613</size_low>
+    <view_counter>167</view_counter>
+    <comment_num>11</comment_num>
+    <mylist_counter>5</mylist_counter>
+    <last_res_body>8888888888888888888 tyore--- いいね! あらら 切なし… うぽつーです gj おもしろい音でした88 gj 草 うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29754364</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">イバケンP</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">飴乃子</tag>
+      <tag lock="1">エレポップ</tag>
+      <tag>ミクオリジナル曲</tag>
+    </tags>
+    <user_id>25469836</user_id>
+    <user_nickname>イバケンP</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2546/25469836.jpg?1341094206</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

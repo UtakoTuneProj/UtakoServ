@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29763801</video_id>
+    <title>【KAITO V3】「夢のドロップ」別Ver.【オリジナル】</title>
+    <description>先に上げた方とは曲が機械的になっていて、歌詞と全く合っていないです。なので、乙女用としては没にしたんですが……こっちの方が不協和音に聞こえない気がしないんですけど……どうかなこれは……。相変わらず、ルカさんいます。毎度恥ずかしくてご報告に行けない……//////イラストをお借りしました。【http://piapro.jp/t/I6hz】</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29763801</thumbnail_url>
+    <first_retrieve>2016-10-03T02:35:03+09:00</first_retrieve>
+    <length>6:29</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11909628</size_high>
+    <size_low>0</size_low>
+    <view_counter>49</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>おつ 期待 声が大きすぎるのかな 曲としてはもう一つの 音が悪いですね; </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29763801</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO</tag>
+      <tag lock="1">オリジナル</tag>
+      <tag lock="1">カイト</tag>
+    </tags>
+    <user_id>58771630</user_id>
+    <user_nickname>Ma.AI</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/5877/58771630.jpg?1469083509</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

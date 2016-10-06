@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29752734</video_id>
+    <title>【初音ミク】おこちゃま戦争【VOCALOIDカバー】</title>
+    <description>Music/Arrange/Mix :ギガ (mylist/7894586)(@GigaMozuku)　　　       Lyric :れをる (mylist/35385156)(@RRReol)　　　       Illust :iXima            Vocal:初音ミク            本家:http://www.nicovideo.jp/watch/sm22349544</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29752734</thumbnail_url>
+    <first_retrieve>2016-10-01T18:51:49+09:00</first_retrieve>
+    <length>3:37</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17299089</size_high>
+    <size_low>6871117</size_low>
+    <view_counter>74</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>うむ!! だぞ 可愛いミクちやん みんなもっとしゃべっ 3コメだと!! 可愛い はつねみくかぁ 1コメげとー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29752734</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+      <tag lock="1">おこちゃま戦争</tag>
+    </tags>
+    <user_id>53482236</user_id>
+    <user_nickname>Future S.</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/5348/53482236.jpg?1474896742</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

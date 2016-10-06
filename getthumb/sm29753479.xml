@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29753479</video_id>
+    <title>【赤咲湊・さとうささら】女ぎつねOnTheRun【CeVIOカバー】</title>
+    <description>ささらさんが耳に息を吹きかけてくれる感じ。マイクに風切音が入りまくりで気持ちよかったけど聞きづらいとか言われるのが関の山なのでMixで音量調整して自重したっぽい</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29753479</thumbnail_url>
+    <first_retrieve>2016-10-01T20:35:32+09:00</first_retrieve>
+    <length>5:54</length>
+    <movie_type>mp4</movie_type>
+    <size_high>8068688</size_high>
+    <size_low>5013602</size_low>
+    <view_counter>75</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>88888888888888888888 うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29753479</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">音楽</tag>
+      <tag lock="1">CeVIO</tag>
+      <tag lock="1">CeVIOカバー曲</tag>
+      <tag lock="1">バービーボーイズ</tag>
+      <tag lock="1">女ぎつね_On_The_Run</tag>
+      <tag lock="1">さとうささら</tag>
+      <tag>赤咲湊</tag>
+      <tag>VOCALOID</tag>
+    </tags>
+    <user_id>14412889</user_id>
+    <user_nickname>czarine001</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1441/14412889.jpg?1448879381</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

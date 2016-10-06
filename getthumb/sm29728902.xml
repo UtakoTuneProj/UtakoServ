@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29728902</video_id>
+    <title>【CeVIO 赤咲湊】 たどりついたらいつも雨ふり / ザ・モップス cover</title>
+    <description>いつも口ずさんでしまいます。今回、伴奏ソフトでのアレンジで。吉田拓郎、氷室京介といろいろ歌ってる人はいますが、個人的には子供バンドの奴が好きかな。</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29728902</thumbnail_url>
+    <first_retrieve>2016-09-27T17:55:02+09:00</first_retrieve>
+    <length>2:59</length>
+    <movie_type>mp4</movie_type>
+    <size_high>8206298</size_high>
+    <size_low>5679661</size_low>
+    <view_counter>99</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>あらきれい いい歌ですね たまにカラオケで歌う </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29728902</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">CeVIO</tag>
+      <tag lock="1">CeVIOカバー曲</tag>
+      <tag lock="1">赤咲湊</tag>
+      <tag lock="1">モップス</tag>
+      <tag>吉田拓郎</tag>
+      <tag>たどりついたらいつも雨ふり</tag>
+      <tag>黄咲愛里</tag>
+      <tag>緑咲香澄</tag>
+      <tag>スナックCeVIO</tag>
+    </tags>
+    <user_id>7256003</user_id>
+    <user_nickname>HAL</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/725/7256003.jpg?1474457860</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

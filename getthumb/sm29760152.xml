@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29760152</video_id>
+    <title>【初音ミク】大切なキミと【オリジナル】</title>
+    <description>ゆたんぽねこです。久しぶりの新曲です。宜しくお願いします。ちょっぴり切ないふたりの物語「大切なキミと」。看護師しながら見てきた風景を歌詞に含んでいるので少しリアルかもしれません</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29760152</thumbnail_url>
+    <first_retrieve>2016-10-02T19:00:08+09:00</first_retrieve>
+    <length>4:33</length>
+    <movie_type>mp4</movie_type>
+    <size_high>13694706</size_high>
+    <size_low>6363235</size_low>
+    <view_counter>241</view_counter>
+    <comment_num>9</comment_num>
+    <mylist_counter>5</mylist_counter>
+    <last_res_body>88888888888888888888 いい曲だ あらいい感じ うぽつー 可愛い 8888888888888888888 かわいい声! うぽつー(๑&amp;gt;◡&amp;lt;๑ うぽつ～ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29760152</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ゆたんぽねこ</tag>
+      <tag>VOCALOID新曲リンク</tag>
+      <tag>ミクオリジナル曲</tag>
+      <tag>あたたまるいいうた</tag>
+    </tags>
+    <user_id>29844601</user_id>
+    <user_nickname>ゆたんぽねこ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2984/29844601.jpg?1406727034</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

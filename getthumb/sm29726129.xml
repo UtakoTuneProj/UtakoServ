@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29726129</video_id>
+    <title>おしえて★ゆかりん！(シリーズ通算)272【クリプトンズ+SSⅧ】</title>
+    <description>こんにちは。鬼畜な天野Pです。シリーズ一覧⇒mylist/54342914メインの活動はトクロP⇒mylist/32277709ボカロPだったりもする⇒mylist/32387463</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29726129</thumbnail_url>
+    <first_retrieve>2016-09-28T19:00:00+09:00</first_retrieve>
+    <length>0:29</length>
+    <movie_type>mp4</movie_type>
+    <size_high>5586426</size_high>
+    <size_low>1461842</size_low>
+    <view_counter>64</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>わんわん うぽつ うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29726129</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">エンターテイメント</tag>
+      <tag lock="1">Voiceroid</tag>
+      <tag lock="1">Vocaloid</tag>
+      <tag lock="1">MikuMikuDance</tag>
+      <tag lock="1">おしえて★ゆかりん！</tag>
+      <tag lock="1">結月ゆかり</tag>
+    </tags>
+    <user_id>18744197</user_id>
+    <user_nickname>天野霧彦(鬼畜な天野P)</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1874/18744197.jpg?1338742367</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29754894</video_id>
+    <title>【VOCALOID Fukase】ほぼ日記 （オリジナル２曲目）</title>
+    <description>オリジナル２曲目です。難産でした・・・ミクとゆかりで悩む心を歌にしました。ていうか、ほぼ日記です。いい加減終わらせて次の曲を始めたくなったので適当な歌詞をつけました。前回は、コード進行・ドラム・ベースが既存曲のパクりでしたが今回は全部自作しました。成長してる、、はず！！ブログで作曲日記つけ始めました。（素人がボカロ買っちゃって何かすいません。http://vocalon.blog.jp/）</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29754894</thumbnail_url>
+    <first_retrieve>2016-10-01T23:38:03+09:00</first_retrieve>
+    <length>1:37</length>
+    <movie_type>mp4</movie_type>
+    <size_high>2911108</size_high>
+    <size_low>1639573</size_low>
+    <view_counter>49</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29754894</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">Fukase</tag>
+      <tag lock="1">VOCALOIDオリジナル曲</tag>
+      <tag lock="1">Fukaseオリジナル曲</tag>
+      <tag lock="1">VOCALOIDFukase</tag>
+    </tags>
+    <user_id>6897962</user_id>
+    <user_nickname>nima</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

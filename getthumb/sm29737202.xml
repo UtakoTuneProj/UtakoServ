@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29737202</video_id>
+    <title>【巡音ルカ】惜別【オリジナル】</title>
+    <description>6曲目の直しですmylist/30062791「落日/反撃」iTunes URL：https://itunes.apple.com/jp/album/id1091410180「篭女/烙印」iTunes URL：https://itunes.apple.com/jp/album/id1154430188</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29737202</thumbnail_url>
+    <first_retrieve>2016-09-29T01:30:06+09:00</first_retrieve>
+    <length>4:20</length>
+    <movie_type>mp4</movie_type>
+    <size_high>8697423</size_high>
+    <size_low>5373240</size_low>
+    <view_counter>78</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29737202</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>1</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">巡音ルカ</tag>
+      <tag lock="1">ルカオリジナル曲</tag>
+      <tag lock="1">VOCAROCK</tag>
+    </tags>
+    <user_id>23005684</user_id>
+    <user_nickname>mino</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29762467</video_id>
+    <title>【オリジナル】ぶっコロ【Rana】</title>
+    <description>お陰さまで第9作目になります。歌はRanaちゃん。画像はルカ姐さんに登場してもらいました。かわいいだけじゃないんだぜ‼というハードボイルドなネコのイメージで歌詞を考えてみました。詞・曲・演奏(ギター・ベース)　　　けにタス(＠sabatorakenchan) 　　　　動画(PSP)　　　　　　　　けにタスよろしくお願いいたします。m(_ _)m</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29762467</thumbnail_url>
+    <first_retrieve>2016-10-02T23:10:33+09:00</first_retrieve>
+    <length>1:35</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7128105</size_high>
+    <size_low>5197609</size_low>
+    <view_counter>51</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29762467</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ボーカロイド</tag>
+      <tag lock="1">vocarock</tag>
+      <tag lock="1">projectdiva</tag>
+      <tag lock="1">Rana</tag>
+      <tag lock="1">巡音ルカ</tag>
+    </tags>
+    <user_id>50397692</user_id>
+    <user_nickname>けにタス@元祖IM系猫◯タル工房</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

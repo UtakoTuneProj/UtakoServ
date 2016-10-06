@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29746295</video_id>
+    <title>【初音ミク】Air War【オリジナル曲】</title>
+    <description>2014年に作り直した曲が発掘されました。MIX比較→sm20641619Twitter：https://twitter.com/fufufuvocaloid投稿したやつ：mylist/24181632前→sm29561274</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29746295</thumbnail_url>
+    <first_retrieve>2016-09-30T19:58:35+09:00</first_retrieve>
+    <length>4:00</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17947248</size_high>
+    <size_low>11753260</size_low>
+    <view_counter>165</view_counter>
+    <comment_num>4</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>ギターかっこいいな Gj うぽつーです うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29746295</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">VOCAROCK</tag>
+      <tag>VOCALOID新曲リンク</tag>
+    </tags>
+    <user_id>4772373</user_id>
+    <user_nickname>フフフ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

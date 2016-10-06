@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29712072</video_id>
+    <title>【オリジナル曲＆アニメ】テクニカルサポート【初音ミク】</title>
+    <description>どうも、ななゆびです１年の修行でちょっとした曲が作れるようになったんですからアニメーションだってがんばれば……（もともと絵師畑の者ですし……）これからもがんばりますコピペ用（使ってください）→（＾ω＾）b ぐっ＜前　sm29725704　｜　mylist/16761521　｜　　次＞</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29712072</thumbnail_url>
+    <first_retrieve>2016-10-01T18:00:00+09:00</first_retrieve>
+    <length>4:40</length>
+    <movie_type>mp4</movie_type>
+    <size_high>56841940</size_high>
+    <size_low>13067563</size_low>
+    <view_counter>137</view_counter>
+    <comment_num>15</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>2007年のWhite LetterのPVを見たとき 使うよ。(^ω^)b ぐっ 素敵だ 歌もPVも輪郭がはっき 歌も いいね! うぽつ 88888888888... </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29712072</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">オリジナル曲</tag>
+      <tag>音楽</tag>
+      <tag>ミクオリジナル曲</tag>
+    </tags>
+    <user_id>1020152</user_id>
+    <user_nickname>7finger</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/102/1020152.jpg?1256810054</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

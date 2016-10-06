@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29757179</video_id>
+    <title>【PDX】ツギハギスタッカート【PS4】</title>
+    <description>録画環境：PS4(1280*720/60FPS)/AverMedia AVT-C875編集環境：Aviutl（1280*720/60fps)PS4版のほうがきれいなのですが、VITA版の淡い霧がかった感じも捨てがたいです。あとピチカート可愛すぎて変身させていません。ごゆるり堪能くださいませ。キュートエリアミク：ピチカートmylist/44130723　　VITA版：sm28639058</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29757179</thumbnail_url>
+    <first_retrieve>2016-10-02T09:47:25+09:00</first_retrieve>
+    <length>3:05</length>
+    <movie_type>mp4</movie_type>
+    <size_high>84064062</size_high>
+    <size_low>10117126</size_low>
+    <view_counter>21</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29757179</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ツギハギスタッカート</tag>
+    </tags>
+    <user_id>1382746</user_id>
+    <user_nickname>たく286</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/138/1382746.jpg?1392556846</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

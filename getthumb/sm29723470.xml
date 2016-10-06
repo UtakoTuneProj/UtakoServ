@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29723470</video_id>
+    <title>自動作曲システムOrpheus 「ぼーか郎アレンジ名曲集」</title>
+    <description>自動作曲システム Orpheusの名曲集です。Orphreusは日本語の歌詞を入力すると、自動作曲して伴奏つきで合成音声で歌うシステムです。条件設定を変えることで、いろいろな作曲結果が得られます。登録すれば誰でも無料で利用できます。http://www.orpheus-music.org/v3/index.php曲はぼーか郎で音源を変えています。また一部改変している曲もあります。http://noike.info/~kenzi/cgi-bin/smf2mp3/01. ポストロック 02. Simple 03. 夜光虫04. でたらめアンビエント Remix05. 月曜日がやってくる06. 白い部屋07. カザグルマ08. オルガンのかけあい 二長調 09. ラテンバイオリズム10. イリテーションの晩秋11. 息抜き12. 木星晴れ上がり13. ORPHESTRA</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29723470</thumbnail_url>
+    <first_retrieve>2016-09-26T17:59:45+09:00</first_retrieve>
+    <length>26:34</length>
+    <movie_type>mp4</movie_type>
+    <size_high>95927429</size_high>
+    <size_low>84331398</size_low>
+    <view_counter>176</view_counter>
+    <comment_num>10</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>うつくC これ一番好き これすき 狙ったかのように好き 出感 なるべく被らないよう 引退しないでクレメン これ好き ええやん! </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29723470</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">Orpheus</tag>
+      <tag lock="1">音楽</tag>
+      <tag lock="1">Orpheusアルバム</tag>
+      <tag lock="1">自動作曲</tag>
+      <tag>Orpheusアレンジ</tag>
+      <tag>作業用BGM</tag>
+    </tags>
+    <user_id>30938086</user_id>
+    <user_nickname>megane</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29745400</video_id>
+    <title>[ヒューズ:IA] ダイバーシティ [オリジナル]</title>
+    <description>45作目ですよろしくお願いします作詞・作曲ヒューズ自己ってものがあまりないと、ときどき苦労する気がします毎週金曜更新予定！ボカロ・作ったもの➡　mylist/54174420Twitterです➡　https://twitter.com/fuse_tone02</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29745400</thumbnail_url>
+    <first_retrieve>2016-09-30T21:00:00+09:00</first_retrieve>
+    <length>3:30</length>
+    <movie_type>mp4</movie_type>
+    <size_high>13802429</size_high>
+    <size_low>5957485</size_low>
+    <view_counter>162</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>6</mylist_counter>
+    <last_res_body>うぽつです ここいいな GJ うぽつん GJ うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29745400</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">IA</tag>
+      <tag lock="1">ヒューズ</tag>
+      <tag lock="1">テクノポップ</tag>
+      <tag lock="1">ボカトロニカ</tag>
+      <tag>VOCALOIDデジタルロック</tag>
+      <tag>ボカロテクノ</tag>
+      <tag>IA_-ARIA_ON_THE_PLANETES-</tag>
+      <tag>IAオリジナル曲</tag>
+    </tags>
+    <user_id>54038238</user_id>
+    <user_nickname>ヒューズ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/5403/54038238.jpg?1474677561</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

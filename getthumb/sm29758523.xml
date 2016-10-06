@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29758523</video_id>
+    <title>【歌わせてみた】 虹を渡ろう (HoneyComing～) 微調整＆画面キャプ 【MIKU V4X】</title>
+    <description>sm29748114 の細かい所を調整してみたので、画面キャプと共にうｐしておこう。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29758523</thumbnail_url>
+    <first_retrieve>2016-10-02T14:33:15+09:00</first_retrieve>
+    <length>3:53</length>
+    <movie_type>mp4</movie_type>
+    <size_high>18441563</size_high>
+    <size_low>12605524</size_low>
+    <view_counter>32</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29758523</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">MIKU_V4X</tag>
+      <tag lock="1">歌わせてみた</tag>
+      <tag lock="1">虹を渡ろう</tag>
+      <tag lock="1">HoneyComing</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+    </tags>
+    <user_id>4369179</user_id>
+    <user_nickname>sugi3nnd</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

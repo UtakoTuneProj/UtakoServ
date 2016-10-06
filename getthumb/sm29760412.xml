@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29760412</video_id>
+    <title>【Cover】魔女っ子メグちゃん【兎眠りおん】</title>
+    <description>☆　アクセスありがとうございます！☆　☆　原曲：魔女っ子メグちゃん☆　　　　前川　陽子☆　作詞：千家　和也☆　作曲：渡辺　岳夫☆　☆　イチコロです！☆　イイナリですっ！！(爆)☆　☆　製作：PressureRain</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29760412</thumbnail_url>
+    <first_retrieve>2016-10-02T19:21:04+09:00</first_retrieve>
+    <length>2:54</length>
+    <movie_type>mp4</movie_type>
+    <size_high>6008004</size_high>
+    <size_low>2883441</size_low>
+    <view_counter>59</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>りおんちゃーんw うぽつ イチコロです!イイナ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29760412</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+      <tag lock="1">兎眠りおん</tag>
+      <tag>魔女っ子メグちゃん</tag>
+    </tags>
+    <user_id>29880993</user_id>
+    <user_nickname>WXYなあなた</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

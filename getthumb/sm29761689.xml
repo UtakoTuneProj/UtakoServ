@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29761689</video_id>
+    <title>【UTAUカバー】独.り.ん.ぼ.エ.ン.ヴ.ィ.ー</title>
+    <description>初投稿ですUTAU自作音源注意素敵な本家様→sm19466301ustお借りしました→sm19581212</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29761689</thumbnail_url>
+    <first_retrieve>2016-10-02T21:53:45+09:00</first_retrieve>
+    <length>3:22</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11574304</size_high>
+    <size_low>9082441</size_low>
+    <view_counter>18</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29761689</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>0</embeddable>
+    <no_live_play>1</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">音楽</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">独りんぼエンヴィー</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>31127366</user_id>
+    <user_nickname>YASU</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

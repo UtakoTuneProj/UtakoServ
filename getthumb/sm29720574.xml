@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29720574</video_id>
+    <title>【初音ミク】白昼シンドローム</title>
+    <description>この曲をアルバムに収録して公開してます http://www.mediafire.com/download/ols8dzjlrfsz03r/%5B_%5D%E3%83%9C%E3%83%BC%E3%82%AB%E3%83%AD%E3%82%A4%E3%83%89%E3%83%AF%E3%83%BC%E3%82%AF%E3%82%B9.zip ■twitter → @miraidempa</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29720574</thumbnail_url>
+    <first_retrieve>2016-09-26T00:06:07+09:00</first_retrieve>
+    <length>2:42</length>
+    <movie_type>mp4</movie_type>
+    <size_high>5444981</size_high>
+    <size_low>0</size_low>
+    <view_counter>149</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>Gj うぽつー Yeaaaaahhhhhhhhh うぽつ まさか鬱木ゆうとさん (◕‿‿◕) </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29720574</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag>ミクオリジナル曲</tag>
+      <tag>VOCAROCK</tag>
+    </tags>
+    <user_id>21694122</user_id>
+    <user_nickname>鬱木ゆうと</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2169/21694122.jpg?1333895717</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29739939</video_id>
+    <title>【飴唄ニト・ニヒト－drop】 思慮するゾンビ 【UTAUカバー/音源配布】</title>
+    <description>祝、飴唄配布開始４周年記念。有り難う御座います。飴唄ニト・ニヒト数年ぶりの新音源「drop」の配布を始めました。いつものふたりより、ちょっとやわらかめで息混じりの、自作録音リストによる単音階単独音です。宜しくお願い致します。例年通り新メンバーもおります：sm29709087音源配布所 :http://nanos.jp/metron/飴唄bot：https://twitter.com/ameuta_botmylist：mylist/33989605お借りしました／動画内敬称略原曲・動画部分：FICUSEL様(sm10955256)ust：Dako/iraunl様※一部歌詞に誤りがありました。申し訳ないです。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29739939</thumbnail_url>
+    <first_retrieve>2016-09-29T21:00:00+09:00</first_retrieve>
+    <length>3:21</length>
+    <movie_type>mp4</movie_type>
+    <size_high>25314359</size_high>
+    <size_low>10444454</size_low>
+    <view_counter>77</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>絵がすごいかわいい </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29739939</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">飴唄ニト</tag>
+      <tag lock="1">飴唄ニヒト</tag>
+      <tag lock="1">UTAU音源配布所リンク</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+      <tag>思慮するゾンビ</tag>
+    </tags>
+    <user_id>29214648</user_id>
+    <user_nickname>大槻メトロ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2921/29214648.jpg?1411961174</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

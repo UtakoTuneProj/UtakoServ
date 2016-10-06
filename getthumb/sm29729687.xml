@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29729687</video_id>
+    <title>【UTAUカバー】愛影 / 闇音レンリ</title>
+    <description>レンリちゃん２周年おめでとう原曲＆イラスト→雨河 雪様【sm24096110】【https://t.co/qjh6o5WN5M】Vocal→闇音レンリ調声・MIX・動画・ust→ほろぞ【mylist/43482247】約一年前の-if-のカバー【sm27412999】</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29729687</thumbnail_url>
+    <first_retrieve>2016-09-28T00:00:00+09:00</first_retrieve>
+    <length>3:30</length>
+    <movie_type>mp4</movie_type>
+    <size_high>13139722</size_high>
+    <size_low>8085947</size_low>
+    <view_counter>83</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>ちょっと前を向けた </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29729687</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">闇音レンリ</tag>
+      <tag lock="1">SetsU</tag>
+      <tag lock="1">愛影</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>38670851</user_id>
+    <user_nickname>ほろぞ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3867/38670851.jpg?1430815323</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

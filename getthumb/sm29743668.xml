@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29743668</video_id>
+    <title>Sweet Cocktail【初音ミクV4XSolidオリジナル曲】</title>
+    <description>■9年経ち、少し大人になった初音ミクの歌をお聴き下さい。■作詞：Tinkerbell　http://piapro.jp/tinkerbell■作曲・編曲：maroki　mylist/8255032■イラスト：かのい　http://piapro.jp/t/M9YC　http://piapro.jp/kanoila■ボーカル調整・動画編集：チョコラテP　mylist/34288159　mylist/27654550</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29743668</thumbnail_url>
+    <first_retrieve>2016-09-30T08:05:26+09:00</first_retrieve>
+    <length>3:20</length>
+    <movie_type>mp4</movie_type>
+    <size_high>15108870</size_high>
+    <size_low>10030554</size_low>
+    <view_counter>283</view_counter>
+    <comment_num>10</comment_num>
+    <mylist_counter>7</mylist_counter>
+    <last_res_body>声自然だなあ 良いと思います GJ! 大人や… うぽつー よかった GJ 聞かせてくれるねえGJ 歌詞がアダルティで音 アップロードするべき </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29743668</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミクV4X</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">Tinkerbell</tag>
+      <tag lock="1">maroki</tag>
+      <tag lock="1">チョコラテP</tag>
+      <tag>かのい</tag>
+      <tag>初音ミク</tag>
+      <tag>初音ミクSolid</tag>
+    </tags>
+    <user_id>637546</user_id>
+    <user_nickname>maroki</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

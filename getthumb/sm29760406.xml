@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29760406</video_id>
+    <title>【音街ウナ/Spicy】シライリス【オリジナル・MV付】</title>
+    <description>すそまろです。初投稿です。花言葉「あなたを大切にします」歌　Spicyちょっとコーラスに参加　Sugar曲　絵　動画　歌詞：すそまろTwitter　http://twitter.com/susomaro</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29760406</thumbnail_url>
+    <first_retrieve>2016-10-02T19:43:27+09:00</first_retrieve>
+    <length>4:00</length>
+    <movie_type>mp4</movie_type>
+    <size_high>89012153</size_high>
+    <size_low>11921028</size_low>
+    <view_counter>126</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>10</mylist_counter>
+    <last_res_body>うぽつです♪ うぽつなのですよO(≧∇ ③ 初投稿おめでとう 初投稿おめ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29760406</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">音街ウナ</tag>
+      <tag lock="1">シライリス</tag>
+      <tag>ウナオリジナル曲</tag>
+      <tag>VOCALOID処女作</tag>
+    </tags>
+    <user_id>48954691</user_id>
+    <user_nickname>すそまろ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4895/48954691.jpg?1466749437</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

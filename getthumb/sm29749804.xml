@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749804</video_id>
+    <title>【初音ミク】ランドマーク【オリジナル】</title>
+    <description>宮殿爆破計画Pです。3作目です。むかし自分の成人式の日に書いた曲です。前作→sm29747538曲：宮殿爆破計画P(twitter→@southparkpip)　　　　　絵：渡 太一さん    piapro→http://piapro.jp/taichi17    pixiv→http://www.pixiv.net/member.php?id=830923</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29749804</thumbnail_url>
+    <first_retrieve>2016-10-01T19:00:00+09:00</first_retrieve>
+    <length>5:26</length>
+    <movie_type>mp4</movie_type>
+    <size_high>100905218</size_high>
+    <size_low>14990774</size_low>
+    <view_counter>103</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>絵いい うぽつ!!! おつ! 素敵 おつー うぽつー この曲好きかも 59分後に見れた </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29749804</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ボカロック</tag>
+      <tag lock="1">ボーカロイド</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag>ミクオリジナル曲</tag>
+    </tags>
+    <user_id>53691392</user_id>
+    <user_nickname>宮殿爆破計画P</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

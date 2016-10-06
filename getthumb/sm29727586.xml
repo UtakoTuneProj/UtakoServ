@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29727586</video_id>
+    <title>【UTAU】雪峰 ～yukimine～【僕音ましまろ】</title>
+    <description>いつもは駅名動画ばかりなのでたまにはカバーを。こういう曲も合いそうだなと思ったのでやってみましたが…初めておまかせに頼らずに(すっぴんプラグイン使って)自家調声したのはいいけれども…うーん…技術…本家様sm5780023ustをお借りしました。https://www.youtube.com/watch?v=2cXGMI4HQy8</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29727586</thumbnail_url>
+    <first_retrieve>2016-09-27T09:48:17+09:00</first_retrieve>
+    <length>4:29</length>
+    <movie_type>mp4</movie_type>
+    <size_high>21560368</size_high>
+    <size_low>14686109</size_low>
+    <view_counter>30</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29727586</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag lock="1">僕音ましまろ</tag>
+      <tag lock="1">雪峰</tag>
+      <tag lock="1">UTAU</tag>
+      <tag>VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>40876022</user_id>
+    <user_nickname>未成線P</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4087/40876022.jpg?1467496837</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

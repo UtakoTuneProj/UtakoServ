@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768760</video_id>
+    <title>【重音テッド】 マエガミスト 【UTAUカバー】</title>
+    <description>MARETU様の「マエガミスト」を重音テッドでカバーさせていただきました。★本家様：「マエガミスト（sm28930143）」カラオケ音源（http://piapro.jp/t/6kCS）★アトリ科ヒワ属のゲン様のust（sm28936202）お借りしています。ありがとうございます。</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29768760</thumbnail_url>
+    <first_retrieve>2016-10-04T00:05:08+09:00</first_retrieve>
+    <length>3:59</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17867626</size_high>
+    <size_low>12523731</size_low>
+    <view_counter>69</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>テッド誕か かっこいいなー かっこいいー おお、かっこいい! イラストいいねえ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29768760</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">重音テッド</tag>
+      <tag lock="1">マエガミスト</tag>
+      <tag>VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>920975</user_id>
+    <user_nickname>(ﾟνﾟ)</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

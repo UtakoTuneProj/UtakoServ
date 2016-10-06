@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29752902</video_id>
+    <title>【初音ミク】ぷりんのおばけがやってくる『ぉりじなるぅ』</title>
+    <description>りんぷーのけーばおーがくるぅう　((((；ﾟДﾟ))))　　　　詞曲絵；斉藤一mylist/36059360      @niconiisaito</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29752902</thumbnail_url>
+    <first_retrieve>2016-10-01T19:28:30+09:00</first_retrieve>
+    <length>2:49</length>
+    <movie_type>mp4</movie_type>
+    <size_high>46190351</size_high>
+    <size_low>8995405</size_low>
+    <view_counter>517</view_counter>
+    <comment_num>19</comment_num>
+    <mylist_counter>20</mylist_counter>
+    <last_res_body>かっこいい 我々日本人はどうして 食い物の恨み...気を この辺たらこキューピ めっさ好き うぽつ... </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29752902</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">VOCALOID新曲リンク</tag>
+      <tag>VOCALOIDプリン曲</tag>
+      <tag>VOCALOID食堂入り</tag>
+      <tag>プリン</tag>
+      <tag>DubSteloid</tag>
+      <tag>VOCALOEDM</tag>
+      <tag>かわいいミクうた</tag>
+    </tags>
+    <user_id>97361</user_id>
+    <user_nickname>斉藤一</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/9/97361.jpg?1471343002</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

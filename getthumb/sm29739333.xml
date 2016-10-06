@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29739333</video_id>
+    <title>【ニコカラ】蜜月アン・ドゥ・トロワ 『off vocal』 +4</title>
+    <description>素敵な本家様　『sm20096569』お借りした動画　『sm20098427』自分用にキーを変えて作らせていただきました。何か問題があれば即時削除いたします</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29739333</thumbnail_url>
+    <first_retrieve>2016-09-29T16:16:06+09:00</first_retrieve>
+    <length>4:16</length>
+    <movie_type>mp4</movie_type>
+    <size_high>16483875</size_high>
+    <size_low>13700620</size_low>
+    <view_counter>37</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29739333</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">蜜月アン・ドゥ・トロワ</tag>
+    </tags>
+    <user_id>41917359</user_id>
+    <user_nickname>たきぃ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4191/41917359.jpg?1450180240</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

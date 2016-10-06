@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29722055</video_id>
+    <title>【初音ミク】Ride_On【オリジナル曲】</title>
+    <description>秋の始まりに、中年男の気持ちをつづった歌。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29722055</thumbnail_url>
+    <first_retrieve>2016-09-26T09:17:03+09:00</first_retrieve>
+    <length>3:47</length>
+    <movie_type>mp4</movie_type>
+    <size_high>10209909</size_high>
+    <size_low>0</size_low>
+    <view_counter>88</view_counter>
+    <comment_num>4</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>歌:初音ミク 作詞作曲:ムート Ride_On うぽつー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29722055</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">秋</tag>
+      <tag lock="1">中年男</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">オリジナル曲</tag>
+      <tag>ミクオリジナル曲</tag>
+    </tags>
+    <user_id>37287121</user_id>
+    <user_nickname>ムート</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

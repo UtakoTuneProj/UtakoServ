@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29752875</video_id>
+    <title>【初音ミク】LOL -lots of laugh- 4画面同時比較動画</title>
+    <description>DIVAにもmiraiにも収録されていたので比較動画作ってみました。既に別の比較動画があればごめんなさい左上：ご本家様（sm8033594）←動画お借りしました左下：Project DIVA X右上：Project mirai でらっくす右下：Project DIVA Arcade本家様の音声が強めに出ているので左耳が少し音量が大きいかもしれません。本家様とmiraiが間奏の歌詞あり。DIVA XとDIVA Arcadeは間奏の歌詞なしです。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29752875</thumbnail_url>
+    <first_retrieve>2016-10-01T19:37:20+09:00</first_retrieve>
+    <length>3:45</length>
+    <movie_type>mp4</movie_type>
+    <size_high>104245563</size_high>
+    <size_low>11972287</size_low>
+    <view_counter>52</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29752875</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">LOL-lots-of-laugh-</tag>
+      <tag lock="1">比較動画</tag>
+    </tags>
+    <user_id>39726508</user_id>
+    <user_nickname>名前はまだ無い</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

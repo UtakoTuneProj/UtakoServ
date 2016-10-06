@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29729282</video_id>
+    <title>【初音ミク】 コンピューターシティ《Perfume》 (初音ミクV4Xカバー）</title>
+    <description>Perfumeの「コンピューターシティ」を初音ミクV4Xでカバーしてみました。</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29729282</thumbnail_url>
+    <first_retrieve>2016-09-27T19:01:14+09:00</first_retrieve>
+    <length>4:43</length>
+    <movie_type>mp4</movie_type>
+    <size_high>15098333</size_high>
+    <size_low>6564155</size_low>
+    <view_counter>131</view_counter>
+    <comment_num>4</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>good! Gj うぽつー 1 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29729282</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">初音ミクV4X</tag>
+      <tag lock="1">ボカロ</tag>
+      <tag lock="1">perfume</tag>
+      <tag>VOCALOIDカバー曲</tag>
+      <tag>音楽</tag>
+      <tag>J-POP</tag>
+      <tag>コンピューターシティ</tag>
+    </tags>
+    <user_id>44111207</user_id>
+    <user_nickname>アルテマ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

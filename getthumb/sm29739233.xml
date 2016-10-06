@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29739233</video_id>
+    <title>【PDA-FT PV】Blackjack（分岐演出OFF）【巡音ルカ：ねこみみパーカー】</title>
+    <description>Project DIVA Arcade FT 「Blackjack」のPV鑑賞モードです。（分岐演出無し・歌詞無し）モジュール：巡音ルカ　ねこみみパーカー動画：1280×720p　60fpsYouTube版：https://youtu.be/URPAdiZhPgwPDA-FT PV動画　　　　　：mylist/47414546PDA-FT PV動画（和服系）：mylist/46443870PDX-HD PV動画　　　　　：mylist/56829047</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29739233</thumbnail_url>
+    <first_retrieve>2016-09-29T15:49:30+09:00</first_retrieve>
+    <length>2:42</length>
+    <movie_type>mp4</movie_type>
+    <size_high>104268067</size_high>
+    <size_low>8874214</size_low>
+    <view_counter>79</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>服かわゆい ルカ最高!!! </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29739233</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">ゲーム</tag>
+      <tag lock="1">ProjectDivaArcade</tag>
+      <tag lock="1">ProjectDIVAArcadePV</tag>
+      <tag lock="1">ProjectDIVAArcade外部出力</tag>
+      <tag lock="1">Blackjack（ゆちゃ）</tag>
+      <tag lock="1">初音ミク-ProjectDIVA-</tag>
+      <tag>巡音ルカモジュール：ねこみみパーカー</tag>
+      <tag>VOCALOID</tag>
+      <tag>巡音ルカ</tag>
+    </tags>
+    <user_id>4094305</user_id>
+    <user_nickname>オーガナ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/409/4094305.jpg?1416753534</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29747422</video_id>
+    <title>Can I Be Free ？【巡音ルカsings】QZ</title>
+    <description>いつか自由になりたいと思っているのに、自由になれないまま過ぎる時間に抗う、そんな詩です。オリジナル曲のアーカイブをルカさんに歌ってもらいリメイクしました。動画は不得手なのでご容赦を。ご参考までに、ボカロ以外はこんな感じです。https://youtu.be/NoIBMWzQZ8w</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29747422</thumbnail_url>
+    <first_retrieve>2016-09-30T22:22:07+09:00</first_retrieve>
+    <length>3:21</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11108616</size_high>
+    <size_low>10769019</size_low>
+    <view_counter>69</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29747422</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">巡音ルカ</tag>
+      <tag lock="1">ボカロ曲</tag>
+      <tag lock="1">オリジナル曲</tag>
+      <tag lock="1">ギターサウンド</tag>
+      <tag lock="1">QZ:typeA</tag>
+    </tags>
+    <user_id>16230000</user_id>
+    <user_nickname>QZ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

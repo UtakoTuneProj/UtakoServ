@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29746556</video_id>
+    <title>【KAITO】hungry【original】</title>
+    <description>少し進歩かな？ ラじゃない。zukkoke05</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29746556</thumbnail_url>
+    <first_retrieve>2016-09-30T20:22:06+09:00</first_retrieve>
+    <length>1:56</length>
+    <movie_type>mp4</movie_type>
+    <size_high>6322356</size_high>
+    <size_low>4424520</size_low>
+    <view_counter>65</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>good いいね かっこよかった kaitoの声が良い感じ 良い感じの緊迫感 かっこいい </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29746556</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO</tag>
+      <tag lock="1">オリジナル</tag>
+    </tags>
+    <user_id>33677410</user_id>
+    <user_nickname>zukkoke05</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3367/33677410.jpg?1453063727</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

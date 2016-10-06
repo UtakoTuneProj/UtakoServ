@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29725770</video_id>
+    <title>【ニコカラ】100×好き 【off vocal】</title>
+    <description>ぺんすて様の「100×好き」のニコカラを作らせて頂きました。不慣れでお見苦しい点ございますがご了承ください。動画は本家様よりお借りしました sm28679277音源はご本人様から何か粗相があればご指摘ください。また、何か問題がありましたらそちらもご指摘ください。削除致します。このニコカラ動画でon vocalなどを投稿するのはお控えください。作ったものリスト→mylist/41233936</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29725770</thumbnail_url>
+    <first_retrieve>2016-09-26T23:13:03+09:00</first_retrieve>
+    <length>2:50</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7084379</size_high>
+    <size_low>6500061</size_low>
+    <view_counter>46</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29725770</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコニコカラオケDB</tag>
+      <tag lock="1">ボカロカラオケDB</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">100×好き</tag>
+      <tag lock="1">ぺんすて</tag>
+    </tags>
+    <user_id>38205889</user_id>
+    <user_nickname>桜哉狐</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3820/38205889.jpg?1474034716</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

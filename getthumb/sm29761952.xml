@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29761952</video_id>
+    <title>【暗鳴ニュイ】Promise【ust配布】</title>
+    <description>Mickeyです!这次让暗鸣唱了kazyuP的Promise谢谢喜欢wwmidi：某只泽mix：我UST:https://bowlroll.net/file/116346</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29761952</thumbnail_url>
+    <first_retrieve>2016-10-02T22:11:19+09:00</first_retrieve>
+    <length>3:59</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12273734</size_high>
+    <size_low>0</size_low>
+    <view_counter>52</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29761952</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">暗鳴ニュイ</tag>
+      <tag lock="1">Promise(kazyuP)</tag>
+      <tag lock="1">ust配布</tag>
+      <tag>VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>42884450</user_id>
+    <user_nickname>Mickey</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4288/42884450.jpg?1424487229</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

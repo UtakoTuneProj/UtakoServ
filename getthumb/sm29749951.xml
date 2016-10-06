@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749951</video_id>
+    <title>ボクっ娘　ver.IA by 藤北漫画制作ｐ</title>
+    <description>二句誤字ｐあの言動も照れ隠し？そんな女の子の曲です。藤漫ｐホームページ：http://hujimanpfmsdnn.wix.com/vocaloidmusic二句誤字ｐオリジナル楽曲：mylist/46363555</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29749951</thumbnail_url>
+    <first_retrieve>2016-10-01T20:00:00+09:00</first_retrieve>
+    <length>2:36</length>
+    <movie_type>mp4</movie_type>
+    <size_high>7250434</size_high>
+    <size_low>6362545</size_low>
+    <view_counter>23</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29749951</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">IA</tag>
+      <tag lock="1">IAオリジナル曲</tag>
+      <tag lock="1">藤漫ｐ</tag>
+      <tag lock="1">二句誤字ｐ</tag>
+      <tag lock="1">藤北奥穂</tag>
+    </tags>
+    <user_id>42237003</user_id>
+    <user_nickname>藤北漫画制作プロジェクト</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4223/42237003.jpg?1431419558</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

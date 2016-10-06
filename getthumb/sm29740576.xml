@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29740576</video_id>
+    <title>この美 最終話ED / ココロ＊パレット 合唱ver.【耳コピ】【重音テト】</title>
+    <description>どむです。midi打ち込みによる耳コピ動画を投稿しています。←20作目「ツンデレも愛してね？」：sm29642298→22作目　まだ。たぶん2016秋アニメの曲。→マイリスト：mylist/47814388(曲について)アニメ「この美術部には問題がある！」の最終話ED曲「ココロ＊パレット 合唱ver.」を耳コピしてMIDI打ち込みしました。後半はおまけとして、UTAUの重音テトと唄音ウタ(デフォ子)に歌わせてみたデュエットアレンジになっています。【Youtube版】https://youtu.be/RLWBGeC5F4k【MIDI編集】MuseScore2.0【音源】FluidR3【再生】MIDITrail【音声編集】SoundEngineFree【おまけの作成】UTAU / RadioLineFree</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29740576</thumbnail_url>
+    <first_retrieve>2016-09-29T20:20:05+09:00</first_retrieve>
+    <length>3:14</length>
+    <movie_type>mp4</movie_type>
+    <size_high>10181078</size_high>
+    <size_low>0</size_low>
+    <view_counter>187</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>スゲー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29740576</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">音楽</tag>
+      <tag lock="1">VOCALOID</tag>
+      <tag lock="1">耳コピ</tag>
+      <tag lock="1">MIDI</tag>
+      <tag lock="1">この美術部には問題がある！</tag>
+      <tag lock="1">重音テト</tag>
+      <tag>デフォ子</tag>
+      <tag>UTAU</tag>
+    </tags>
+    <user_id>34228049</user_id>
+    <user_nickname>どむ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3422/34228049.jpg?1421991010</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

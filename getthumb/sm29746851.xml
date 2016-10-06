@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29746851</video_id>
+    <title>自傷無色　歌いました 【夜癒】</title>
+    <description>誰も僕を望まない 、そんな世界だったらいいのになねこぼーろさんの本家様【sm19870840】まりさんの素敵なPVをお借りしました【sm21661024】歌とMIX 夜癒【mylist/45709768】</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29746851</thumbnail_url>
+    <first_retrieve>2016-09-30T21:06:13+09:00</first_retrieve>
+    <length>3:39</length>
+    <movie_type>mp4</movie_type>
+    <size_high>17891806</size_high>
+    <size_low>11874989</size_low>
+    <view_counter>45</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>うぽつです! うぽつです! うぽつ! </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29746851</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">歌ってみた</tag>
+      <tag lock="1">VOCALOIDオリジナルを歌ってみた</tag>
+      <tag lock="1">自傷無色</tag>
+      <tag lock="1">ねこぼーろ</tag>
+      <tag lock="1">まり</tag>
+      <tag lock="1">夜癒</tag>
+    </tags>
+    <user_id>41827896</user_id>
+    <user_nickname>夜癒-やゆ-</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4182/41827896.jpg?1472994302</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

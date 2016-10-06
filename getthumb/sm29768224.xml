@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768224</video_id>
+    <title>【デレマス】共鳴世界の存在論【VY2カバー】</title>
+    <description>この曲を作った方がボカロPだと知ったので、VOCALOIDカバーしてみました。最後のセリフまで頑張って歌ってるので（VY2が）、ぜひぜひ聴いてください！「共鳴世界の存在論」　／　烏屋茶房マイリスト★mylist/38053388：Twitter@htk_pz</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29768224</thumbnail_url>
+    <first_retrieve>2016-10-03T22:58:55+09:00</first_retrieve>
+    <length>4:19</length>
+    <movie_type>mp4</movie_type>
+    <size_high>6451585</size_high>
+    <size_low>5650752</size_low>
+    <view_counter>52</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>にこめ~ いちこめ~ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29768224</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VY2</tag>
+      <tag lock="1">共鳴世界の存在論</tag>
+      <tag lock="1">二宮飛鳥</tag>
+      <tag>アイドルマスターシンデレラガールズ</tag>
+      <tag>アイドルマスター</tag>
+      <tag>アイドルマスター_シンデレラガールズ</tag>
+    </tags>
+    <user_id>13085647</user_id>
+    <user_nickname>畑中ゆう</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1308/13085647.jpg?1417362010</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

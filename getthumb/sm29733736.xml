@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29733736</video_id>
+    <title>【初音ミク・オリジナル】Good-bye Days（カラオケ）</title>
+    <description>JoySoundさん用　カラオケ</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29733736</thumbnail_url>
+    <first_retrieve>2016-09-28T15:13:23+09:00</first_retrieve>
+    <length>3:41</length>
+    <movie_type>mp4</movie_type>
+    <size_high>10715716</size_high>
+    <size_low>0</size_low>
+    <view_counter>15</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>うぽつー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29733736</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">カラオケ</tag>
+      <tag>カラプロ</tag>
+    </tags>
+    <user_id>9224595</user_id>
+    <user_nickname>fwgn28</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

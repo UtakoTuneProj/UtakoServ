@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29760836</video_id>
+    <title>初音ミク「星の欠片」</title>
+    <description>今回はオーケストラサウンドのロックに挑戦してみました。ぜひ最後の大サビまで聴いてみてください。　　素敵なイラストはenxxxさんからお借りしました → http://piapro.jp/mititaba　　これまでの自作曲一覧はこちら → mylist/41438744　　前作「真夜中のロックンロール」 → sm29672786</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29760836</thumbnail_url>
+    <first_retrieve>2016-10-02T20:14:15+09:00</first_retrieve>
+    <length>4:38</length>
+    <movie_type>mp4</movie_type>
+    <size_high>100497478</size_high>
+    <size_low>14211773</size_low>
+    <view_counter>371</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>10</mylist_counter>
+    <last_res_body>うぽつです。 VOCALOIDらしくていい 良さげ うぽつーです きみにー うぽつです </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29760836</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">kanta</tag>
+      <tag lock="1">VOCAROCK</tag>
+    </tags>
+    <user_id>13600343</user_id>
+    <user_nickname>カンタ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1360/13600343.jpg?1317357213</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>nm29736536</video_id>
+    <title>【焔音レイ】ラピスラズリ/藍井エイル(cover)</title>
+    <description>アルスラーン戦記ED曲</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29736536</thumbnail_url>
+    <first_retrieve>2016-09-28T23:33:37+09:00</first_retrieve>
+    <length>3:57</length>
+    <movie_type>mp4</movie_type>
+    <size_high>15349196</size_high>
+    <size_low>6761875</size_low>
+    <view_counter>51</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>かっすやな </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/nm29736536</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">UTAUカバー曲</tag>
+      <tag lock="1">焔音レイ</tag>
+    </tags>
+    <user_id>1633395</user_id>
+    <user_nickname>ぱるまる</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/163/1633395.jpg?1394722770</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

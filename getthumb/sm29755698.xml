@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29755698</video_id>
+    <title>【ニコカラ】夏の魔法【on_v】</title>
+    <description>*Luna様の「夏の魔法」のニコカラを個人持込用に作成させていただきました。不都合がありましたら削除いたします。---------------------------------本家様 → sm29741205on_v → sm29755698off_v → sm29755713---------------------------------今まで作ったニコカラ → mylist/41629577</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29755698</thumbnail_url>
+    <first_retrieve>2016-10-02T01:16:32+09:00</first_retrieve>
+    <length>3:47</length>
+    <movie_type>mp4</movie_type>
+    <size_high>20726651</size_high>
+    <size_low>11886940</size_low>
+    <view_counter>85</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>9</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29755698</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ボカロカラオケDB</tag>
+      <tag lock="1">ニコニコカラオケDB</tag>
+      <tag lock="1">夏の魔法(*Luna)</tag>
+      <tag lock="1">*Luna</tag>
+    </tags>
+    <user_id>305886</user_id>
+    <user_nickname>すめ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29756113</video_id>
+    <title>【鏡音リン＆レン】Share An Umbrella</title>
+    <description>リンレンのデュエット曲になってます。タイトルは相合傘という意味です。偽りの恋を歌っています。そして三拍子で作ってみました！気に入って頂けると嬉しいです～～＾＾</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29756113</thumbnail_url>
+    <first_retrieve>2016-10-02T02:47:04+09:00</first_retrieve>
+    <length>3:04</length>
+    <movie_type>mp4</movie_type>
+    <size_high>6266613</size_high>
+    <size_low>0</size_low>
+    <view_counter>79</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>GJ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29756113</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">鏡音リン</tag>
+      <tag lock="1">鏡音レン</tag>
+      <tag lock="1">相合傘</tag>
+      <tag lock="1">恋</tag>
+      <tag lock="1">VOCALOID新曲リンク</tag>
+      <tag>鏡音オリジナル曲</tag>
+      <tag>VOCALOID梅雨入り</tag>
+    </tags>
+    <user_id>31074218</user_id>
+    <user_nickname>Cory</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3107/31074218.jpg?1443850386</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

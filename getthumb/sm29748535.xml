@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29748535</video_id>
+    <title>GUMIちゃんにランカちゃんの真似をしてもらった</title>
+    <description>喋ります。トークロイド楽しいうへへぇ</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29748535</thumbnail_url>
+    <first_retrieve>2016-10-01T00:30:16+09:00</first_retrieve>
+    <length>0:46</length>
+    <movie_type>mp4</movie_type>
+    <size_high>3246993</size_high>
+    <size_low>2295962</size_low>
+    <view_counter>79</view_counter>
+    <comment_num>4</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>うぽつ 今後もトークロイド期 このGUMIさん良いなw うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29748535</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">トークロイド</tag>
+      <tag lock="1">GUMI</tag>
+      <tag lock="1">ランカ・リー</tag>
+      <tag lock="1">マクロスF</tag>
+    </tags>
+    <user_id>37407338</user_id>
+    <user_nickname>ツバサ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3740/37407338.jpg?1455096463</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29743201</video_id>
+    <title>【初音ミク】食葬【オリジナル曲】</title>
+    <description>はじめまして！哀号のあ！涙骨のる！火葬のか！あるかだよ！爽やかポップチューンだからお天道様もお元気ベイベーな真夏にあげようと思ったけど初めてのさっきょくですごく時間がかかったよ！聞き苦しいところばっかりだろうから、もっともっと勉強してくるね！食葬　〜うしなはれるひと、あいしたひと〜作詞・作曲　あるか</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29743201</thumbnail_url>
+    <first_retrieve>2016-09-30T04:44:00+09:00</first_retrieve>
+    <length>2:38</length>
+    <movie_type>mp4</movie_type>
+    <size_high>46931968</size_high>
+    <size_low>7410445</size_low>
+    <view_counter>97</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>gj うぽつー 良い </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29743201</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">オリジナル曲</tag>
+      <tag lock="1">爽やかポップチューン</tag>
+      <tag>ミクオリジナル曲</tag>
+    </tags>
+    <user_id>1781267</user_id>
+    <user_nickname>あるか</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

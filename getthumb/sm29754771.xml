@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29754771</video_id>
+    <title>おてぃんてぃんパレード【PV】</title>
+    <description>勢いだけで作ったものにＰＶをつけてみました。※ご自由にお持ち帰り下さい。http://xfs.jp/kv6Df</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29754771</thumbnail_url>
+    <first_retrieve>2016-10-01T23:15:08+09:00</first_retrieve>
+    <length>1:15</length>
+    <movie_type>mp4</movie_type>
+    <size_high>10419387</size_high>
+    <size_low>4068758</size_low>
+    <view_counter>82</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>5</mylist_counter>
+    <last_res_body>謎の声謎の中毒性 シュール </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29754771</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VY1</tag>
+      <tag>おてぃんてぃんパレード</tag>
+    </tags>
+    <user_id>1364465</user_id>
+    <user_nickname>shalo</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/136/1364465.jpg?1396486395</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

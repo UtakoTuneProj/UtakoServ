@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29720649</video_id>
+    <title>【ZOLA YUU】 Space Wind 【オリジナル】</title>
+    <description>前作「MOONLIGHT」のアンサーソングにしてみました。ZOLA体験版使用。mylist/44704564</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29720649</thumbnail_url>
+    <first_retrieve>2016-09-26T00:25:11+09:00</first_retrieve>
+    <length>2:31</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11314645</size_high>
+    <size_low>8142497</size_low>
+    <view_counter>117</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>PV絵師か誰かに書いて GJ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29720649</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ZOLA</tag>
+      <tag lock="1">VOCALOID宇宙派</tag>
+      <tag lock="1">星のうた</tag>
+      <tag lock="1">ふへんてき</tag>
+      <tag>ZOLA_project＿YUU</tag>
+      <tag>YUUオリジナル曲</tag>
+      <tag>ZOLA_project</tag>
+      <tag>ZOLAオリジナル曲</tag>
+    </tags>
+    <user_id>11721672</user_id>
+    <user_nickname>ふへんてき</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1172/11721672.jpg?1397928900</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

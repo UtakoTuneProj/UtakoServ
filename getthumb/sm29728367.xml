@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29728367</video_id>
+    <title>【巡音ルカ GUMI】ハッピーシンセサイザ 【Remix】</title>
+    <description>HISASHIzといいます。思い入れのある曲をリミックスしてみました。　原曲：sm12825985投稿動画：user/10367051　DLリンク：https://soundcloud.com/134z-1/hisashiz-bootleg-remix</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29728367</thumbnail_url>
+    <first_retrieve>2016-09-27T15:22:04+09:00</first_retrieve>
+    <length>4:44</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12172845</size_high>
+    <size_low>7821832</size_low>
+    <view_counter>72</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29728367</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">Hands_Up</tag>
+      <tag lock="1">Handz_Up</tag>
+      <tag lock="1">VOCALOIDアレンジ曲</tag>
+      <tag lock="1">ハッピーシンセサイザ</tag>
+    </tags>
+    <user_id>10367051</user_id>
+    <user_nickname>134</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1036/10367051.jpg?1300024596</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

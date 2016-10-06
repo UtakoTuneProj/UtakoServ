@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29768333</video_id>
+    <title>『ニコカラ』ハナウタ日和 ～掃除、洗濯、家事、ワタシ～ ～off vocal～</title>
+    <description>『ハナウタ日和 ～掃除、洗濯、家事、ワタシ～』Vocal：ココロボMusic/Lyric：40mP様Illustration/Movi：たま様本家様 〔sm29765704〕よろしければご活用くださいヾ(*´∀｀*)ﾉon vocal ⇛ sm29768276今まで作ったニコカラオンボ：mylist/44864569オフボ：mylist/46238331</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29768333</thumbnail_url>
+    <first_retrieve>2016-10-03T23:07:48+09:00</first_retrieve>
+    <length>4:12</length>
+    <movie_type>mp4</movie_type>
+    <size_high>52627569</size_high>
+    <size_low>13362925</size_low>
+    <view_counter>17</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29768333</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ハナウタ日和</tag>
+      <tag lock="1">～掃除、洗濯、家事、ワタシ～</tag>
+      <tag lock="1">ニコカラ</tag>
+    </tags>
+    <user_id>7742121</user_id>
+    <user_nickname>かわたく</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/774/7742121.jpg?1412758923</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

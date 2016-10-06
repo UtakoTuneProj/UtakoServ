@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29729054</video_id>
+    <title>【初音ミク】アメイジング・シー (darkミクVer)【オリジナル歌詞】</title>
+    <description>ご視聴＆コメントありがとうございます♪sm29701739にて「キーを下げてdarkの方が合いそう」との、ご意見をいただいたのでキーを少し下げてdarkなミクさんに歌っていただきました。今回のテーマ：夏、海曲：魔王魂様　grandiflora(原曲名)歌：初音ミクV4X(dark)様歌詞：ルナート(きときと)製作者の皆様に感謝です。</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29729054</thumbnail_url>
+    <first_retrieve>2016-09-27T18:38:23+09:00</first_retrieve>
+    <length>3:26</length>
+    <movie_type>mp4</movie_type>
+    <size_high>4090857</size_high>
+    <size_low>2550118</size_low>
+    <view_counter>44</view_counter>
+    <comment_num>3</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>リクエストに応えて頂 おつー うぽつー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29729054</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+    </tags>
+    <user_id>43550930</user_id>
+    <user_nickname>ルナート</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4355/43550930.jpg?1413130933</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

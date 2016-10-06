@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29739426</video_id>
+    <title>【MEIKO】深海魚【オリジナル】</title>
+    <description>深海へ行ったことは無いが</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29739426</thumbnail_url>
+    <first_retrieve>2016-09-29T16:41:04+09:00</first_retrieve>
+    <length>2:22</length>
+    <movie_type>mp4</movie_type>
+    <size_high>3954410</size_high>
+    <size_low>2842672</size_low>
+    <view_counter>122</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>深海感 「禁断の惑星」の音楽 不思議な感じ なんか気持ち良い すばらしい。最近はこ タイトルとサムネでク GJ うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29739426</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">MEIKO</tag>
+      <tag lock="1">オリジナル</tag>
+      <tag>VOCALOID深海入り</tag>
+      <tag>ボカトロニカ</tag>
+      <tag>ボカンビエント</tag>
+      <tag>VOCALOIDインスト曲</tag>
+    </tags>
+    <user_id>33677410</user_id>
+    <user_nickname>zukkoke05</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3367/33677410.jpg?1453063727</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

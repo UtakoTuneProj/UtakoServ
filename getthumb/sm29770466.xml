@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29770466</video_id>
+    <title>【重音テッド】オドロシライダー【UTAUカバー】</title>
+    <description>去年投稿しようと思ってたけどミックスうまくいかなすぎて挫折してたのをなんとか今年は完成させることができました。よかった。調声頑張りました。■原曲：saiB様 sm17440172■うた：重音テッド(テトg+28くらい)他の→mylist/21955416</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29770466</thumbnail_url>
+    <first_retrieve>2016-10-04T11:36:05+09:00</first_retrieve>
+    <length>3:45</length>
+    <movie_type>mp4</movie_type>
+    <size_high>11558056</size_high>
+    <size_low>0</size_low>
+    <view_counter>14</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29770466</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">オドロシライダー</tag>
+      <tag lock="1">重音テッド</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>1897349</user_id>
+    <user_nickname>ｔｋｍｒ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

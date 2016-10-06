@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29743403</video_id>
+    <title>MMD初心者が動画を投稿するまで:part1</title>
+    <description>part1：HKミク さんが『極楽浄土』を踊るまで。 一応予定を載せときます。part2：テクスチャ改変part3：シェーダー”N2+CShader”を使うpart4：モーションを艶改変する！？最近では露出が少なめになってきたmmd。それはつまり技術がおおよそ確立されて固まってきたということなのでは？？とかなんとか思い、mmdに挑戦することにしてみました。皆様も、今だからこそMMD、ってな感じで挑戦してみてはいかがでしょうか？使用モデル：Tda式初音ミク・アペンドHK Miku</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29743403</thumbnail_url>
+    <first_retrieve>2016-09-30T08:19:06+09:00</first_retrieve>
+    <length>12:37</length>
+    <movie_type>mp4</movie_type>
+    <size_high>41359424</size_high>
+    <size_low>36156288</size_low>
+    <view_counter>222</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>7</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29743403</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">mmd</tag>
+      <tag lock="1">mmd講座</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag>実況MMD講座</tag>
+      <tag>MMD練習場</tag>
+      <tag>MikuMikuDance</tag>
+      <tag>MMDer</tag>
+      <tag>Tda式Appendミク</tag>
+      <tag>極楽浄土</tag>
+    </tags>
+    <user_id>40101214</user_id>
+    <user_nickname>CODE BABA</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4010/40101214.jpg?1439945658</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

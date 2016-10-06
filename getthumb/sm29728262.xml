@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29728262</video_id>
+    <title>【GUMI】　青　【オリジナル】</title>
+    <description>ただのリマスターver.です！ちょっと雑な部分もありますが聞いてもらえれば感謝です！！作詞、作曲　Air251　(mylist/29669653)twitter　https://twitter.com/Air251次曲　未定　前曲　繋ぐ手、繋いだ手　sm28949669</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29728262</thumbnail_url>
+    <first_retrieve>2016-09-27T14:44:09+09:00</first_retrieve>
+    <length>3:50</length>
+    <movie_type>mp4</movie_type>
+    <size_high>9862092</size_high>
+    <size_low>8808094</size_low>
+    <view_counter>97</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29728262</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">GUMI</tag>
+      <tag lock="1">Air251</tag>
+      <tag lock="1">VOCALOID新曲リンク</tag>
+      <tag>GUMIオリジナル曲</tag>
+    </tags>
+    <user_id>12444214</user_id>
+    <user_nickname>Air2.51</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1244/12444214.jpg?1400188158</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

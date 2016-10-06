@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749654</video_id>
+    <title>【KAITO_V3】光よ【カバー】</title>
+    <description>■ダウンロードしてサイト等にアップロード：不可きくお様の「光よ」をカバーさせていただきました。原曲：sm28836303途中、歌詞のタイミングがズレるのは演出です。-お借りしたもの-・ツール窓屋様ありがとうございます。mylist/57042039mylist/57085892ツイッター：https://twitter.com/akira_side1</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29749654</thumbnail_url>
+    <first_retrieve>2016-10-01T05:00:00+09:00</first_retrieve>
+    <length>4:32</length>
+    <movie_type>mp4</movie_type>
+    <size_high>33915331</size_high>
+    <size_low>13070331</size_low>
+    <view_counter>99</view_counter>
+    <comment_num>6</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body>GJ 良かった 不安定な感じするのが 絵もいいなあ いいね この曲好きだからカバ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29749654</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO_V3</tag>
+      <tag lock="1">光よ</tag>
+      <tag lock="1">きくお</tag>
+      <tag lock="1">上級者向けP</tag>
+      <tag lock="1">VOCALOIDカバー曲</tag>
+    </tags>
+    <user_id>61028216</user_id>
+    <user_nickname>上級者向けP</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/6102/61028216.jpg?1474237432</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

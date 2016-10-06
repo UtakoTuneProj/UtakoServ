@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29763840</video_id>
+    <title>【KAITO・鏡音レン】TRY&amp;ERROR【HEY!ボカロ部】</title>
+    <description>ＨＥＹ！ボカロ部３ｒｄシングルです。ＫＡＩＴＯと鏡音レンが歌ってます。ご視聴ありがとうございます！！【ＨＥＹ！ボカロ部部員】よっＰ毛珠こまなゆわＭｅｌａｌｅｕｃａあさみＰ</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29763840</thumbnail_url>
+    <first_retrieve>2016-10-03T02:42:08+09:00</first_retrieve>
+    <length>4:50</length>
+    <movie_type>mp4</movie_type>
+    <size_high>23700425</size_high>
+    <size_low>15316721</size_low>
+    <view_counter>59</view_counter>
+    <comment_num>9</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>gj 勇気とやる気もらえる GJ!!!! 良かった! 良い歌 この二人好き いいね 会話みたいに交互に歌 ww </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29763840</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO</tag>
+      <tag lock="1">鏡音レン</tag>
+    </tags>
+    <user_id>41689832</user_id>
+    <user_nickname>あさみＰ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4168/41689832.jpg?1418475463</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

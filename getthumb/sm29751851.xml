@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29751851</video_id>
+    <title>【鏡音リン・レン】幸福な死を【カバー】</title>
+    <description>うちの鏡音に「幸福な死を」を歌ってもらいました。ボカロなのにUSTの表記があるのはいつもUSTを参考にしながら書き写したりしてるからです。</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29751851</thumbnail_url>
+    <first_retrieve>2016-10-01T16:30:14+09:00</first_retrieve>
+    <length>4:48</length>
+    <movie_type>mp4</movie_type>
+    <size_high>21457343</size_high>
+    <size_low>15505068</size_low>
+    <view_counter>46</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29751851</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">鏡音リン</tag>
+      <tag lock="1">鏡音レン</tag>
+      <tag lock="1">幸福な死を</tag>
+      <tag lock="1">VOCALOIDカバー</tag>
+      <tag lock="1">鏡音リン・レン</tag>
+      <tag>VOCALOID→VOCALOIDカバー</tag>
+    </tags>
+    <user_id>34905175</user_id>
+    <user_nickname>レプリカ</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

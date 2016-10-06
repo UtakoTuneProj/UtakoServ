@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29764102</video_id>
+    <title>Vocaloid - Start</title>
+    <description>Vocaloid musicアニメ初音ミク</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29764102</thumbnail_url>
+    <first_retrieve>2016-10-03T04:23:03+09:00</first_retrieve>
+    <length>0:35</length>
+    <movie_type>mp4</movie_type>
+    <size_high>2520104</size_high>
+    <size_low>1932649</size_low>
+    <view_counter>36</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>ん? うぽつー </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29764102</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+    </tags>
+    <user_id>25487894</user_id>
+    <user_nickname>かわいずみ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2548/25487894.jpg?1463808014</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

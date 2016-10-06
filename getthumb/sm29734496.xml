@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29734496</video_id>
+    <title>【GUMI ・ 初音ミク】 金欠ガール(ゝω・)v 【オリジナル曲】</title>
+    <description>HISAです。4作目になります。世の中お金じゃないでしょ？(ゝω・)vMusic:HISA　@g_fatly23(Twitter)Illustration久遠 @Nmgtsd_ES(Twitter)もぐまる @moguzonesu(Twitter)もみじ suzutaro(ピアプロ)</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29734496</thumbnail_url>
+    <first_retrieve>2016-09-28T21:00:00+09:00</first_retrieve>
+    <length>4:30</length>
+    <movie_type>mp4</movie_type>
+    <size_high>39588103</size_high>
+    <size_low>11914834</size_low>
+    <view_counter>208</view_counter>
+    <comment_num>7</comment_num>
+    <mylist_counter>7</mylist_counter>
+    <last_res_body>いいね おーえいぇー うぽつ!! ひささん?????? 1げつ! </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29734496</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">GUMI</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ボカロオリジナル曲</tag>
+      <tag>GUMIオリジナル曲</tag>
+      <tag>ミクオリジナル曲</tag>
+      <tag>HISA</tag>
+      <tag>久遠</tag>
+      <tag>もぐまる</tag>
+      <tag>もみじ</tag>
+    </tags>
+    <user_id>29458168</user_id>
+    <user_nickname>HISA</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

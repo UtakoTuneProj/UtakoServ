@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29760037</video_id>
+    <title>週刊ボーカロイドTOP30 2016年09月4号(#469)</title>
+    <description>規則:ar741025集計期間:9月19日5時～9月26日5時プレイリスト：mylist/57166941/*  */今月号：sm29592532前号：sm29698320｜次号：月刊ボーカロイドTOP30：mylist/10583525</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29760037</thumbnail_url>
+    <first_retrieve>2016-10-02T18:38:01+09:00</first_retrieve>
+    <length>14:45</length>
+    <movie_type>mp4</movie_type>
+    <size_high>84198676</size_high>
+    <size_low>42210548</size_low>
+    <view_counter>126</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>ドーナツライン うぽつ うぽつー うぽつ うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29760037</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">VOCALOIDランキング</tag>
+      <tag lock="1">月刊ボーカロイドTOP30</tag>
+      <tag lock="1">週刊ボーカロイドTOP30</tag>
+    </tags>
+    <user_id>557100</user_id>
+    <user_nickname>iori</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29766970</video_id>
+    <title>薙ぎ払いビーム素材を公開したのでダヨさん撃って（二連装）</title>
+    <description>こっちのほうがわかりやすいな青いビーム→nc145079色が白くてFHD版ビーム→nc145129</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29766970</thumbnail_url>
+    <first_retrieve>2016-10-03T20:17:04+09:00</first_retrieve>
+    <length>0:07</length>
+    <movie_type>mp4</movie_type>
+    <size_high>2102890</size_high>
+    <size_low>335399</size_low>
+    <view_counter>34</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29766970</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ミクダヨー</tag>
+      <tag lock="1">ビーム</tag>
+      <tag lock="1">エフェクト</tag>
+      <tag lock="1">素材サンプル</tag>
+    </tags>
+    <user_id>30337032</user_id>
+    <user_nickname>エキストリーム納豆</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3033/30337032.jpg?1378899248</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

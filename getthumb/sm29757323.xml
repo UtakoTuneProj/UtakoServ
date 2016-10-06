@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29757323</video_id>
+    <title>【初音ミク】Motor Lover Choice【バイクの歌】</title>
+    <description>バイクの歌です。ライダーに恋した普通の女の子のお話です。作詞作曲イラスト動画：LOOPDEPT★☆★LOOPDEPT楽曲マイリスト★☆★　http://www.nicovideo.jp/mylist/45743399</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29757323</thumbnail_url>
+    <first_retrieve>2016-10-02T10:19:10+09:00</first_retrieve>
+    <length>4:26</length>
+    <movie_type>mp4</movie_type>
+    <size_high>19855057</size_high>
+    <size_low>13332891</size_low>
+    <view_counter>282</view_counter>
+    <comment_num>10</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>作詞作曲イラスト動画 Motor Lover Choice 歌:初音ミク おつおつ! 888888 おつおつ うぽつー ミドリw gjjj ミクさん、バイク乗る </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29757323</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">バイク</tag>
+      <tag lock="1">ドット絵</tag>
+      <tag>VOCALOIDドライブソング</tag>
+    </tags>
+    <user_id>36518999</user_id>
+    <user_nickname>LOOPDEPT</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3651/36518999.jpg?1427770425</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

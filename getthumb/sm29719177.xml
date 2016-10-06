@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29719177</video_id>
+    <title>【一番だけ歌ってみた】 　妄想税　 【Ray】</title>
+    <description>DECO*27 様の 妄想税 を歌わせていただきました!! とても素敵な本家様：sm21764582● MIX：にゃるた様：(mylist/56448216)(twitter:@aririn125)◆vocal・Ray 【@Ray_KK_】歌ったもの・mylist/55775017</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29719177</thumbnail_url>
+    <first_retrieve>2016-09-28T20:00:00+09:00</first_retrieve>
+    <length>1:16</length>
+    <movie_type>mp4</movie_type>
+    <size_high>16906774</size_high>
+    <size_low>4071681</size_low>
+    <view_counter>27</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body>ボカロが歌っていない </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29719177</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">歌ってみた</tag>
+      <tag lock="1">にゃるた様</tag>
+      <tag lock="1">妄想税</tag>
+      <tag lock="1">VOCALOID</tag>
+    </tags>
+    <user_id>40046021</user_id>
+    <user_nickname>Ray</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4004/40046021.jpg?1471535933</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

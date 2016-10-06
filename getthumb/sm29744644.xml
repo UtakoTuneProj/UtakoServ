@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29744644</video_id>
+    <title>[ウナオリジナル曲] あやかしDays [シカクドット]</title>
+    <description>明日もいい日になりますように■ねこむすめ道草日記な曲です■詞・曲・絵シカクドット(@Shikaku_dot / mylist/21927366)</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29744644</thumbnail_url>
+    <first_retrieve>2016-09-30T17:00:00+09:00</first_retrieve>
+    <length>4:36</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12386861</size_high>
+    <size_low>4534560</size_low>
+    <view_counter>1420</view_counter>
+    <comment_num>37</comment_num>
+    <mylist_counter>65</mylist_counter>
+    <last_res_body>『なんだって1』＼(^o 『なんだって1』＼(^o 『こうやって』＼(^o^ 『こうやって』＼(^o^ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29744644</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag>音街ウナ</tag>
+      <tag>ウナオリジナル曲</tag>
+      <tag>シカクドット</tag>
+      <tag>VOCALOID新曲リンク</tag>
+      <tag>ねこむすめ道草日記</tag>
+      <tag>VOCALOID和風曲</tag>
+      <tag>良曲</tag>
+    </tags>
+    <user_id>361781</user_id>
+    <user_nickname>シカクドット</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/36/361781.jpg?1449072360</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29726065</video_id>
+    <title>【MMD】hzeo式KAITOでロストワン</title>
+    <description>ロストワンのモーション、カバー音源をお借りしてKAITOで作成しました。男性モデルで動画を作るのはソロでは初めてです(￣▽￣;)(以前アヤトとトーカでも作成してましたｗ)素敵なカバーをお借りしてますがtwitterなどの連絡先がなかったのでここでお礼させていただきます。ありがとうございますm(._.)m</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29726065</thumbnail_url>
+    <first_retrieve>2016-09-27T00:06:15+09:00</first_retrieve>
+    <length>3:43</length>
+    <movie_type>mp4</movie_type>
+    <size_high>76498257</size_high>
+    <size_low>12123453</size_low>
+    <view_counter>93</view_counter>
+    <comment_num>9</comment_num>
+    <mylist_counter>6</mylist_counter>
+    <last_res_body>うぽつ～ GJGJGJ !! おつです かっこよかった! コートやマフラーがダ 光加減が綺麗 かっこいい うぽつ! うぽつー! </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29726065</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">KAITO</tag>
+      <tag lock="1">MMD</tag>
+      <tag>KAITO_V3</tag>
+    </tags>
+    <user_id>15683207</user_id>
+    <user_nickname>来流</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1568/15683207.jpg?1446292710</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

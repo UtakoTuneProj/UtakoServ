@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29756820</video_id>
+    <title>ボーカロイド新着ダイジェスト／2016年10月01日</title>
+    <description>この日の新着ボーカロイド楽曲を聞きたい方用。人の褌で相撲をとってすみませんm(_ _)m他の日→mylist/47650787【ボカロＰの皆様へ】マイリストにコメントした再生ＵＲＬをご利用ください。お借りした動画→mylist/53255995背景→sm25283820コメント半角「n」で次曲へスキップコメント「本家」ｏｒボタンで本家動画を別窓で開く</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29756820</thumbnail_url>
+    <first_retrieve>2016-10-02T07:46:14+09:00</first_retrieve>
+    <length>34:20</length>
+    <movie_type>mp4</movie_type>
+    <size_high>89406504</size_high>
+    <size_low>80585021</size_low>
+    <view_counter>79</view_counter>
+    <comment_num>103</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body>http://nico.ms/sm297 http://nico.ms/sm297 http://nico.ms/sm297 http://nico.ms/sm297 http://nico.ms/sm297 </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29756820</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ダイジェスト</tag>
+      <tag lock="1">ボカロ動画紹介動画</tag>
+      <tag lock="1">動画紹介動画</tag>
+    </tags>
+    <user_id>1984695</user_id>
+    <user_nickname>あなたの天然記念物</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/198/1984695.jpg?1451786562</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

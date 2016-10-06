@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29746426</video_id>
+    <title>【Project DIVA FT PV】ワールドイズマイン・別モジュール【最後の感謝祭】</title>
+    <description>Project DIVA FTには最後の感謝祭で使用された曲がほぼ収録されてるので該当曲の音声を差し替えてみました。この動画はFTの追加コンテンツで追加されたモジュール「シュープリーム」版です。なのでこっちを正としようかと。従来のモジュール「ノーブル」版→sm29407195Project DIVA FT PV × 最後の感謝祭 → mylist/56622731</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29746426</thumbnail_url>
+    <first_retrieve>2016-10-02T03:09:00+09:00</first_retrieve>
+    <length>2:52</length>
+    <movie_type>mp4</movie_type>
+    <size_high>104100342</size_high>
+    <size_low>9493023</size_low>
+    <view_counter>29</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29746426</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク-ProjectDIVA-FT</tag>
+      <tag lock="1">初音ミク</tag>
+    </tags>
+    <user_id>13211492</user_id>
+    <user_nickname>EBD</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

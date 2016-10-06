@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29728561</video_id>
+    <title>【初音ミク】怪盗★東京キャット【オリジナル曲】</title>
+    <description>歌・初音ミク絵・パラノイア様楽曲・ScRewDrive（侍JP）お聴きいただきありがとうございます。オリジナル楽曲、ボカロオリジナル曲のリストはこちらです↓http://www.nicovideo.jp/my/mylist/#/57004747「VOCALOID Songs Vol.１　２０１６年１０月１５日　iTunes Storeで配信決定いたしました。ニコニココミュニティーhttp://com.nicovideo.jp/community/co3282946公式YouTubeチャンネル（ぜひ登録をお願いします！）https://www.youtube.com/channel/UC3pLx3bAdu0JWA0_T0xXZzQディスコグラフィhttp://www.tunecore.co.jp/artist/screwdrive公式サイトhttp://www.screwdrivejp.com日本最大のインディーズサイト　muziehttp://www.muzie.ne.jp/artist/r006508/ストリーミングhttps://soundcloud.com/screwdrive</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29728561</thumbnail_url>
+    <first_retrieve>2016-09-27T16:21:06+09:00</first_retrieve>
+    <length>4:29</length>
+    <movie_type>mp4</movie_type>
+    <size_high>21249557</size_high>
+    <size_low>14268136</size_low>
+    <view_counter>253</view_counter>
+    <comment_num>8</comment_num>
+    <mylist_counter>6</mylist_counter>
+    <last_res_body>Gj うぽつー ←ボカロ曲をNNIにアッ komy u ←?東京猫って何 888888888 東京猫の歌? </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29728561</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ボーカロイド</tag>
+      <tag lock="1">ボカロ</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">VOCALOID新曲リンク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">ボカロP</tag>
+    </tags>
+    <user_id>49754148</user_id>
+    <user_nickname>ScRewDrive（侍JP）</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/4975/49754148.jpg?1475461934</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

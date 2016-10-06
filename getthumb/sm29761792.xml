@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29761792</video_id>
+    <title>【ニコカラ】ストレルカ【off vocalコーラスなし】</title>
+    <description>ジグさまのストレルカのニコカラを作らせて頂きました。練習用に使ってください。素敵な本家様【sm29746920】on vocal【sm29757398】off vocal コーラス有り【sm29762168】#032「なんだか死ぬ前みたい」□ music, movie : ジグ様mylist/44932933 / @zig_zag_727□ mastering : さぶろう様mylist/53644148 / @saburousan3263□ illustration : 秋月アキラ様mylist/53587202 / @akira_akidsukiお借りしたlyrics, off vocal, movie : http://xfs.jp/Fkhyz</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29761792</thumbnail_url>
+    <first_retrieve>2016-10-02T22:00:00+09:00</first_retrieve>
+    <length>3:54</length>
+    <movie_type>mp4</movie_type>
+    <size_high>5611084</size_high>
+    <size_low>4784240</size_low>
+    <view_counter>24</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29761792</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコニコカラオケDB</tag>
+      <tag lock="1">ボカロカラオケDB</tag>
+      <tag lock="1">ストレルカ</tag>
+    </tags>
+    <user_id>22757504</user_id>
+    <user_nickname>しープ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/2275/22757504.jpg?1451799572</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

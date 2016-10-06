@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29753557</video_id>
+    <title>【PDFT】ペリコスペースシッパー【PS4】</title>
+    <description>録画環境：PS4(1280*720/60FPS)/AverMedia AVT-C875編集環境：Aviutl（1280*720/60fps)かわいい曲ですね。衣装：フォニュエールスタイルmylist/44130723</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29753557</thumbnail_url>
+    <first_retrieve>2016-10-01T20:44:22+09:00</first_retrieve>
+    <length>2:47</length>
+    <movie_type>mp4</movie_type>
+    <size_high>104353280</size_high>
+    <size_low>9070367</size_low>
+    <view_counter>11</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29753557</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ペリコスペースシッパー</tag>
+    </tags>
+    <user_id>1382746</user_id>
+    <user_nickname>たく286</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/138/1382746.jpg?1392556846</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

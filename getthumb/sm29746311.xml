@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29746311</video_id>
+    <title>皆でシティライツ！</title>
+    <description>シティライツ簡易PV構築キットが凄いのでPV作ってみた(´ω`)ちょっと違和感がある部分があると思いますが、このまま投稿します(´ω`)みんな可愛いです(´ω`)okattiさん広告ありがとうございました(´ω`)</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29746311</thumbnail_url>
+    <first_retrieve>2016-09-30T19:55:28+09:00</first_retrieve>
+    <length>2:46</length>
+    <movie_type>mp4</movie_type>
+    <size_high>26576908</size_high>
+    <size_low>8903227</size_low>
+    <view_counter>145</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>3</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29746311</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">MMD</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">MMD-PV</tag>
+      <tag lock="1">シティライツ</tag>
+    </tags>
+    <user_id>31623204</user_id>
+    <user_nickname>mane</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/3162/31623204.jpg?1446484901</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

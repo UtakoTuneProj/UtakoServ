@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29749749</video_id>
+    <title>【ニコカラ】リバーシブル・キャンペーン －2キー【off vocal】</title>
+    <description>本家様→sm29654974お借りした動画→sm29660258</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29749749</thumbnail_url>
+    <first_retrieve>2016-10-01T05:49:06+09:00</first_retrieve>
+    <length>2:52</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12870543</size_high>
+    <size_low>9358242</size_low>
+    <view_counter>98</view_counter>
+    <comment_num>1</comment_num>
+    <mylist_counter>5</mylist_counter>
+    <last_res_body>キーちょうどいい </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29749749</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ニコカラ</tag>
+    </tags>
+    <user_id>51721918</user_id>
+    <user_nickname>彩咲 れの</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/5172/51721918.jpg?1464613032</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

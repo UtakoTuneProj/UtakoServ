@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29759328</video_id>
+    <title>KAITOのつぶやき(つぶやき&apos;16.No.18)</title>
+    <description>皆さんはちゃんと防犯気を付けてますか？twitter→@whispermovie　先週→sm29720835　 mylist/56029654</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29759328</thumbnail_url>
+    <first_retrieve>2016-10-02T16:49:23+09:00</first_retrieve>
+    <length>0:09</length>
+    <movie_type>mp4</movie_type>
+    <size_high>282238</size_high>
+    <size_low>154914</size_low>
+    <view_counter>47</view_counter>
+    <comment_num>5</comment_num>
+    <mylist_counter>2</mylist_counter>
+    <last_res_body>おつ とりあえずバックに入 必要な時に探さなくち それな うぽつ </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29759328</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">トークロイド</tag>
+      <tag lock="1">KAITO</tag>
+      <tag>つぶやきP</tag>
+    </tags>
+    <user_id>55974131</user_id>
+    <user_nickname>ぴの</user_nickname>
+    <user_icon_url>http://res.nimg.jp/img/user/thumb/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

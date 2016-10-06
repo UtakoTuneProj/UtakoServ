@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29741759</video_id>
+    <title>【歌愛ユキ】背伸びをして Follow You【魔法使いTai!】</title>
+    <description>(２０１６-９-２９修正しました)VOCALOIDカバー曲：『魔法使いTai!』主題歌オープニングテーマ「背伸びをして Follow You」</description>
+    <thumbnail_url>http://tn-skr4.smilevideo.jp/smile?i=29741759</thumbnail_url>
+    <first_retrieve>2016-09-29T22:58:14+09:00</first_retrieve>
+    <length>4:28</length>
+    <movie_type>mp4</movie_type>
+    <size_high>72834404</size_high>
+    <size_low>14525769</size_low>
+    <view_counter>120</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29741759</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">歌愛ユキ</tag>
+      <tag lock="1">背伸びをしてFollowYou</tag>
+      <tag lock="1">魔法使いTai!</tag>
+      <tag lock="1">まほTai!</tag>
+      <tag>VOCALOIDカバー曲</tag>
+      <tag>ダンス</tag>
+      <tag>PV</tag>
+      <tag>カワイイは正義</tag>
+      <tag>パンツの見えるゲーム</tag>
+    </tags>
+    <user_id>8781473</user_id>
+    <user_nickname>YU☆KI</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/878/8781473.jpg?1474063320</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29748194</video_id>
+    <title>【雨歌エル】自傷無色【UTAUカバー】</title>
+    <description>こんな僕なら。習作です。□本家様→ねこぼーろ様【sm19870840】□ベタ打ちustお借りしました→ハピマスP様【sm19942567】□動画のサイズ間違えました（照）</description>
+    <thumbnail_url>http://tn-skr3.smilevideo.jp/smile?i=29748194</thumbnail_url>
+    <first_retrieve>2016-10-01T00:01:12+09:00</first_retrieve>
+    <length>3:39</length>
+    <movie_type>mp4</movie_type>
+    <size_high>12029004</size_high>
+    <size_low>11534003</size_low>
+    <view_counter>48</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>0</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29748194</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">音楽</tag>
+      <tag lock="1">UTAU</tag>
+      <tag lock="1">雨歌エル</tag>
+      <tag lock="1">自傷無色</tag>
+      <tag lock="1">VOCALOID→UTAUカバー曲</tag>
+    </tags>
+    <user_id>60214020</user_id>
+    <user_nickname>しぐ</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/6021/60214020.jpg?1475248662</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

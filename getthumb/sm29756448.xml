@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29756448</video_id>
+    <title>[UTAU]ロストワンの号哭sat1080 - 虎音スピーディ</title>
+    <description>This is Speedy Torane STuDio, a new bank with 8 pitches. Enjoy this cover!To download the VoiceBank, go here -&gt; https://mega.nz/#!CVVnib7S!rfyk5Trfq7q1rWviEXrqCYkd2fEoHdVGyQe82pGrr2YGoogle Translate:これは虎音スピーディSTuDio, 8ピッチの声. このミュージカルカバーを楽しみます!虎音スピーディSTuDioダウンロード -&gt; https://mega.nz/#!CVVnib7S!rfyk5Trfq7q1rWviEXrqCYkd2fEoHdVGyQe82pGrr2Y</description>
+    <thumbnail_url>http://tn-skr1.smilevideo.jp/smile?i=29756448</thumbnail_url>
+    <first_retrieve>2016-10-02T04:35:33+09:00</first_retrieve>
+    <length>4:21</length>
+    <movie_type>mp4</movie_type>
+    <size_high>13655364</size_high>
+    <size_low>0</size_low>
+    <view_counter>47</view_counter>
+    <comment_num>0</comment_num>
+    <mylist_counter>1</mylist_counter>
+    <last_res_body />
+    <watch_url>http://www.nicovideo.jp/watch/sm29756448</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag>ロストワンの号哭</tag>
+      <tag>VOCALOID→UTAUカバー曲</tag>
+      <tag>虎音スピーディ</tag>
+    </tags>
+    <user_id>18395070</user_id>
+    <user_nickname>FastSpeedy</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1839/18395070.jpg?1315356833</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

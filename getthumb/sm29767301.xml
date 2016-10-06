@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm29767301</video_id>
+    <title>【ニコカラ】ハナウタ日和 ～掃除、洗濯、家事、ワタシ～ 【off vocal版】</title>
+    <description>40mP様作のオリジナル曲「ハナウタ日和 ～掃除、洗濯、家事、ワタシ～ （sm29765704）」にカラオケ字幕を付けさせていただきました。オフボーカル版になります他のニコカラ mylist/19930381on vocal版→sm29767261</description>
+    <thumbnail_url>http://tn-skr2.smilevideo.jp/smile?i=29767301</thumbnail_url>
+    <first_retrieve>2016-10-03T21:01:47+09:00</first_retrieve>
+    <length>4:13</length>
+    <movie_type>mp4</movie_type>
+    <size_high>24495257</size_high>
+    <size_low>13549314</size_low>
+    <view_counter>36</view_counter>
+    <comment_num>2</comment_num>
+    <mylist_counter>4</mylist_counter>
+    <last_res_body>つp よろしくお願いします </last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/sm29767301</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">ハナウタ日和～掃除、洗濯、家事、ワタシ～</tag>
+      <tag lock="1">ニコカラ</tag>
+      <tag lock="1">ニコニコカラオケDB</tag>
+      <tag lock="1">40mPカラオケ動画リンク</tag>
+      <tag lock="1">ボカロカラオケDB</tag>
+      <tag>ハナウタ日和</tag>
+    </tags>
+    <user_id>13247004</user_id>
+    <user_nickname>kenken</user_nickname>
+    <user_icon_url>http://usericon.nimg.jp/usericon/s/1324/13247004.jpg?1271443669</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>
