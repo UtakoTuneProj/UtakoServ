@@ -67,7 +67,7 @@ def thumb_cook(mvid):#mvidについて取得済みのxmlファイルを解析し
         page[s2i] = int(page[s2i])
 
     # http://www.lifewithpython.com/2014/08/python-use-multiple-separators-to-split-strings.html
-    page["title"] = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」]",page["title"]) if len(x) > 0] #指定文字でタイトルを分割
+    page["title"] = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",page["title"]) if len(x) > 0] #指定文字でタイトルを分割
 
     return page
 

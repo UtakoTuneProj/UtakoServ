@@ -16,8 +16,6 @@ learnFile = codecs.open("Network/learned.json",'r','utf-8')
 learn_data = json.load(learnFile,encoding = 'utf-8')
 learnFile.close()
 
-
-
 def teach(GUI = False):
     rankfilelist = [r.split('\\')[-1] for r in glob.glob("ranking/*Newest.json")]
     for i,rankdate in enumerate(rankfilelist):
