@@ -44,11 +44,5 @@ for i,cell in enumerate(learn_data):
 
         os.remove("ranking/0.json")
 
-        resFile = codecs.open("Network/searchResult.json",'w','utf-8')
-        json.dump(res, resFile, ensure_ascii = False, indent = 2)
-        resFile.close()
-    else:
-        print(cell + " already exists.")
-
 if __name__ == '__main__':
     pass
