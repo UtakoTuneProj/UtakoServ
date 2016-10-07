@@ -85,7 +85,14 @@ def movinforeq(mvid,Force = False): #動画情報xmlがない場合は取得、F
 def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtag) + "&targets=tags&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
 
-    gurl(rankreqbase + "&filters[startTime][gte]=" + rank_start_time + "","ranking/" + str(page) + ".json")
+    gurl(rankreqbase, "ranking/" + str(page) + ".json")
+
+    return None
+
+def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定したタイトルのランキングを取得、指定のない場合はVOCALOIDタグ
+    rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtitle) + "&targets=title&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
+
+    gurl(rankreqbase, "ranking/" + str(page) + ".json")
 
     return None
 

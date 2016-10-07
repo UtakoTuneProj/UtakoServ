@@ -41,18 +41,5 @@ def make_chart(rankfilepass): #取得したランキングファイルからチ�
 
 def main():
 
-    chartedfile = codecs.open("mvinfo/charted.json",'r','utf-8')
-    charted = json.load(chartedfile, encoding = 'utf-8')
-    chartedfile.close()
-
-    for rankfilepass in glob.glob('ranking/*.json'):
-        if rankfilepass not in charted:
-            make_chart(rankfilepass)
-            charted.append(rankfilepass)
-
-    chartedfile = codecs.open("mvinfo/charted.json",'w','utf-8')
-    json.dump(charted, chartedfile, ensure_ascii = False)
-    chartedfile.close()
-
 if __name__ == '__main__':
     main()
