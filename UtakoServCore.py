@@ -139,7 +139,7 @@ def rankreq(): #ランキング取得・キュー生成部
         os.remove("ranking/" + str(j) + ".json")
 
     listfile = codecs.open("dat/queuelist.json",'w','utf-8')
-    json.dump(queuelist, listfile, ensure_ascii = False, indent = 2)
+    json.dump(queuelist, listfile, ensure_ascii = False)
     listfile.close()
 
     return None
