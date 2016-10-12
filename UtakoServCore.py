@@ -169,7 +169,7 @@ def chartupdate(queue):#queueで与えられた動画についてチャートを
                 chartlist[mvid] = [gotdata]
 
     listfile = codecs.open("dat/chartlist.json",'w','utf-8')
-    json.dump(chartlist, listfile, ensure_ascii = False, indent = 2)
+    json.dump(chartlist, listfile, ensure_ascii = False)
     listfile.close()
 
     return deletedlist
@@ -206,7 +206,7 @@ def aweekafterchk(): #一週間後チェック
         os.remove("getthumb/" + mvid + ".xml")
 
     listfile = codecs.open("dat/queuelist.json",'w','utf-8')
-    json.dump(queuelist, listfile, ensure_ascii = False, indent = 2)
+    json.dump(queuelist, listfile, ensure_ascii = False)
     listfile.close()
 
 def main():
