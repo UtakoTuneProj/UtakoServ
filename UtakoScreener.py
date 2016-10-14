@@ -132,12 +132,7 @@ def Perceptron(GUI = False):
 
     return miss
 
-def do_all():
-    rankreq()
-    teach()
-    Perceptron()
-
-def main(selector = None):
+def main():
 
 if __name__ == '__main__':
     main()
