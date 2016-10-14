@@ -12,10 +12,6 @@ import glob
 
 import UtakoServCore as core
 
-learnFile = codecs.open("Network/learned.json",'r','utf-8')
-learn_data = json.load(learnFile,encoding = 'utf-8')
-learnFile.close()
-
 def teach(GUI = False):
     rankfilelist = [r.split('\\')[-1] for r in glob.glob("ranking/*Newest.json")]
     for i,rankdate in enumerate(rankfilelist):
@@ -29,6 +25,27 @@ def teach(GUI = False):
     for mv in rankingArray['data']:
         mvid = mv['contentId']
         teacher_req(mvid,GUI = GUI)
+
+def searchHit(query):#クエリに指定した検索結果の件数を返す:検索結果信用の基準は70程度
+
+    if query.startswith("tag"):
+        stag = cell.lstrip("tag")
+        print("tag")
+        print(stag)
+        core.rankfilereq(searchtag = stag)
+    else:
+        stitle = cell.lstrip("title")
+        print("title")
+        print(stitle)
+        core.rankfilereqTITLE(searchtitle = stitle)
+
+    searchFile = codecs.open("ranking/0.json",'r','utf-8')
+    search_data = json.load(searchFile, encoding = 'utf-8')
+    searchFile.close()
+
+    os.remove("ranking/0.json")
+    return search_data["meta"]["totalCount"]
+
 
 def teacher_req(mvid, GUI = False):
     teacherFile = codecs.open("Network/teacher.json",'r','utf-8')
