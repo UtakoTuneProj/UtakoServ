@@ -131,8 +131,21 @@ def Perceptron(GUI = False):
 
     return miss
 
-def main():
-    pass
+def main(mode):
+    if mode == "teach":
+        teach()
+    elif mode == "learn":
+        learn()
+    elif mode in "all":
+        teach()
+        learn()
+    else:
+        raise ValueError()
 
-if __name__ == '__main__':
-    main()
+if __name__ == '__main__'
+    try:
+        main(sys.argv[1])
+    except ValueError:
+        print("Command Line Argument '" + sys.argv[1] + "' is invalid.")
+    except IndexError:
+        print("Command Line Argument is needed.")
