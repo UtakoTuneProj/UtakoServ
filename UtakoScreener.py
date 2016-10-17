@@ -12,20 +12,6 @@ import glob
 
 import UtakoServCore as core
 
-def teach(GUI = False):
-    rankfilelist = [r.split('\\')[-1] for r in glob.glob("ranking/*Newest.json")]
-    for i,rankdate in enumerate(rankfilelist):
-        rankfilelist[i] =int( rankdate.replace("Newest.json", ""))
-    latestrank = max(rankfilelist)
-
-    jsonFile = codecs.open("ranking/"+str(latestrank)+"Newest.json",'r','utf-8')
-    rankingArray = json.load(jsonFile,encoding = 'utf-8')
-    jsonFile.close()
-
-    for mv in rankingArray['data']:
-        mvid = mv['contentId']
-        teacher_req(mvid,GUI = GUI)
-
 def searchHit(query):#クエリに指定した検索結果の件数を返す:検索結果信用の基準は70程度
 
     if query.startswith("tag"):
@@ -46,6 +32,19 @@ def searchHit(query):#クエリに指定した検索結果の件数を返す:検
     os.remove("ranking/0.json")
     return search_data["meta"]["totalCount"]
 
+def teach(GUI = False):
+    rankfilelist = [r.split('\\')[-1] for r in glob.glob("ranking/*Newest.json")]
+    for i,rankdate in enumerate(rankfilelist):
+        rankfilelist[i] =int( rankdate.replace("Newest.json", ""))
+    latestrank = max(rankfilelist)
+
+    jsonFile = codecs.open("ranking/"+str(latestrank)+"Newest.json",'r','utf-8')
+    rankingArray = json.load(jsonFile,encoding = 'utf-8')
+    jsonFile.close()
+
+    for mv in rankingArray['data']:
+        mvid = mv['contentId']
+        teacher_req(mvid,GUI = GUI)
 
 def teacher_req(mvid, GUI = False):
     teacherFile = codecs.open("Network/teacher.json",'r','utf-8')
@@ -133,6 +132,7 @@ def Perceptron(GUI = False):
     return miss
 
 def main():
+    pass
 
 if __name__ == '__main__':
     main()
