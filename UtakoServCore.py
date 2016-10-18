@@ -19,50 +19,50 @@ class MovDeletedException(Exception):
         Exception.__init__(self,e)
 
 class Time:
-    def __init__(self, mode = "now", in = None):
-        if mode = "now":
+    def __init__(self, mode = "now", stream = None):
+        if mode == "now":
             self.dt = datetime.datetime.now()
-        elif mode = "nico" or "n":
-            self.dt = self.__n2d(in)
-        elif mode = "str12" or "str":
-            self.dt = self.__s2d(in)
-        elif mode = "datetime" or "dt" or "d":
-            self.dt = in
+        elif mode in ["nico","n"]:
+            self.dt = self.__n2d(stream)
+        elif mode in ["str12","str","s"]:
+            self.dt = self.__s2d(stream)
+        elif mode in ["datetime","dt","d"]:
+            self.dt = stream
         else:
             raise ValueError
-        self.nico = __d2n(self.dt)
-        self.str12 = __d2s(self.dt)
-        
-    def __n2d(nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
+        self.nico = self.__d2n(self.dt)
+        self.str12 = self.__d2s(self.dt)
+
+    def __n2d(self,nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
         return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
-    
-    def __s2d(time12): #12桁時刻方式をPython内部時刻形式に変換
+
+    def __s2d(self,time12): #12桁時刻方式をPython内部時刻形式に変換
         return datetime.datetime.strptime(time12,"%Y%m%d%H%M")
-    
-    def __d2s(dt): #Python内部時刻形式を12桁時刻方式に変換
+
+    def __d2s(self,dt): #Python内部時刻形式を12桁時刻方式に変換
         return dt.strftime("%Y%m%d%H%M")
-        
-    def __d2n(dt):
+
+    def __d2n(self,dt):
         return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
 class JSONfile:
     def __init__(self, path, encoding = 'utf-8'):
         self.path = path
         self.encoding = encoding
-    def read(self)
+    def read(self):
         fobj = codecs.open(self.path,'r',self.encoding)
         stream = json.load(fobj, encoding = self.encoding)
-        listfile.close()
+        fobj.close()
         return stream
-    def write(self, stream, indent = False)
+    def write(self, stream, indent = False):
         fobj= codecs.open(self.path,'w',self.encoding)
         if indent:
             json.dump(stream, fobj, ensure_ascii = False, indent = 2)
         else:
             json.dump(stream, fobj, ensure_ascii = False)
-        listfile.close()
+        fobj.close()
         return None
-        
+
 now = Time(mode = 'now')
 
 def xml2dict(filename):#ニコ動動画詳細xml形式を辞書形式に
@@ -181,7 +181,7 @@ def chartupdate(queue):#queueで与えられた動画についてチャートを
                 del chartlist[mvid]
             deletedlist.append(mvid)
         else:
-            postdate = Time(mode = 'n', in = mvinfo['first_retrieve'])
+            postdate = Time(mode = 'n', stream = mvinfo['first_retrieve'])
             passedmin = (now.dt - postdate.dt).total_seconds() / 60
             gotdata = [passedmin, mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
 
@@ -201,8 +201,8 @@ def postdaychk(): #投稿日チェック
     queue = []
 
     for raw_queue in queuelist:
-        postdate = Time(mode = "s", in = raw_queue['start'])
-        if now.dt - postdate.dt) < datetime.timedelta(days = 1): #startが1日以内ならば
+        postdate = Time(mode = "s", stream = raw_queue['start'])
+        if now.dt - postdate.dt < datetime.timedelta(days = 1): #startが1日以内ならば
             queue.extend(raw_queue['list'])
 
     deleted = chartupdate(queue)
@@ -216,7 +216,7 @@ def aweekafterchk(): #一週間後チェック
     queue = []
 
     for raw_queue in queuelist:
-        postdate = Time(mode = "s", in = raw_queue['start'])
+        postdate = Time(mode = "s", stream = raw_queue['start'])
         if now.dt - postdate.dt > datetime.timedelta(days = 7): #startが7日以前ならば
             queue.extend(raw_queue['list'])
             queuelist.remove(raw_queue)
