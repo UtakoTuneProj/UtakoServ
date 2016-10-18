@@ -12,31 +12,58 @@ import glob
 import os
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
-
-nowdt = datetime.datetime.now()
-now12 = nowdt.strftime("%Y%m%d%H%M")
-rank_start_time = (nowdt + datetime.timedelta(days = -7)).strftime("%Y-%m-%dT%H:%M")+":00%2B09:00"
-# rank_start_time = (datetime.datetime.now() + datetime.timedelta(hours = -1, minutes = -30)).strftime("%Y-%m-%dT%H:%M")+":00%2B09:00"
-
 gurl = urllib.request.urlretrieve
 
 class MovDeletedException(Exception):
     def __init__(self,e):
         Exception.__init__(self,e)
 
-def nicodate2date12(nicodate): #ニコ動形式の時刻を12桁時刻方式(str)に変換
-    temp = [x for x in re.split("[-T:\+]",nicodate) if len(x) > 0]
-    temp = temp[:5]
-    return "".join(temp)
+class Time:
+    def __init__(self, mode = "now", in = None):
+        if mode = "now":
+            self.dt = datetime.datetime.now()
+        elif mode = "nico" or "n":
+            self.dt = self.__n2d(in)
+        elif mode = "str12" or "str":
+            self.dt = self.__s2d(in)
+        elif mode = "datetime" or "dt" or "d":
+            self.dt = in
+        else:
+            raise ValueError
+        self.nico = __d2n(self.dt)
+        self.str12 = __d2s(self.dt)
+        
+    def __n2d(nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
+        return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
+    
+    def __s2d(time12): #12桁時刻方式をPython内部時刻形式に変換
+        return datetime.datetime.strptime(time12,"%Y%m%d%H%M")
+    
+    def __d2s(dt): #Python内部時刻形式を12桁時刻方式に変換
+        return dt.strftime("%Y%m%d%H%M")
+        
+    def __d2n(dt):
+        return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
-def nicodate2datetime(nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
-    return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
-
-def time122datetime(time12): #12桁時刻方式をPython内部時刻形式に変換
-    return datetime.datetime.strptime(time12,"%Y%m%d%H%M")
-
-def datetime2time12(dt): #Python内部時刻形式を12桁時刻方式に変換
-    return dt.strftime("%Y%m%d%H%M")
+class JSONfile:
+    def __init__(self, path, encoding = 'utf-8'):
+        self.path = path
+        self.encoding = encoding
+    def read(self)
+        fobj = codecs.open(self.path,'r',self.encoding)
+        stream = json.load(fobj, encoding = self.encoding)
+        listfile.close()
+        return stream
+    def write(self, stream, indent = False)
+        fobj= codecs.open(self.path,'w',self.encoding)
+        if indent:
+            json.dump(stream, fobj, ensure_ascii = False, indent = 2)
+        else:
+            json.dump(stream, fobj, ensure_ascii = False)
+        listfile.close()
+        return None
+        
+now = Time(mode = 'now')
 
 def xml2dict(filename):#ニコ動動画詳細xml形式を辞書形式に
     page = {}
@@ -97,9 +124,8 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def rankreq(): #ランキング取得・キュー生成部
-    listfile = codecs.open("dat/queuelist.json",'r','utf-8')
-    queuelist = json.load(listfile, encoding = 'utf-8')
-    listfile.close()
+    listfile = JSONfile("dat/queuelist.json")
+    queuelist = listfile.read()
 
     i = -1
     while True:
@@ -115,9 +141,8 @@ def rankreq(): #ランキング取得・キュー生成部
     while True:
         rankfilereq(page = i)
 
-        rankfile = codecs.open("ranking/" + str(i) + ".json",'r','utf-8')
-        raw_rank = json.load(rankfile, encoding = 'utf-8')
-        rankfile.close()
+        rankfile = JSONfile("ranking/" + str(i) + ".json")
+        raw_rank = rankfile.read()
 
         for mvdata in raw_rank['data']:
             mvid = mvdata['contentId']
@@ -133,21 +158,17 @@ def rankreq(): #ランキング取得・キュー生成部
         else:
             i += 1
 
-    queuelist.append({"start":now12, "list": newcomer})
+    queuelist.append({"start":now.str12, "list": newcomer})
 
     for j in range(i+1):
         os.remove("ranking/" + str(j) + ".json")
 
-    listfile = codecs.open("dat/queuelist.json",'w','utf-8')
-    json.dump(queuelist, listfile, ensure_ascii = False)
-    listfile.close()
-
+    listfile.write(queuelist)
     return None
 
 def chartupdate(queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
-    listfile = codecs.open("dat/chartlist.json",'r','utf-8')
-    chartlist = json.load(listfile, encoding = 'utf-8')
-    listfile.close()
+    listfile = JSONfile("dat/chartlist.json")
+    chartlist = listfile.read()
 
     deletedlist = []
 
@@ -160,7 +181,8 @@ def chartupdate(queue):#queueで与えられた動画についてチャートを
                 del chartlist[mvid]
             deletedlist.append(mvid)
         else:
-            passedmin = (nowdt - nicodate2datetime(mvinfo['first_retrieve'])).total_seconds() / 60
+            postdate = Time(mode = 'n', in = mvinfo['first_retrieve'])
+            passedmin = (now.dt - postdate.dt).total_seconds() / 60
             gotdata = [passedmin, mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
 
             if mvid in chartlist:
@@ -168,21 +190,19 @@ def chartupdate(queue):#queueで与えられた動画についてチャートを
             else:
                 chartlist[mvid] = [gotdata]
 
-    listfile = codecs.open("dat/chartlist.json",'w','utf-8')
-    json.dump(chartlist, listfile, ensure_ascii = False)
-    listfile.close()
+    listfile.write(chartlist)
 
     return deletedlist
 
 def postdaychk(): #投稿日チェック
-    listfile = codecs.open("dat/queuelist.json",'r','utf-8')
-    queuelist = json.load(listfile, encoding = 'utf-8')
-    listfile.close()
+    listfile = JSONfile("dat/queuelist.json")
+    queuelist = listfile.read()
 
     queue = []
 
     for raw_queue in queuelist:
-        if nowdt - time122datetime(raw_queue['start']) < datetime.timedelta(days = 1): #startが1日以内ならば
+        postdate = Time(mode = "s", in = raw_queue['start'])
+        if now.dt - postdate.dt) < datetime.timedelta(days = 1): #startが1日以内ならば
             queue.extend(raw_queue['list'])
 
     deleted = chartupdate(queue)
@@ -190,14 +210,14 @@ def postdaychk(): #投稿日チェック
         os.remove("getthumb/" + mvid + ".xml")
 
 def aweekafterchk(): #一週間後チェック
-    listfile = codecs.open("dat/queuelist.json",'r','utf-8')
-    queuelist = json.load(listfile, encoding = 'utf-8')
-    listfile.close()
+    listfile = JSONfile("dat/queuelist.json")
+    queuelist = listfile.read()
 
     queue = []
 
     for raw_queue in queuelist:
-        if nowdt - time122datetime(raw_queue['start']) > datetime.timedelta(days = 7): #startが7日以前ならば
+        postdate = Time(mode = "s", in = raw_queue['start'])
+        if now.dt - postdate.dt > datetime.timedelta(days = 7): #startが7日以前ならば
             queue.extend(raw_queue['list'])
             queuelist.remove(raw_queue)
 
@@ -205,9 +225,7 @@ def aweekafterchk(): #一週間後チェック
     for mvid in queue:
         os.remove("getthumb/" + mvid + ".xml")
 
-    listfile = codecs.open("dat/queuelist.json",'w','utf-8')
-    json.dump(queuelist, listfile, ensure_ascii = False)
-    listfile.close()
+    listfile.write(queuelist)
 
 def main():
     rankreq()
