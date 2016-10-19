@@ -1,45 +1,115 @@
 # coding: utf-8
-import urllib.request
-import urllib.parse
-import datetime
-import json
-import codecs
-import re
-import glob
 import numpy as np
+from chainer import cuda, Variable, FunctionSet, optimizers
+import chainer.functions  as F
+try:
+    import matplotlib.pyplot as plt
+except:
+    pass
 
-import UtakoServCore
+import UtakoServCore as core
 
-gurl = urllib.request.urlretrieve
+def learn():
+    batchsize = 10
+    n_epoch = 1000
+    n_units = 50
 
-def make_chart(rankfilepass): #取得したランキングファイルからチャートを生成
-    rankfile = codecs.open(rankfilepass,'r','utf-8')
-    raw_rank = json.load(rankfile, encoding = 'utf-8')
-    rankfile.close()
-    rankdate = rankfilepass.split('\\')[-1].replace("Newest.json", "")
+    model = FunctionSet(l1 = F.Linear(96, n_units),
+        l2 = F.Linear(n_units, n_units),
+        l3 = F.Linear(n_units, 1)
+    )
 
-    chartfile = codecs.open("mvinfo/chart.json",'r','utf-8')
-    chart = json.load(chartfile, encoding = 'utf-8')
-    chartfile.close()
+    def forward(x_data, y_data, train = True):
+        x,t = Variable(x_data), Variable(y_data)
+        h1 = F.relu(model.l1(x))
+        h2 = F.relu(model.l2(h1))
+        y = model.l3(h2)
 
-    for mvdata in raw_rank['data']:
-        mvid = mvdata['contentId']
-        [summ,dummy] = UtakoCore.predict(mvid)
-        if summ > 0:
-            if mvid not in chart:
-                chart[mvid] = {'startTime' : nicodate2date12(mvdata['startTime'])}
-            diffdt = time122datetime(rankdate) - time122datetime(chart[mvid]['startTime'])
-            diffmin = diffdt.total_seconds()/60
-            chart[mvid][diffmin] = {"viewCounter" : mvdata['viewCounter'], "commentCounter" : mvdata['commentCounter'], "mylistCounter" : mvdata['mylistCounter'] }
-        else:
-            if mvdata['contentId'] in chart:
-                del chart[mvdata['contentId']]
+        return F.softmax_cross_entropy(y,t), F.accuracy(y,t)
 
-    chartfile = codecs.open("mvinfo/chart.json",'w','utf-8')
-    json.dump(chart, chartfile, ensure_ascii = False, indent = 2)
-    chartfile.close()
+    optimizer = optimizers.Adam()
+    optimizer.setup(model.collect_parameters())
+
+    train_loss = []
+    train_acc  = []
+    test_loss = []
+    test_acc  = []
+
+    l1_W = []
+    l2_W = []
+
+    [x_dump, y_dump] = dataimport('mlp_train.data')
+    x_train = np.array(x_dump, dtype = np.float32)
+    y_train = np.array(y_dump, dtype = np.int32)
+
+    [x_dump, y_dump] = dataimport('mlp_test10.data')
+    x_test = np.array(x_dump, dtype = np.float32)
+    y_test = np.array(y_dump, dtype = np.int32)
+
+    # Learning loop
+    for epoch in range(1, n_epoch+1):
+        print('epoch', epoch)
+
+        # training
+        # N個の順番をランダムに並び替える
+        perm = np.random.permutation(N)
+        sum_accuracy = 0
+        sum_loss = 0
+        # 0〜Nまでのデータをバッチサイズごとに使って学習
+        for i in range(0, N, batchsize):
+            x_batch = x_train[perm[i:i+batchsize]]
+            y_batch = y_train[perm[i:i+batchsize]]
+
+            # 勾配を初期化
+            optimizer.zero_grads()
+            # 順伝播させて誤差と精度を算出
+            loss, acc = forward(x_batch, y_batch)
+            # 誤差逆伝播で勾配を計算
+            loss.backward()
+            optimizer.update()
+            sum_loss     += float(cuda.to_cpu(loss.data)) * batchsize
+            sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
+
+        # 訓練データの誤差と、正解精度を表示
+        print('train mean loss={}, accuracy={}'.format(sum_loss / N, sum_accuracy / N))
+
+        train_loss.append(sum_loss / N)
+        train_acc.append(sum_accuracy / N)
+
+        # evaluation
+        # テストデータで誤差と、正解精度を算出し汎化性能を確認
+        sum_accuracy = 0
+        sum_loss     = 0
+        for i in range(0, N_test, batchsize):
+            x_batch = x_test[i:i+batchsize]
+            y_batch = y_test[i:i+batchsize]
+
+            # 順伝播させて誤差と精度を算出
+            loss, acc = forward(x_batch, y_batch, train=False)
+
+            sum_loss     += float(cuda.to_cpu(loss.data)) * batchsize
+            sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
+
+        # テストデータでの誤差と、正解精度を表示
+        print('test  mean loss={}, accuracy={}'.format(sum_loss / N_test, sum_accuracy / N_test))
+        test_loss.append(sum_loss / N_test)
+        test_acc.append(sum_accuracy / N_test)
+
+        # 学習したパラメーターを保存
+        l1_W.append(model.l1.W)
+        l2_W.append(model.l2.W)
+
+    # 精度と誤差をグラフ描画
+    plt.plot(range(len(train_acc)), train_acc)
+    plt.plot(range(len(test_acc)), test_acc)
+    plt.legend(["train_acc","test_acc"])
+    plt.show()
+
+def analyze():
+    pass
 
 def main():
+    pass
 
 if __name__ == '__main__':
     main()
