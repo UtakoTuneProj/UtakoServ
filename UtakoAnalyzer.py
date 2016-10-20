@@ -1,4 +1,5 @@
 # coding: utf-8
+import sys
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions  as F
@@ -8,11 +9,25 @@ except:
     pass
 
 import UtakoServCore as core
+from ChartVisualizer import ChartData
+
+class Chartfile(core.JSONfile):
+    def __init__(self,path, encoding = 'utf-8'):
+        core.JSONfile.__init__(self, path, encoding = encoding)
+        dump = self.read()
+        self.x = []
+        self.y = []
+        for mov in dump:
+            self.x.append([])
+            for cell in mov[0:-1]:
+                self.x[-1].extend(cell)
+            ydump = ChartData(mov[-1])
+            self.y.append(ydump.vocaran)
 
 def learn():
     batchsize = 10
-    n_epoch = 1000
-    n_units = 50
+    n_epoch = 300
+    n_units = 20
 
     model = FunctionSet(l1 = F.Linear(96, n_units),
         l2 = F.Linear(n_units, n_units),
@@ -24,8 +39,10 @@ def learn():
         h1 = F.relu(model.l1(x))
         h2 = F.relu(model.l2(h1))
         y = model.l3(h2)
+        if not train:
+            print(np.hstack((y.data,t.data)))
 
-        return F.softmax_cross_entropy(y,t), F.accuracy(y,t)
+        return F.mean_squared_error(y,t)
 
     optimizer = optimizers.Adam()
     optimizer.setup(model.collect_parameters())
@@ -38,13 +55,19 @@ def learn():
     l1_W = []
     l2_W = []
 
-    [x_dump, y_dump] = dataimport('mlp_train.data')
-    x_train = np.array(x_dump, dtype = np.float32)
-    y_train = np.array(y_dump, dtype = np.int32)
+    lfile = Chartfile('dat/chartlist_init.json')
+    x_dump = np.array(lfile.x, dtype = np.float32)
+    y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
-    [x_dump, y_dump] = dataimport('mlp_test10.data')
-    x_test = np.array(x_dump, dtype = np.float32)
-    y_test = np.array(y_dump, dtype = np.int32)
+    N_test = 100
+    N = len(x_dump) - N_test
+    perm = np.arange(len(x_dump))
+    # perm = np.random.permutation(N + N_test)
+
+    x_train = x_dump[perm[:-N_test]]
+    y_train = y_dump[perm[:-N_test]]
+    x_test = x_dump[perm[-N_test:]]
+    y_test = y_dump[perm[-N_test:]]
 
     # Learning loop
     for epoch in range(1, n_epoch+1):
@@ -63,53 +86,49 @@ def learn():
             # 勾配を初期化
             optimizer.zero_grads()
             # 順伝播させて誤差と精度を算出
-            loss, acc = forward(x_batch, y_batch)
+            loss = forward(x_batch, y_batch.reshape((len(y_batch),1)))
             # 誤差逆伝播で勾配を計算
             loss.backward()
             optimizer.update()
-            sum_loss     += float(cuda.to_cpu(loss.data)) * batchsize
-            sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
+            sum_loss += loss.data * batchsize
 
         # 訓練データの誤差と、正解精度を表示
-        print('train mean loss={}, accuracy={}'.format(sum_loss / N, sum_accuracy / N))
+        print('train mean loss={}'.format(sum_loss / N))
 
         train_loss.append(sum_loss / N)
-        train_acc.append(sum_accuracy / N)
 
         # evaluation
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
-        sum_accuracy = 0
         sum_loss     = 0
         for i in range(0, N_test, batchsize):
             x_batch = x_test[i:i+batchsize]
             y_batch = y_test[i:i+batchsize]
 
             # 順伝播させて誤差と精度を算出
-            loss, acc = forward(x_batch, y_batch, train=False)
+            loss = forward(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
 
-            sum_loss     += float(cuda.to_cpu(loss.data)) * batchsize
-            sum_accuracy += float(cuda.to_cpu(acc.data)) * batchsize
+            sum_loss += loss.data * batchsize
 
         # テストデータでの誤差と、正解精度を表示
-        print('test  mean loss={}, accuracy={}'.format(sum_loss / N_test, sum_accuracy / N_test))
+        print('test  mean loss={}'.format(sum_loss / N_test))
         test_loss.append(sum_loss / N_test)
-        test_acc.append(sum_accuracy / N_test)
 
         # 学習したパラメーターを保存
         l1_W.append(model.l1.W)
         l2_W.append(model.l2.W)
 
     # 精度と誤差をグラフ描画
-    plt.plot(range(len(train_acc)), train_acc)
-    plt.plot(range(len(test_acc)), test_acc)
-    plt.legend(["train_acc","test_acc"])
+    plt.plot(range(len(train_loss)), train_loss)
+    plt.plot(range(len(test_loss)), test_loss)
+    plt.legend(["train","test"])
+    plt.yscale('log')
     plt.show()
 
 def analyze():
     pass
 
 def main():
-    pass
+    learn()
 
 if __name__ == '__main__':
     main()

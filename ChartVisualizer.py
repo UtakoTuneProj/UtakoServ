@@ -17,17 +17,28 @@ def main():
     chartf = core.JSONfile('dat/chartlist_init.json')
     chart = chartf.read()
 
-    score = []
+    vocaran = []
+    # vt30 = []
+    # vocasan = []
     for cell in chart:
         x = ChartData(cell[-1])
-        score.append(x.vocaran)
-    score.sort()
+        vocaran.append(x.vocaran)
+        # vt30.append(x.vt30)
+        # vocasan.append(x.vocasan)
+    vocaran.sort()
+    # vt30.sort()
+    # vocasan.sort()
 
-    x = np.array(score)
-    y = np.arange(0,1,1/len(score))
+    x1 = np.array(vocaran)
+    # x2 = np.array(vt30)
+    # x3 = np.array(vocasan)
+    y = np.arange(0,1,1/len(vocaran))
 
-    plt.plot(x,y)
+    plt.plot(x1,y, label = 'vocaran')
+    # plt.plot(x2,y, label = 'vt30')
+    # plt.plot(x3,y, label = 'vocasan')
     plt.xscale('log')
+    # plt.legend()
     plt.show()
 
 if __name__ == '__main__':
