@@ -25,7 +25,7 @@ class Chartfile(core.JSONfile):
             self.y.append(ydump.vocaran)
 
 def learn():
-    batchsize = 10
+    batchsize = 1
     n_epoch = 300
     n_units = 20
 
@@ -68,10 +68,12 @@ def learn():
     y_train = y_dump[perm[:-N_test]]
     x_test = x_dump[perm[-N_test:]]
     y_test = y_dump[perm[-N_test:]]
+    
+    
 
     # Learning loop
-    for epoch in range(1, n_epoch+1):
-        print('epoch', epoch)
+    for epoch in range(n_epoch):
+        print('epoch', epoch + 1)
 
         # training
         # N個の順番をランダムに並び替える
@@ -94,7 +96,6 @@ def learn():
 
         # 訓練データの誤差と、正解精度を表示
         print('train mean loss={}'.format(sum_loss / N))
-
         train_loss.append(sum_loss / N)
 
         # evaluation
