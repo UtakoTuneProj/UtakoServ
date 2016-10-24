@@ -26,7 +26,7 @@ class Chartfile(core.JSONfile):
 
 def learn():
     batchsize = 1
-    n_epoch = 300
+    n_epoch = 150
     n_units = 20
 
     model = FunctionSet(l1 = F.Linear(96, n_units),
@@ -40,9 +40,11 @@ def learn():
         h2 = F.relu(model.l2(h1))
         y = model.l3(h2)
         if not train:
-            print(np.hstack((y.data,t.data)))
+            ret = [t.data[0][0], y.data[0][0]]
+        else:
+            ret = None
 
-        return F.mean_squared_error(y,t)
+        return F.mean_squared_error(y,t), ret
 
     optimizer = optimizers.Adam()
     optimizer.setup(model.collect_parameters())
@@ -51,6 +53,8 @@ def learn():
     train_acc  = []
     test_loss = []
     test_acc  = []
+
+    test_data = []
 
     l1_W = []
     l2_W = []
@@ -68,8 +72,6 @@ def learn():
     y_train = y_dump[perm[:-N_test]]
     x_test = x_dump[perm[-N_test:]]
     y_test = y_dump[perm[-N_test:]]
-    
-    
 
     # Learning loop
     for epoch in range(n_epoch):
@@ -88,7 +90,7 @@ def learn():
             # 勾配を初期化
             optimizer.zero_grads()
             # 順伝播させて誤差と精度を算出
-            loss = forward(x_batch, y_batch.reshape((len(y_batch),1)))
+            loss, dump = forward(x_batch, y_batch.reshape((len(y_batch),1)))
             # 誤差逆伝播で勾配を計算
             loss.backward()
             optimizer.update()
@@ -101,12 +103,14 @@ def learn():
         # evaluation
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
         sum_loss     = 0
+        test_data.append([])
         for i in range(0, N_test, batchsize):
             x_batch = x_test[i:i+batchsize]
             y_batch = y_test[i:i+batchsize]
 
             # 順伝播させて誤差と精度を算出
-            loss = forward(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
+            loss,dump = forward(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
+            test_data[-1].append(dump)
 
             sum_loss += loss.data * batchsize
 
@@ -123,6 +127,20 @@ def learn():
     plt.plot(range(len(test_loss)), test_loss)
     plt.legend(["train","test"])
     plt.yscale('log')
+    plt.show()
+
+    test_data[0].sort()
+    test_data[int(n_epoch / 2)].sort()
+    test_data[-1].sort()
+    plt_data_init = [list(x) for x in zip(*test_data[0])]
+    plt_data_cent = [list(x) for x in zip(*test_data[int(n_epoch / 2)])]
+    plt_data_last = [list(x) for x in zip(*test_data[-1])]
+    print(plt_data_init)
+    plt.plot(plt_data_init[0],range(N_test))
+    plt.plot(plt_data_init[1],range(N_test))
+    plt.plot(plt_data_cent[1],range(N_test))
+    plt.plot(plt_data_last[1],range(N_test))
+    plt.legend(['Ans.','init','cent','last'])
     plt.show()
 
 def analyze():
