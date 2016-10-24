@@ -26,7 +26,7 @@ class Chartfile(core.JSONfile):
 
 def learn():
     batchsize = 1
-    n_epoch = 150
+    n_epoch = 1000
     n_units = 20
 
     model = FunctionSet(l1 = F.Linear(96, n_units),
@@ -63,7 +63,7 @@ def learn():
     x_dump = np.array(lfile.x, dtype = np.float32)
     y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
-    N_test = 100
+    N_test = 200
     N = len(x_dump) - N_test
     perm = np.arange(len(x_dump))
     # perm = np.random.permutation(N + N_test)
