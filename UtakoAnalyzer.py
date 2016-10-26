@@ -24,10 +24,25 @@ class Chartfile(core.JSONfile):
             ydump = ChartData(mov[-1])
             self.y.append(ydump.vocaran)
 
+batchsize = 50
+n_epoch = 500
+n_units = 50
+
+class UtakoModel(Chain):
+    def __init__(self, n_units = 50):
+        super(Model, self).__init__(
+            l1 = L.Linear(96, n_units),
+            l2 = L.Linear(n_units, n_units),
+            l3 = L.Linear(n_units, 1)
+        )
+
+    def __call__(self, x):
+        h1 = F.relu(self.l1(x))
+        h2 = F.relu(self.l1(x))
+        y = self.l1(x)
+        return y
+
 def learn():
-    batchsize = 1
-    n_epoch = 1000
-    n_units = 20
 
     model = FunctionSet(l1 = F.Linear(96, n_units),
         l2 = F.Linear(n_units, n_units),
@@ -75,7 +90,7 @@ def learn():
 
     # Learning loop
     for epoch in range(n_epoch):
-        print('epoch', epoch + 1)
+        print('epoch', epoch + 1, flush = True)
 
         # training
         # N個の順番をランダムに並び替える
@@ -104,15 +119,15 @@ def learn():
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
         sum_loss     = 0
         test_data.append([])
-        for i in range(0, N_test, batchsize):
-            x_batch = x_test[i:i+batchsize]
-            y_batch = y_test[i:i+batchsize]
+        for i in range(0, N_test):
+            x_batch = x_test[i:i+1]
+            y_batch = y_test[i:i+1]
 
             # 順伝播させて誤差と精度を算出
             loss,dump = forward(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
             test_data[-1].append(dump)
 
-            sum_loss += loss.data * batchsize
+            sum_loss += loss.data
 
         # テストデータでの誤差と、正解精度を表示
         print('test  mean loss={}'.format(sum_loss / N_test))
@@ -135,7 +150,7 @@ def learn():
     plt_data_init = [list(x) for x in zip(*test_data[0])]
     plt_data_cent = [list(x) for x in zip(*test_data[int(n_epoch / 2)])]
     plt_data_last = [list(x) for x in zip(*test_data[-1])]
-    print(plt_data_init)
+
     plt.plot(plt_data_init[0],range(N_test))
     plt.plot(plt_data_init[1],range(N_test))
     plt.plot(plt_data_cent[1],range(N_test))
