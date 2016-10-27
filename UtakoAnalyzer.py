@@ -1,8 +1,9 @@
 # coding: utf-8
 import sys
 import numpy as np
-from chainer import cuda, Variable, FunctionSet, optimizers
+from chainer import cuda, Variable, optimizers, Chain
 import chainer.functions  as F
+import chainer.links as L
 try:
     import matplotlib.pyplot as plt
 except:
@@ -12,8 +13,8 @@ import UtakoServCore as core
 from ChartVisualizer import ChartData
 
 class Chartfile(core.JSONfile):
-    def __init__(self,path, encoding = 'utf-8'):
-        core.JSONfile.__init__(self, path, encoding = encoding)
+    def __init__(self, path, encoding = 'utf-8'):
+        super().__init__(path, encoding = encoding)
         dump = self.read()
         self.x = []
         self.y = []
@@ -24,13 +25,10 @@ class Chartfile(core.JSONfile):
             ydump = ChartData(mov[-1])
             self.y.append(ydump.vocaran)
 
-batchsize = 50
-n_epoch = 500
-n_units = 50
 
 class UtakoModel(Chain):
     def __init__(self, n_units = 50):
-        super(Model, self).__init__(
+        super(UtakoModel, self).__init__(
             l1 = L.Linear(96, n_units),
             l2 = L.Linear(n_units, n_units),
             l3 = L.Linear(n_units, 1)
@@ -38,22 +36,13 @@ class UtakoModel(Chain):
 
     def __call__(self, x):
         h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l1(x))
-        y = self.l1(x)
+        h2 = F.relu(self.l2(h1))
+        y = self.l3(h2)
         return y
 
-def learn():
-
-    model = FunctionSet(l1 = F.Linear(96, n_units),
-        l2 = F.Linear(n_units, n_units),
-        l3 = F.Linear(n_units, 1)
-    )
-
-    def forward(x_data, y_data, train = True):
-        x,t = Variable(x_data), Variable(y_data)
-        h1 = F.relu(model.l1(x))
-        h2 = F.relu(model.l2(h1))
-        y = model.l3(h2)
+    def error(self, x_data, y_data, train = True):
+        y = self(Variable(x_data))
+        t = Variable(y_data)
         if not train:
             ret = [t.data[0][0], y.data[0][0]]
         else:
@@ -61,8 +50,15 @@ def learn():
 
         return F.mean_squared_error(y,t), ret
 
+def learn():
+
+    batchsize = 100
+    n_epoch = 5000
+    N_test = 200
+
+    model = UtakoModel(n_units = 50)
     optimizer = optimizers.Adam()
-    optimizer.setup(model.collect_parameters())
+    optimizer.setup(model)
 
     train_loss = []
     train_acc  = []
@@ -78,7 +74,6 @@ def learn():
     x_dump = np.array(lfile.x, dtype = np.float32)
     y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
-    N_test = 200
     N = len(x_dump) - N_test
     perm = np.arange(len(x_dump))
     # perm = np.random.permutation(N + N_test)
@@ -105,7 +100,7 @@ def learn():
             # 勾配を初期化
             optimizer.zero_grads()
             # 順伝播させて誤差と精度を算出
-            loss, dump = forward(x_batch, y_batch.reshape((len(y_batch),1)))
+            loss, dump = model.error(x_batch, y_batch.reshape((len(y_batch),1)))
             # 誤差逆伝播で勾配を計算
             loss.backward()
             optimizer.update()
@@ -124,7 +119,7 @@ def learn():
             y_batch = y_test[i:i+1]
 
             # 順伝播させて誤差と精度を算出
-            loss,dump = forward(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
+            loss,dump = model.error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
             test_data[-1].append(dump)
 
             sum_loss += loss.data
@@ -132,10 +127,6 @@ def learn():
         # テストデータでの誤差と、正解精度を表示
         print('test  mean loss={}'.format(sum_loss / N_test))
         test_loss.append(sum_loss / N_test)
-
-        # 学習したパラメーターを保存
-        l1_W.append(model.l1.W)
-        l2_W.append(model.l2.W)
 
     # 精度と誤差をグラフ描画
     plt.plot(range(len(train_loss)), train_loss)
@@ -152,10 +143,8 @@ def learn():
     plt_data_last = [list(x) for x in zip(*test_data[-1])]
 
     plt.plot(plt_data_init[0],range(N_test))
-    plt.plot(plt_data_init[1],range(N_test))
-    plt.plot(plt_data_cent[1],range(N_test))
     plt.plot(plt_data_last[1],range(N_test))
-    plt.legend(['Ans.','init','cent','last'])
+    plt.legend(['Ans.', 'last'])
     plt.show()
 
 def analyze():
