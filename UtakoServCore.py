@@ -161,7 +161,7 @@ def chartupdate(queue):#queueで与えられた動画についてチャートを
             deletedlist.append(mvid)
         else:
             passedmin = (nowdt - nicodate2datetime(mvinfo['first_retrieve'])).total_seconds() / 60
-            gotdata = [passedmin, mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
+            gotdata = [round(passedmin,1), mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
 
             if mvid in chartlist:
                 chartlist[mvid].append(gotdata)
