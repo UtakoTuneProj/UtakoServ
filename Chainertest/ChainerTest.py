@@ -39,7 +39,7 @@ def dataimport(filename): #テストフォーマット形式のデータ読み�
 if __name__ == '__main__':
 
     batchsize = 10
-    n_epoch = 1000
+    n_epoch = 10
     n_units = 100
 
     N = 100
