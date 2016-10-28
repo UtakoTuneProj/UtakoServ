@@ -11,9 +11,6 @@ import re
 import glob
 import os
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
-gurl = urllib.request.urlretrieve
-
 class MovDeletedException(Exception):
     def __init__(self,e):
         Exception.__init__(self,e)
@@ -32,6 +29,7 @@ class Time:
             raise ValueError
         self.nico = self.__d2n(self.dt)
         self.str12 = self.__d2s(self.dt)
+        return None
 
     def __n2d(self,nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
         return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
@@ -46,24 +44,127 @@ class Time:
         return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
 class JSONfile:
+    #self.path:ファイルパスを保存
+    #self.encoding:エンコードを保存
+    #self.data:データを保存
+    #
+    #self.read():self.pathのファイルから読み込む関数
+    #self.write(indent):self.dataを書き込む関数
     def __init__(self, path, encoding = 'utf-8'):
         self.path = path
         self.encoding = encoding
+        self.data = self.read()
     def read(self):
         fobj = codecs.open(self.path,'r',self.encoding)
         stream = json.load(fobj, encoding = self.encoding)
         fobj.close()
         return stream
-    def write(self, stream, indent = False):
+    def write(self, indent = False, compress = True):
         fobj= codecs.open(self.path,'w',self.encoding)
-        if indent:
-            json.dump(stream, fobj, ensure_ascii = False, indent = 2)
+        if indent and compress:
+            json.dump(float_compressor(self.data), fobj, ensure_ascii = False, indent = 2)
+        elif indent:
+            json.dump(self.data, fobj, ensure_ascii = False, indent = 2)
+        elif compress:
+            json.dump(float_compressor(self.data), fobj, ensure_ascii = False)
         else:
-            json.dump(stream, fobj, ensure_ascii = False)
+            json.dump(self.data, fobj, ensure_ascii = False)
+
         fobj.close()
         return None
 
-now = Time(mode = 'now')
+class Queuefile(JSONfile):
+    def __init__(self):
+        super().__init__("dat/queuelist.json")
+
+    def update(self): #ランキング取得・キュー生成部
+
+        i = -1
+        while len(self.data[i]['list']) != 0:
+            i -= 1
+        latestList = self.data[i]['list']
+        newcomer = []
+        exitstatus = False
+
+        for i in range(15):
+            rankfilereq(page = i)
+            raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
+            for mvdata in raw_rank:
+                mvid = mvdata['contentId']
+                if not mvid in latestList: #最後に取得できたリストの中に含まれていないならば
+                    newcomer.append(mvid)
+                else:
+                    break
+            else:
+                continue
+            break
+
+        self.data.append({"start":now.str12, "list": newcomer})
+
+        for j in range(i+1):
+            os.remove("ranking/" + str(j) + ".json")
+
+        self.todays_mv = []
+        self.lastwks_mv = []
+
+        for raw_queue in self.data:
+            postdate = Time(mode = "s", stream = raw_queue['start'])
+            if now.dt - postdate.dt < datetime.timedelta(days = 1): #startが1日以内ならば
+                self.todays_mv.extend(raw_queue['list'])
+            elif now.dt - postdate.dt > datetime.timedelta(days = 7): #startが7日以前ならば
+                self.lastwks_mv.extend(raw_queue['list'])
+                self.data.remove(raw_queue)
+
+        self.write()
+
+        return None
+
+class Chartfile(JSONfile):
+    #self.deletedlist:
+    #self.update()
+    def __init__(self):
+        super().__init__("dat/chartlist.json")
+
+    def update(self, queue, queue_del = False):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
+        self.deletedlist = []
+
+        if not isinstance(queue, (tuple, list)):
+            raise TypeError("queue must be list or tuple")
+        for mvid in queue:
+            movinforeq(mvid)
+            try:
+                mvinfo = thumb_cook(mvid)
+            except MovDeletedException:
+                if mvid in chartlist:
+                    del chartlist[mvid]
+                deletedlist.append(mvid)
+            else:
+                postdate = Time(mode = 'n', stream = mvinfo['first_retrieve'])
+                passedmin = (now.dt - postdate.dt).total_seconds() / 60
+                gotdata = [passedmin, mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
+
+                if mvid in self.data:
+                    self.data[mvid].append(gotdata)
+                else:
+                    self.data[mvid] = [gotdata]
+
+        self.write()
+
+        return None
+
+class CompressedFloat(float):
+    def __repr__(self):
+        return '%.2f' % self
+
+def float_compressor(obj):
+    if isinstance(obj, float):
+        return CompressedFloat(obj)
+    elif isinstance(obj, dict):
+        return dict((k, float_compressor(v)) for k, v in obj.items())
+    elif isinstance(obj,(list,tuple)):
+        return list(map(float_compressor, obj))
+    else:
+        return obj
 
 def xml2dict(filename):#ニコ動動画詳細xml形式を辞書形式に
     page = {}
@@ -98,14 +199,12 @@ def thumb_cook(mvid):#mvidについて取得済みのxmlファイルを解析し
 
     return page
 
-def movinforeq(mvid,Force = False): #動画情報xmlがない場合は取得、Force=Trueで強制取得
-    try:
-        open("getthumb/"+mvid+".xml")
-        if Force :
-            gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid ,"getthumb/"+ str(mvid) +".xml")
+def movinforeq(mvid): #動画情報xmlを取得
 
-    except FileNotFoundError:
-        gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid , "getthumb/"+ str(mvid) +".xml")
+    try:
+        gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid ,"getthumb/"+ str(mvid) +".xml")
+    except:
+        raise MovDeletedException("handling" + mvid + "error occured")
 
     return None
 
@@ -123,114 +222,20 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
 
     return None
 
-def rankreq(): #ランキング取得・キュー生成部
-    listfile = JSONfile("dat/queuelist.json")
-    queuelist = listfile.read()
+def main():
+    qf = Queuefile()
+    qf.update()
+    cf = Chartfile()
+    cf.update(qf.todays_mv)
+    cf.update(qf.lastwks_mv)
+    # rankreq()
+    # postdaychk()
+    # aweekafterchk()
 
-    i = -1
-    while True:
-        latestList = queuelist[i]['list']
-        i -= 1
-        if len(latestList) != 0:
-            break
-
-    newcomer = []
-    i = 0
-    exitstatus = False
-
-    while True:
-        rankfilereq(page = i)
-
-        rankfile = JSONfile("ranking/" + str(i) + ".json")
-        raw_rank = rankfile.read()
-
-        for mvdata in raw_rank['data']:
-            mvid = mvdata['contentId']
-            mvdt = mvdata['startTime']
-            if not mvid in latestList: #最後に取得したリストの中に含まれていないならば
-                newcomer.append(mvid)
-            else:
-                exitstatus = True
-                break
-
-        if exitstatus or i == 14:
-            break
-        else:
-            i += 1
-
-    queuelist.append({"start":now.str12, "list": newcomer})
-
-    for j in range(i+1):
-        os.remove("ranking/" + str(j) + ".json")
-
-    listfile.write(queuelist)
     return None
 
-def chartupdate(queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
-    listfile = JSONfile("dat/chartlist.json")
-    chartlist = listfile.read()
-
-    deletedlist = []
-
-    for mvid in queue:
-        movinforeq(mvid, Force = True)
-        try:
-            mvinfo = thumb_cook(mvid)
-        except MovDeletedException:
-            if mvid in chartlist:
-                del chartlist[mvid]
-            deletedlist.append(mvid)
-        else:
-            postdate = Time(mode = 'n', stream = mvinfo['first_retrieve'])
-            passedmin = (now.dt - postdate.dt).total_seconds() / 60
-            gotdata = [round(passedmin,1), mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
-
-            if mvid in chartlist:
-                chartlist[mvid].append(gotdata)
-            else:
-                chartlist[mvid] = [gotdata]
-
-    listfile.write(chartlist)
-
-    return deletedlist
-
-def postdaychk(): #投稿日チェック
-    listfile = JSONfile("dat/queuelist.json")
-    queuelist = listfile.read()
-
-    queue = []
-
-    for raw_queue in queuelist:
-        postdate = Time(mode = "s", stream = raw_queue['start'])
-        if now.dt - postdate.dt < datetime.timedelta(days = 1): #startが1日以内ならば
-            queue.extend(raw_queue['list'])
-
-    deleted = chartupdate(queue)
-    for mvid in deleted:
-        os.remove("getthumb/" + mvid + ".xml")
-
-def aweekafterchk(): #一週間後チェック
-    listfile = JSONfile("dat/queuelist.json")
-    queuelist = listfile.read()
-
-    queue = []
-
-    for raw_queue in queuelist:
-        postdate = Time(mode = "s", stream = raw_queue['start'])
-        if now.dt - postdate.dt > datetime.timedelta(days = 7): #startが7日以前ならば
-            queue.extend(raw_queue['list'])
-            queuelist.remove(raw_queue)
-
-    chartupdate(queue)
-    for mvid in queue:
-        os.remove("getthumb/" + mvid + ".xml")
-
-    listfile.write(queuelist)
-
-def main():
-    rankreq()
-    postdaychk()
-    aweekafterchk()
-
 if __name__ == '__main__':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
+    gurl = urllib.request.urlretrieve
+    now = Time(mode = 'now')
     main()
