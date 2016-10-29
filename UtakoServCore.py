@@ -43,7 +43,7 @@ class Time:
     def __d2n(self,dt):
         return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
-class Queuecell():
+class Queuecell:
     def __init__(self,queue):
         self.queue = queue
 
@@ -74,13 +74,19 @@ class Queue:
     def add_queue(self,start,mvidls):
         self.qcell.append(Queuecell({'start':start, 'list':mvidls}))
 
-    def del_queue(self,mvid):
-        self.mvlist.index(mvid)
-        start = self.mvlist.pop(mvid)
-        for q in qcell:
-            if q.start = start:
-                q.q_delete(mvid)
+    def del_queue(self,queue):
+        self.qcell.remove(queue)
+
+    def del_mv(self,mvid):
+        start = self.mvdate.pop(self.mvlist.index(mvid))
+        for q in self:
+            if q.start == start:
+                self[self.qcell.index(q)].q_delete(mvid)
                 break
+        self.mvlist.remove(mvid)
+
+    def listate(self):
+        return [x.queue for x in self.qcell]
 
 class JSONfile:
     #self.path:ファイルパスを保存
@@ -117,6 +123,12 @@ class Queuefile(JSONfile):
         super().__init__("dat/queuelist.json")
         self.data = Queue(self.data)
 
+    def write(self):
+        _tmp = self.data
+        self.data = self.data.listate()
+        super().write()
+        self.data = _tmp
+
     def update(self): #ランキング取得・キュー生成部
 
         newcomer = []
@@ -135,25 +147,29 @@ class Queuefile(JSONfile):
                 continue
             break
 
-        self.data.add_queue(now.str12,newcomer)
-
         for j in range(i+1):
             os.remove("ranking/" + str(j) + ".json")
 
+        self.data.add_queue(now.str12,newcomer)
         self.todays_mv = []
         self.lastwks_mv = []
 
-        for raw_queue in self.data:
-            postdate = Time(mode = "s", stream = raw_queue['start'])
+        for raw_queue in self.data.qcell:
+            postdate = Time(mode = "s", stream = raw_queue.start)
             if now.dt - postdate.dt < datetime.timedelta(days = 1): #startが1日以内ならば
-                self.todays_mv.extend(raw_queue['list'])
+                self.todays_mv.extend(raw_queue.list)
             elif now.dt - postdate.dt > datetime.timedelta(days = 7): #startが7日以前ならば
-                self.lastwks_mv.extend(raw_queue['list'])
-                self.data.remove(raw_queue)
+                self.lastwks_mv.extend(raw_queue.list)
+                self.data.del_queue(raw_queue)
 
         self.write()
 
         return None
+
+    def delete(self, deleted):
+        for d in deleted:
+            self.data.del_mv(d)
+        self.write()
 
 class Chartfile(JSONfile):
     #self.deletedlist:
@@ -163,7 +179,6 @@ class Chartfile(JSONfile):
 
     def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
         self.deletedlist = []
-        print(len(queue))
 
         if not isinstance(queue, (tuple, list)):
             raise TypeError("queue must be list or tuple")
@@ -189,13 +204,10 @@ class Chartfile(JSONfile):
 
         return None
 
-class CompressedFloat(float):
-    def __repr__(self):
-        return '%.2f' % self
-
 def float_compressor(obj):
     if isinstance(obj, float):
-        return CompressedFloat(obj)
+        return round(obj,2)
+        # return CompressedFloat(obj)
     elif isinstance(obj, dict):
         return dict((k, float_compressor(v)) for k, v in obj.items())
     elif isinstance(obj,(list,tuple)):
@@ -265,6 +277,7 @@ def main():
     cf = Chartfile()
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv)
+    qf.delete(cf.deletedlist)
     # rankreq()
     # postdaychk()
     # aweekafterchk()
