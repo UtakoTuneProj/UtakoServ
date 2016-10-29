@@ -43,6 +43,45 @@ class Time:
     def __d2n(self,dt):
         return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
+class Queuecell():
+    def __init__(self,queue):
+        self.queue = queue
+
+    @property
+    def queue(self):
+        return self._queue
+
+    @queue.setter
+    def queue(self, queue):
+        self._queue = queue
+        self.start = queue['start']
+        self.list = queue['list']
+
+    def q_delete(self,mvid):
+        self.queue['list'].remove(mvid)
+
+class Queue:
+    def __init__(self, queuels):
+        self.qcell = []
+        self.mvlist = []
+        self.mvdate = []
+        for q in queuels:
+            self.qcell.append(Queuecell(q))
+            for cell in q['list']:
+                self.mvlist.append(cell)
+                self.mvdate.append(q['start'])
+
+    def add_queue(self,start,mvidls):
+        self.qcell.append(Queuecell({'start':start, 'list':mvidls}))
+
+    def del_queue(self,mvid):
+        self.mvlist.index(mvid)
+        start = self.mvlist.pop(mvid)
+        for q in qcell:
+            if q.start = start:
+                q.q_delete(mvid)
+                break
+
 class JSONfile:
     #self.path:ファイルパスを保存
     #self.encoding:エンコードを保存
@@ -76,13 +115,10 @@ class JSONfile:
 class Queuefile(JSONfile):
     def __init__(self):
         super().__init__("dat/queuelist.json")
+        self.data = Queue(self.data)
 
     def update(self): #ランキング取得・キュー生成部
 
-        i = -1
-        while len(self.data[i]['list']) != 0:
-            i -= 1
-        latestList = self.data[i]['list']
         newcomer = []
         exitstatus = False
 
@@ -91,7 +127,7 @@ class Queuefile(JSONfile):
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                if not mvid in latestList: #最後に取得できたリストの中に含まれていないならば
+                if not mvid in self.data.mvlist: #最後に取得できたリストの中に含まれていないならば
                     newcomer.append(mvid)
                 else:
                     break
@@ -99,7 +135,7 @@ class Queuefile(JSONfile):
                 continue
             break
 
-        self.data.append({"start":now.str12, "list": newcomer})
+        self.data.add_queue(now.str12,newcomer)
 
         for j in range(i+1):
             os.remove("ranking/" + str(j) + ".json")
@@ -125,8 +161,9 @@ class Chartfile(JSONfile):
     def __init__(self):
         super().__init__("dat/chartlist.json")
 
-    def update(self, queue, queue_del = False):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
+    def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
         self.deletedlist = []
+        print(len(queue))
 
         if not isinstance(queue, (tuple, list)):
             raise TypeError("queue must be list or tuple")
@@ -135,9 +172,9 @@ class Chartfile(JSONfile):
             try:
                 mvinfo = thumb_cook(mvid)
             except MovDeletedException:
-                if mvid in chartlist:
-                    del chartlist[mvid]
-                deletedlist.append(mvid)
+                if mvid in self.data:
+                    del self.data[mvid]
+                self.deletedlist.append(mvid)
             else:
                 postdate = Time(mode = 'n', stream = mvinfo['first_retrieve'])
                 passedmin = (now.dt - postdate.dt).total_seconds() / 60
