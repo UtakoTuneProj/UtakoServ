@@ -2,28 +2,41 @@
 import codecs
 import json
 
-learnFile = codecs.open("dat/chartlist.json",'r','utf-8')
-learn_data = json.load(learnFile,encoding = 'utf-8')
-learnFile.close()
+import UtakoServCore as core
 
-res = []
+def main(initialize = False):
 
-for mov in learn_data.values():
-    status = False
-    if len(mov) == 25:
+    chartf = core.Chartfile()
+    initf = core.JSONfile('dat/chartlist_init.json')
+
+    if initialize:
+        initf.data = []
+    crushedList = []
+
+    for mvid in chartf.data.keys():
+        mov = chartf.data[mvid]
+        status = True
         for i,cell in enumerate(mov):
-            if i != 24:
-                if cell[0] < i*60 or (cell[0] > (i+1)*60):
+            if i < 24:
+                if cell[0] < i*60 or ((i+1)*60 < cell[0]):
+                    status = False
                     break
-            elif 10140 < cell[0] and cell[0] < 10200:
-                status = True
-        if status:
-            res.append(mov)
-print(len(res))
+            elif i > 24:
+                status = False
+                break
+            elif cell[0] < 10140 or 10200 < cell[0]:
+                status = False
+                break
+        if status and (mov not in initf.data) and len(mov) == 25:
+            initf.data.append(mov)
+        if not status:
+            crushedList.append(mvid)
+    for mvid in crushedList:
+        del chartf.data[mvid]
+    print(len(initf.data))
 
-initfile = codecs.open("dat/chartlist_init.json",'w','utf-8')
-json.dump(res,initfile,ensure_ascii = False)
-initfile.close()
+    chartf.write()
+    initf.write()
 
 if __name__ == '__main__':
-    pass
+    main(initialize = False)
