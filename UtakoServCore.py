@@ -15,6 +15,10 @@ class MovDeletedException(Exception):
     def __init__(self,e):
         Exception.__init__(self,e)
 
+class NoResponseException(Exception):
+    def __init__(self,e):
+        Exception.__init__(self,e)
+
 class Time:
     def __init__(self, mode = "now", stream = None):
         if mode == "now":
@@ -206,7 +210,6 @@ class Chartfile(JSONfile):
                     self.data[mvid].append(gotdata)
                 else:
                     self.data[mvid] = [gotdata]
-                del movf
 
         self.write()
 
@@ -221,14 +224,11 @@ class MovInfo:
         else:
             self.read()
 
-    def __del__(self):
-        os.remove(self.fname)
-
     def update(self): #動画情報xmlを取得
         try:
             gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + self.mvid ,self.fname)
         except:
-            raise MovDeletedException("Cannot get thumbs for" + self.mvid)
+            raise NoResponseException("Cannot get thumbs for " + self.mvid)
 
         self.read()
         return None
@@ -236,7 +236,7 @@ class MovInfo:
     def read(self):#ニコ動動画詳細xml形式を辞書形式に
         root = ET.parse(self.fname).getroot()
         if root.attrib['status'] == 'fail':
-            raise MovDeletedException(mvid + 'has been deleted.')
+            raise MovDeletedException(self.mvid + ' has been deleted.')
 
         for child in root[0]:#xmlの辞書化
             if child.tag == 'tags':
@@ -247,7 +247,6 @@ class MovInfo:
                 self.first_retrieve = Time(stream = child.text, mode = 'nico')
             else:
                 setattr(self, child.tag, child.text)
-            print(getattr(self, child.tag))
 
         # http://www.lifewithpython.com/2014/08/python-use-multiple-separators-to-split-strings.html
         self.title_split = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",self.title) if len(x) > 0] #指定文字でタイトルを分割
@@ -292,8 +291,8 @@ def main():
 
     return None
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
+gurl = urllib.request.urlretrieve
+now = Time(mode = 'now')
 if __name__ == '__main__':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
-    gurl = urllib.request.urlretrieve
-    now = Time(mode = 'now')
     main()
