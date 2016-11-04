@@ -126,8 +126,8 @@ class JSONfile:
         return None
 
 class Queuefile(JSONfile):
-    def __init__(self):
-        super().__init__("dat/queuelist.json")
+    def __init__(self, path = "dat/queuelist.json"):
+        super().__init__(path = path)
         self.data = Queue(self.data)
 
     def write(self):
@@ -181,8 +181,8 @@ class Queuefile(JSONfile):
 class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
-    def __init__(self):
-        super().__init__("dat/chartlist.json")
+    def __init__(self, path = "dat/chartlist.json"):
+        super().__init__(path = path)
 
     def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
         self.deletedlist = []

@@ -1,4 +1,4 @@
-# coding: utf-8
+﻿# coding: utf-8
 import codecs
 import json
 
@@ -21,13 +21,14 @@ def main(initialize = False):
         chart = chartf.data[mvid]
         status = True
         for i,cell in enumerate(chart):
-            if i < 24 and (cell[0] < i*60 or ((i+1) * 60 < cell[0])):
-                status = False
-                break
+            if i < 24:
+                if cell[0] < i*60 or ((i+1)*60 + 30 < cell[0]):
+                    status = False
+                    break
             elif i > 24:
                 status = False
                 break
-            elif i == 24 and (cell[0] < 10140 or 10200 < cell[0]):
+            elif cell[0] < 10140 or 10200 + 30 < cell[0]:
                 status = False
                 break
         if status and (chart not in initf.data) and (len(chart) == 25):
