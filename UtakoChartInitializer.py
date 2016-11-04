@@ -18,13 +18,13 @@ def main(initialize = False):
         status = True
         for i,cell in enumerate(mov):
             if i < 24:
-                if cell[0] < i*60 or ((i+1)*60 < cell[0]):
+                if cell[0] < i*60 or ((i+1)*60 + 30 < cell[0]):
                     status = False
                     break
             elif i > 24:
                 status = False
                 break
-            elif cell[0] < 10140 or 10200 < cell[0]:
+            elif cell[0] < 10140 or 10200 + 30 < cell[0]:
                 status = False
                 break
         if status and (mov not in initf.data) and len(mov) == 25:
