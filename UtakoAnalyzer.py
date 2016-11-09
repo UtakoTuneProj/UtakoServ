@@ -12,9 +12,9 @@ except:
 import UtakoServCore as core
 from ChartVisualizer import ChartData
 
-class Chartfile(core.JSONfile):
-    def __init__(self, path, encoding = 'utf-8'):
-        super().__init__(path, encoding = encoding)
+class InitChartfile(core.JSONfile):
+    def __init__(self, encoding = 'utf-8'):
+        super().__init__('dat/chartlist_init.json', encoding = encoding)
         dump = self.read()
         self.x = []
         self.y = []
@@ -53,7 +53,7 @@ class UtakoModel(Chain):
 def learn():
 
     batchsize = 100
-    n_epoch = 5000
+    n_epoch = 10000
     N_test = 200
 
     model = UtakoModel(n_units = 50)
@@ -70,7 +70,7 @@ def learn():
     l1_W = []
     l2_W = []
 
-    lfile = Chartfile('dat/chartlist_init.json')
+    lfile = InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
     y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
