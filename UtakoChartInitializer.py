@@ -14,10 +14,14 @@ def main(initialize = False):
     crushedList = []
 
     for mvid in chartf.data.keys():
-        # try:
-        #     thumb = core.MovInfo(mvid)
-        # except core.MovDeletedException:
-        #     status = False
+        try:
+            thumb = core.MovInfo(mvid)
+        except core.MovDeletedException:
+            status = False
+            print(mvid + ' has been deleted.', flush = True)
+        except core.NoResponseException:
+            print('No response for ' + mvid + '.', flush = True)
+            continue
         chart = chartf.data[mvid]
         status = True
         for i,cell in enumerate(chart):
@@ -32,6 +36,7 @@ def main(initialize = False):
                 status = False
                 break
         if status and (chart not in initf.data) and (len(chart) == 25):
+            chart.insert(-1, [thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()])
             initf.data.append(chart)
         elif status:
             pass

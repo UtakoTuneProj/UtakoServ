@@ -182,7 +182,7 @@ class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
     def __init__(self, path = "dat/chartlist.json"):
-        super().__init__(path = path)
+        super().__init__(path)
 
     def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
         self.deletedlist = []

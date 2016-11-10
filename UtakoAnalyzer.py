@@ -29,15 +29,17 @@ class InitChartfile(core.JSONfile):
 class UtakoModel(Chain):
     def __init__(self, n_units = 50):
         super(UtakoModel, self).__init__(
-            l1 = L.Linear(96, n_units),
+            l1 = L.Linear(98, n_units),
             l2 = L.Linear(n_units, n_units),
-            l3 = L.Linear(n_units, 1)
+            l3 = L.Linear(n_units, n_units),
+            l4 = L.Linear(n_units, 1)
         )
 
     def __call__(self, x):
         h1 = F.relu(self.l1(x))
         h2 = F.relu(self.l2(h1))
-        y = self.l3(h2)
+        h3 = F.relu(self.l3(h2))
+        y = self.l4(h3)
         return y
 
     def error(self, x_data, y_data, train = True):
@@ -52,11 +54,11 @@ class UtakoModel(Chain):
 
 def learn():
 
-    batchsize = 100
-    n_epoch = 1000
+    batchsize = 200
+    n_epoch = 10000
     N_test = 200
 
-    model = UtakoModel(n_units = 50)
+    model = UtakoModel(n_units = 200)
     optimizer = optimizers.Adam()
     optimizer.setup(model)
 
