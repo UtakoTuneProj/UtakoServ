@@ -1,7 +1,7 @@
 # coding: utf-8
 import sys
 import numpy as np
-from chainer import cuda, Variable, optimizers, Chain
+from chainer import cuda, Variable, optimizers, Chain, ChainList
 import chainer.functions  as F
 import chainer.links as L
 try:
@@ -26,21 +26,20 @@ class InitChartfile(core.JSONfile):
             self.y.append(ydump.vocaran)
 
 
-class UtakoModel(Chain):
-    def __init__(self, n_units = 50):
-        super(UtakoModel, self).__init__(
-            l1 = L.Linear(98, n_units),
-            l2 = L.Linear(n_units, n_units),
-            l3 = L.Linear(n_units, n_units),
-            l4 = L.Linear(n_units, 1)
-        )
+class UtakoModel(ChainList):
+    def __init__(self, n_units = 50, layer = 4):
+        l = [L.Linear(98, n_units)]
+        l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
+        l.append(L.Linear(n_units, 1))
+        super().__init__(*l)
 
     def __call__(self, x):
-        h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l2(h1))
-        h3 = F.relu(self.l3(h2))
-        y = self.l4(h3)
-        return y
+        h = x
+        for i in range(self.__len__() - 1):
+            layer = self.__getitem__(i)
+            h = F.relu(layer(h))
+        o_layer = self.__getitem__(i+1)
+        return o_layer(h)
 
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
@@ -55,10 +54,10 @@ class UtakoModel(Chain):
 def learn():
 
     batchsize = 200
-    n_epoch = 10000
+    n_epoch = 1000
     N_test = 200
 
-    model = UtakoModel(n_units = 200)
+    model = UtakoModel(n_units = 200, layer = 5)
     optimizer = optimizers.Adam()
     optimizer.setup(model)
 
