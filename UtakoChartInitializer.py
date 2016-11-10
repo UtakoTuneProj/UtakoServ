@@ -1,4 +1,4 @@
-# coding: utf-8
+﻿# coding: utf-8
 import codecs
 import json
 
@@ -14,9 +14,17 @@ def main(initialize = False):
     crushedList = []
 
     for mvid in chartf.data.keys():
-        mov = chartf.data[mvid]
+        try:
+            thumb = core.MovInfo(mvid)
+        except core.MovDeletedException:
+            status = False
+            print(mvid + ' has been deleted.', flush = True)
+        except core.NoResponseException:
+            print('No response for ' + mvid + '.', flush = True)
+            continue
+        chart = chartf.data[mvid]
         status = True
-        for i,cell in enumerate(mov):
+        for i,cell in enumerate(chart):
             if i < 24:
                 if cell[0] < i*60 or ((i+1)*60 + 30 < cell[0]):
                     status = False
@@ -27,12 +35,16 @@ def main(initialize = False):
             elif cell[0] < 10140 or 10200 + 30 < cell[0]:
                 status = False
                 break
-        if status and (mov not in initf.data) and len(mov) == 25:
-            initf.data.append(mov)
-        if not status:
+        if status and (chart not in initf.data) and (len(chart) == 25):
+            chart.insert(-1, [thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()])
+            initf.data.append(chart)
+        elif status:
+            pass
+        else:
             crushedList.append(mvid)
     for mvid in crushedList:
         del chartf.data[mvid]
+    print(len(chartf.data))
     print(len(initf.data))
 
     chartf.write()

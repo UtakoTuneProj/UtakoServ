@@ -15,6 +15,10 @@ class MovDeletedException(Exception):
     def __init__(self,e):
         Exception.__init__(self,e)
 
+class NoResponseException(Exception):
+    def __init__(self,e):
+        Exception.__init__(self,e)
+
 class Time:
     def __init__(self, mode = "now", stream = None):
         if mode == "now":
@@ -30,6 +34,9 @@ class Time:
         self.nico = self.__d2n(self.dt)
         self.str12 = self.__d2s(self.dt)
         return None
+
+    def __repr__(self):
+        return('{} <Utako Time Object>'.format(self.nico))
 
     def __n2d(self,nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
         return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
@@ -175,7 +182,7 @@ class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
     def __init__(self, path = "dat/chartlist.json"):
-        super().__init__(path = path)
+        super().__init__(path)
 
     def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
         self.deletedlist = []
@@ -183,17 +190,21 @@ class Chartfile(JSONfile):
         if not isinstance(queue, (tuple, list)):
             raise TypeError("queue must be list or tuple")
         for mvid in queue:
-            movinforeq(mvid)
             try:
-                mvinfo = thumb_cook(mvid)
+                movf = MovInfo(mvid)
             except MovDeletedException:
                 if mvid in self.data:
                     del self.data[mvid]
                 self.deletedlist.append(mvid)
             else:
-                postdate = Time(mode = 'n', stream = mvinfo['first_retrieve'])
-                passedmin = (now.dt - postdate.dt).total_seconds() / 60
-                gotdata = [passedmin, mvinfo['view_counter'], mvinfo['comment_num'], mvinfo['mylist_counter']]
+                movf.update()
+                passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
+                gotdata = [
+                           passedmin,
+                           movf.view_counter,
+                           movf.comment_num,
+                           movf.mylist_counter
+                          ]
 
                 if mvid in self.data:
                     self.data[mvid].append(gotdata)
@@ -201,6 +212,44 @@ class Chartfile(JSONfile):
                     self.data[mvid] = [gotdata]
 
         self.write()
+
+        return None
+
+class MovInfo:
+    def __init__(self, mvid):
+        self.mvid = mvid
+        self.fname = 'getthumb/' + mvid + '.xml'
+        if not os.path.exists(self.fname):
+            self.update()
+        else:
+            self.read()
+
+    def update(self): #動画情報xmlを取得
+        try:
+            gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + self.mvid ,self.fname)
+        except:
+            raise NoResponseException("Cannot get thumbs for " + self.mvid)
+
+        self.read()
+        return None
+
+    def read(self):#ニコ動動画詳細xml形式を辞書形式に
+        root = ET.parse(self.fname).getroot()
+        if root.attrib['status'] == 'fail':
+            raise MovDeletedException(self.mvid + ' has been deleted.')
+
+        for child in root[0]:#xmlの辞書化
+            if child.tag == 'tags':
+                setattr(self, 'tags', [x.text for x in child])
+            elif child.tag in ["mylist_counter", "comment_num", "view_counter"]:#一部を数値に変換
+                setattr(self, child.tag, int(child.text))
+            elif child.tag == 'first_retrieve':
+                self.first_retrieve = Time(stream = child.text, mode = 'nico')
+            else:
+                setattr(self, child.tag, child.text)
+
+        # http://www.lifewithpython.com/2014/08/python-use-multiple-separators-to-split-strings.html
+        self.title_split = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",self.title) if len(x) > 0] #指定文字でタイトルを分割
 
         return None
 
@@ -214,48 +263,6 @@ def float_compressor(obj):
         return list(map(float_compressor, obj))
     else:
         return obj
-
-def xml2dict(filename):#ニコ動動画詳細xml形式を辞書形式に
-    page = {}
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    if root.attrib['status'] == 'fail':
-        raise MovDeletedException(filename + 'is info for deleted movie.')
-
-    for child in root[0]:#xmlの辞書化
-        page[child.tag] = child.text
-
-    page["tags"] = []#タグの分割
-    for tags in root[0].find("tags"):
-        page["tags"].append(tags.text)
-
-    return page
-
-#https://remotestance.com/blog/136/
-def thumb_cook(mvid):#mvidについて取得済みのxmlファイルを解析し整形
-
-    page = xml2dict("getthumb/"+mvid+".xml")
-
-    for deletetag in ["watch_url", "movie_type", "size_low", "no_live_play", "embeddable", "last_res_body", "user_icon_url", "size_high", "thumb_type"]:#不必要なエントリを除去
-        if deletetag in page:
-            del page[deletetag]
-
-    for s2i in ["mylist_counter", "comment_num", "view_counter"]:#一部を数値に変換
-        page[s2i] = int(page[s2i])
-
-    # http://www.lifewithpython.com/2014/08/python-use-multiple-separators-to-split-strings.html
-    page["title"] = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",page["title"]) if len(x) > 0] #指定文字でタイトルを分割
-
-    return page
-
-def movinforeq(mvid): #動画情報xmlを取得
-
-    try:
-        gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid ,"getthumb/"+ str(mvid) +".xml")
-    except:
-        raise MovDeletedException("handling" + mvid + "error occured")
-
-    return None
 
 def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtag) + "&targets=tags&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
@@ -284,8 +291,8 @@ def main():
 
     return None
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
+gurl = urllib.request.urlretrieve
+now = Time(mode = 'now')
 if __name__ == '__main__':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
-    gurl = urllib.request.urlretrieve
-    now = Time(mode = 'now')
     main()
