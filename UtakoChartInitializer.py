@@ -19,10 +19,14 @@ def main(initialize = False):
         except core.MovDeletedException:
             status = False
             print(mvid + ' has been deleted.', flush = True)
+            crushedList.append(mvid)
+            continue
         except core.NoResponseException:
             print('No response for ' + mvid + '.', flush = True)
             continue
-        chart = chartf.data[mvid]
+
+        #http://qiita.com/utgwkk/items/5ad2527f19150ae33322
+        chart = chartf.data[mvid][:]
         status = True
         for i,cell in enumerate(chart):
             if i < 24:
