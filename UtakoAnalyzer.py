@@ -1,7 +1,7 @@
 # coding: utf-8
 import sys
 import numpy as np
-from chainer import cuda, Variable, optimizers, Chain
+from chainer import cuda, Variable, optimizers, Chain, ChainList
 import chainer.functions  as F
 import chainer.links as L
 try:
@@ -12,9 +12,9 @@ except:
 import UtakoServCore as core
 from ChartVisualizer import ChartData
 
-class Chartfile(core.JSONfile):
-    def __init__(self, path, encoding = 'utf-8'):
-        super().__init__(path, encoding = encoding)
+class InitChartfile(core.JSONfile):
+    def __init__(self, encoding = 'utf-8'):
+        super().__init__('dat/chartlist_init.json', encoding = encoding)
         dump = self.read()
         self.x = []
         self.y = []
@@ -26,19 +26,20 @@ class Chartfile(core.JSONfile):
             self.y.append(ydump.vocaran)
 
 
-class UtakoModel(Chain):
-    def __init__(self, n_units = 50):
-        super(UtakoModel, self).__init__(
-            l1 = L.Linear(96, n_units),
-            l2 = L.Linear(n_units, n_units),
-            l3 = L.Linear(n_units, 1)
-        )
+class UtakoModel(ChainList):
+    def __init__(self, n_units = 50, layer = 4):
+        l = [L.Linear(98, n_units)]
+        l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
+        l.append(L.Linear(n_units, 1))
+        super().__init__(*l)
 
     def __call__(self, x):
-        h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l2(h1))
-        y = self.l3(h2)
-        return y
+        h = x
+        for i in range(self.__len__() - 1):
+            layer = self.__getitem__(i)
+            h = F.relu(layer(h))
+        o_layer = self.__getitem__(i+1)
+        return o_layer(h)
 
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
@@ -52,11 +53,11 @@ class UtakoModel(Chain):
 
 def learn():
 
-    batchsize = 100
-    n_epoch = 5000
+    batchsize = 200
+    n_epoch = 1000
     N_test = 200
 
-    model = UtakoModel(n_units = 50)
+    model = UtakoModel(n_units = 200, layer = 5)
     optimizer = optimizers.Adam()
     optimizer.setup(model)
 
@@ -70,7 +71,7 @@ def learn():
     l1_W = []
     l2_W = []
 
-    lfile = Chartfile('dat/chartlist_init.json')
+    lfile = InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
     y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
