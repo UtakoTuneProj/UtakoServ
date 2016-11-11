@@ -259,7 +259,8 @@ class MovInfo:
         return None
 
     def read(self):#ニコ動動画詳細xml形式を辞書形式に
-        root = ET.parse(self.fname).getroot()
+        with codecs.open(self.fname, 'r', 'utf-8') as f:
+            root = ET.parse(f).getroot()
         if root.attrib['status'] == 'fail':
             raise MovDeletedException(self.mvid + ' has been deleted.')
 
@@ -310,13 +311,10 @@ def main():
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv)
     qf.delete(cf.deletedlist)
-    # rankreq()
-    # postdaychk()
-    # aweekafterchk()
 
     return None
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
 gurl = urllib.request.urlretrieve
 now = Time(mode = 'now')
 if __name__ == '__main__':

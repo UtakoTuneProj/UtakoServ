@@ -1,12 +1,5 @@
 # coding: utf-8
-import urllib.request
-import urllib.parse
-import datetime
-import json
-import codecs
 import sys
-import io
-import xml.etree.ElementTree as ET
 import re
 import glob
 from chainer import cuda, Variable, optimizers, Chain, ChainList
@@ -16,9 +9,12 @@ import numpy as np
 
 import UtakoServCore as core
 
+# sys.stdout = _io.TextIOWrapper(sys.stdout.buffer, encoding = 'utf-8')
+# sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer)
+
 class ScreenerModel(ChainList):
     def __init__(self, in_len, n_units = 50, layer = 2):
-        l = [L.Linear(98, n_units)]
+        l = [L.Linear(in_len, n_units)]
         if layer > 2:
             l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
         l.append(L.Linear(n_units, 1))
@@ -61,7 +57,7 @@ class CorrtableFile(core.JSONfile):
                 self.len += 1
                 ret.append(1)
 
-        return np.array(ret, dtype = np.float32)
+        return np.array([ret], dtype = np.float32)
 
 def searchHit(query):#クエリに指定した検索結果の件数を返す:検索結果信用の基準は70程度
 
@@ -83,35 +79,40 @@ def teach():
     chartf = core.Chartfile()
     teacherf = TeacherFile()
     corrtablef = CorrtableFile()
-    net = ScreenerModel(in_len = corrtablef.len)
 
-    for mv in chartf.data.keys():
+    for mvid in chartf.data.keys():
 
-        if mvid not in teachef.data:
-            thumb = core.MovInfo(mvid)
-            thumb.update()
+        print('------------------------------------')
+
+        if mvid not in teacherf.data:
+            try:
+                thumb = core.MovInfo(mvid)
+                thumb.update()
+            except core.MovDeletedException:
+                continue
 
             x = corrtablef.thumb2chainer(*thumb.tags)
+            net = ScreenerModel(in_len = corrtablef.len)
 
             pred = net(x)
-            if abs(pred) < 0.5:
-                print("ねえ、" + mvid + "がオリジナル曲かどうか調べてきてくれない?こんな動画なんだけど…")
-                for tk in thumb.data.keys():
-                    print(tk + ':' + thumb.data[tk])
-                print(pred)
-                print("オリジナル曲だった→1/じゃなかった→0/分からなかった→u/終わる→exit")
+            if abs(pred.data) < 0.5:
+                print(u"ねえ、" + mvid + u"がオリジナル曲かどうか調べてきてくれない?こんな動画なんだけど…", flush = True)
+                for tk in ['title', 'description', 'tags', 'length', 'view_counter', 'comment_num', 'mylist_counter']:
+                    print(tk + ':' , getattr(thumb,tk))
+                print(pred.data)
+                print(u"オリジナル曲だった→1/じゃなかった→0/分からなかった→u/終わる→exit")
                 res = input()
                 if res == "1":
-                    print("ありがと、今から聞いてくるわ")
+                    print(u"ありがと、今から聞いてくるわ")
                     teacherf.data[mvid] = 1
                 elif res == "0":
-                    print("そっか、残念ね…")
+                    print(u"そっか、残念ね…")
                     teacherf.data[mvid] = 0
                 elif res == "exit":
-                    print("あんたはあたしと違って忙しいもんね")
+                    print(u"あんたはあたしと違って忙しいもんね")
                     break
                 else:
-                    print("役立たずね")
+                    print(u"役立たずね")
 
     teacherf.write()
     corrtablef.write()
@@ -135,5 +136,6 @@ if __name__ == '__main__':
         main(sys.argv[1])
     except ValueError:
         print("Command Line Argument '" + sys.argv[1] + "' is invalid.")
+        raise
     except IndexError:
         print("Command Line Argument is needed.")
