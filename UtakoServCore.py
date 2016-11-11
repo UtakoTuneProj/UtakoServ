@@ -95,6 +95,17 @@ class Queue:
     def listate(self):
         return [x.queue for x in self.qcell]
 
+class Chartcell:
+    def __init__(self,l):
+        self.view = l[1]
+        self.comment = l[2]
+        self.mylist = l[3]
+
+        self.cm_cor = (self.view + self.mylist) / (self.view + self.comment + self.mylist)
+        self.vocaran = self.view + self.comment * self.cm_cor + self.mylist ** 2 / self.view * 2
+        self.vt30 = self.view + self.comment * self.cm_cor + self.mylist * 20
+        self.vocasan = self.view + self.comment * 8 + self.mylist * 25
+
 class JSONfile:
     #self.path:ファイルパスを保存
     #self.encoding:エンコードを保存
@@ -215,6 +226,19 @@ class Chartfile(JSONfile):
         self.write()
 
         return None
+
+class InitChartfile(JSONfile):
+    def __init__(self, encoding = 'utf-8'):
+        super().__init__('dat/chartlist_init.json', encoding = encoding)
+        dump = self.read()
+        self.x = []
+        self.y = []
+        for mov in dump:
+            self.x.append([])
+            for cell in mov[0:-1]:
+                self.x[-1].extend(cell)
+            ydump = Chartcell(mov[-1])
+            self.y.append(ydump.vocaran)
 
 class MovInfo:
     def __init__(self, mvid):

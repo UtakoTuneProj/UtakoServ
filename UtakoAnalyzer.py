@@ -10,21 +10,6 @@ except:
     pass
 
 import UtakoServCore as core
-from ChartVisualizer import ChartData
-
-class InitChartfile(core.JSONfile):
-    def __init__(self, encoding = 'utf-8'):
-        super().__init__('dat/chartlist_init.json', encoding = encoding)
-        dump = self.read()
-        self.x = []
-        self.y = []
-        for mov in dump:
-            self.x.append([])
-            for cell in mov[0:-1]:
-                self.x[-1].extend(cell)
-            ydump = ChartData(mov[-1])
-            self.y.append(ydump.vocaran)
-
 
 class UtakoModel(ChainList):
     def __init__(self, n_units = 50, layer = 4):
@@ -71,7 +56,7 @@ def learn():
     l1_W = []
     l2_W = []
 
-    lfile = InitChartfile()
+    lfile = core.InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
     y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
 
