@@ -79,6 +79,7 @@ def main(initialize = False):
                                           rankf.data['meta']['totalCount']
                                          ])
                 tagstat.append(tagstatf.hits[x])
+                tagstat.sort()
                 if len(tagstat) > 11:
                     tagstat = tagstat[0:11]
                 elif len(tagstat) < 11:
