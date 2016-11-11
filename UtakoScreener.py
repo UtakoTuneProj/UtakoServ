@@ -9,20 +9,44 @@ import io
 import xml.etree.ElementTree as ET
 import re
 import glob
+from chainer import cuda, Variable, optimizers, Chain, ChainList
+import chainer.functions  as F
+import chainer.links as L
 
 import UtakoServCore as core
+
+class ScreenerModel(ChainList):
+    def __init__(self, n_units = 50, layer = 2):
+        l = [L.Linear(98, n_units)]
+        l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
+        l.append(L.Linear(n_units, 1))
+        super().__init__(*l)
+
+    def __call__(self, x):
+        h = x
+        for i in range(self.__len__() - 1):
+            layer = self.__getitem__(i)
+            h = F.relu(layer(h))
+        o_layer = self.__getitem__(i+1)
+        return o_layer(h)
+
+    def error(self, x_data, y_data, train = True):
+        y = self(Variable(x_data))
+        t = Variable(y_data)
+        if not train:
+            ret = [t.data[0][0], y.data[0][0]]
+        else:
+            ret = None
+
+        return F.mean_squared_error(y,t), ret
 
 def searchHit(query):#クエリに指定した検索結果の件数を返す:検索結果信用の基準は70程度
 
     if query.startswith("tag"):
         stag = cell.lstrip("tag")
-        print("tag")
-        print(stag)
         core.rankfilereq(searchtag = stag)
     else:
         stitle = cell.lstrip("title")
-        print("title")
-        print(stitle)
         core.rankfilereqTITLE(searchtitle = stitle)
 
     searchFile = codecs.open("ranking/0.json",'r','utf-8')
