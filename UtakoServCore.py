@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import re
 import glob
 import os
+from tweepyCore import chart_tw
 
 class MovDeletedException(Exception):
     def __init__(self,e):
