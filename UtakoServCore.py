@@ -267,7 +267,10 @@ def float_compressor(obj):
 def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtag) + "&targets=tags&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
 
-    gurl(rankreqbase, "ranking/" + str(page) + ".json")
+    try:
+        gurl(rankreqbase, "ranking/" + str(page) + ".json")
+    except urllib.error.URLError:
+        print("Search query for",searchtag,"is failed. Maybe overloaded.")
 
     return None
 

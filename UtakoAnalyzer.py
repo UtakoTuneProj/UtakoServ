@@ -28,7 +28,7 @@ class InitChartfile(core.JSONfile):
 
 class UtakoModel(ChainList):
     def __init__(self, n_units = 50, layer = 4):
-        l = [L.Linear(98, n_units)]
+        l = [L.Linear(109, n_units)]
         l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
         l.append(L.Linear(n_units, 1))
         super().__init__(*l)
@@ -53,9 +53,9 @@ class UtakoModel(ChainList):
 
 def learn():
 
-    batchsize = 200
-    n_epoch = 1000
-    N_test = 200
+    batchsize = 400
+    n_epoch = 3000
+    N_test = 300
 
     model = UtakoModel(n_units = 200, layer = 5)
     optimizer = optimizers.Adam()

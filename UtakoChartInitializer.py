@@ -1,13 +1,32 @@
 ﻿# coding: utf-8
 import codecs
 import json
+import datetime
+import math as m
 
 import UtakoServCore as core
+
+class TagStatFile(core.JSONfile):
+    #TagStatFile:[[tagname, valid, hits],...]
+    def __init__(self, path = 'dat/tagstat.json'):
+        super().__init__(path = path)
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        self._data = data
+        self.tags = list(zip(*data))[0]
+        self.valid = list(map(lambda x:core.Time(stream = str(x), mode = 's'), list(zip(*data))[1] ))
+        self.hits = list(map(int, list(zip(*data))[2] ))
 
 def main(initialize = False):
 
     chartf = core.Chartfile()
     initf = core.JSONfile('dat/chartlist_init.json')
+    tagstatf = TagStatFile()
 
     if initialize:
         initf.data = []
@@ -40,7 +59,41 @@ def main(initialize = False):
                 status = False
                 break
         if status and (chart not in initf.data) and (len(chart) == 25):
-            chart.insert(-1, [thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()])
+            tagstat = []
+            for tag in thumb.tags:
+                if tag in tagstatf.tags:
+                    x = tagstatf.tags.index(tag)
+                    if tagstatf.valid[x].dt < core.now.dt:
+                        core.rankfilereq(searchtag = tag)
+                        hits = core.JSONfile('ranking/0.json').data['meta']['totalCount']
+                        tagstatf.data[x] = [
+                                            tag,
+                                            core.Time( stream =  core.now.dt
+                                                     + datetime.timedelta(days = 7 + 3 * m.log10(hits+1)),
+                                                       mode = 'dt').str12,
+                                            hits
+                                           ]
+                else:
+                    x = -1
+                    core.rankfilereq(searchtag = tag)
+                    hits = core.JSONfile('ranking/0.json').data['meta']['totalCount']
+                    tagstatf.data.append([
+                                          tag,
+                                          core.Time( stream =  core.now.dt
+                                                   + datetime.timedelta(days = 7 + 3 * m.log10(hits+1)),
+                                                     mode = 'dt').str12,
+                                          hits
+                                         ])
+                tagstat.append(m.log10(tagstatf.hits[x] + 1))
+            tagstat.sort()
+            tagstat.reverse()
+            if len(tagstat) > 11:
+                tagstat = tagstat[0:11]
+            elif len(tagstat) < 11:
+                tagstat.extend([0 for i in range(11 - len(tagstat))])
+            x = [thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()]
+            x.extend(tagstat)
+            chart.insert(-1, x)
             initf.data.append(chart)
         elif status:
             pass
@@ -53,6 +106,7 @@ def main(initialize = False):
 
     chartf.write()
     initf.write()
+    tagstatf.write()
 
 if __name__ == '__main__':
     main(initialize = False)
