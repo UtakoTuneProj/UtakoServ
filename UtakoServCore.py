@@ -96,6 +96,17 @@ class Queue:
     def listate(self):
         return [x.queue for x in self.qcell]
 
+class Chartcell:
+    def __init__(self,l):
+        self.view = l[1]
+        self.comment = l[2]
+        self.mylist = l[3]
+
+        self.cm_cor = (self.view + self.mylist) / (self.view + self.comment + self.mylist)
+        self.vocaran = self.view + self.comment * self.cm_cor + self.mylist ** 2 / self.view * 2
+        self.vt30 = self.view + self.comment * self.cm_cor + self.mylist * 20
+        self.vocasan = self.view + self.comment * 8 + self.mylist * 25
+
 class JSONfile:
     #self.path:ファイルパスを保存
     #self.encoding:エンコードを保存
@@ -125,6 +136,7 @@ class JSONfile:
 
         fobj.close()
         return None
+
 
 class Queuefile(JSONfile):
     def __init__(self, path = "dat/queuelist.json"):
@@ -216,6 +228,19 @@ class Chartfile(JSONfile):
 
         return None
 
+class InitChartfile(JSONfile):
+    def __init__(self, encoding = 'utf-8'):
+        super().__init__('dat/chartlist_init.json', encoding = encoding)
+        dump = self.read()
+        self.x = []
+        self.y = []
+        for mov in dump:
+            self.x.append([])
+            for cell in mov[0:-1]:
+                self.x[-1].extend(cell)
+            ydump = Chartcell(mov[-1])
+            self.y.append(ydump.vocaran)
+
 class MovInfo:
     def __init__(self, mvid):
         self.mvid = mvid
@@ -235,7 +260,8 @@ class MovInfo:
         return None
 
     def read(self):#ニコ動動画詳細xml形式を辞書形式に
-        root = ET.parse(self.fname).getroot()
+        with codecs.open(self.fname, 'r', 'utf-8') as f:
+            root = ET.parse(f).getroot()
         if root.attrib['status'] == 'fail':
             raise MovDeletedException(self.mvid + ' has been deleted.')
 
@@ -289,13 +315,10 @@ def main():
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv)
     qf.delete(cf.deletedlist)
-    # rankreq()
-    # postdaychk()
-    # aweekafterchk()
 
     return None
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
 gurl = urllib.request.urlretrieve
 now = Time(mode = 'now')
 if __name__ == '__main__':
