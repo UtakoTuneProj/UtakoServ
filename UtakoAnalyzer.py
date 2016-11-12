@@ -1,19 +1,20 @@
 # coding: utf-8
 import sys
 import numpy as np
-from chainer import cuda, Variable, optimizers, Chain, ChainList
+from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
 import chainer.functions  as F
 import chainer.links as L
 try:
     import matplotlib.pyplot as plt
+    GUI = True
 except:
-    pass
+    GUI = False
 
 import UtakoServCore as core
 
-class UtakoModel(ChainList):
-    def __init__(self, n_units = 50, layer = 4):
-        l = [L.Linear(109, n_units)]
+class ChartModel(ChainList):
+    def __init__(self, in_layer = 109, n_units = 50, layer = 4):
+        l = [L.Linear(in_layer, n_units)]
         l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
         l.append(L.Linear(n_units, 1))
         super().__init__(*l)
@@ -40,9 +41,9 @@ def learn():
 
     batchsize = 400
     n_epoch = 3000
-    N_test = 300
+    N_test = 500
 
-    model = UtakoModel(n_units = 200, layer = 5)
+    model = ChartModel(n_units = 200, layer = 5)
     optimizer = optimizers.Adam()
     optimizer.setup(model)
 
@@ -58,7 +59,7 @@ def learn():
 
     lfile = core.InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
-    y_dump = 100 * np.log10(np.array(lfile.y, dtype = np.float32))
+    y_dump = 100 * np.log10(np.array(lfile.vocaran, dtype = np.float32))
 
     N = len(x_dump) - N_test
     perm = np.arange(len(x_dump))
@@ -114,27 +115,31 @@ def learn():
         print('test  mean loss={}'.format(sum_loss / N_test))
         test_loss.append(sum_loss / N_test)
 
-    # 精度と誤差をグラフ描画
-    plt.plot(range(len(train_loss)), train_loss)
-    plt.plot(range(len(test_loss)), test_loss)
-    plt.legend(["train","test"])
-    plt.yscale('log')
-    plt.show()
+    serializers.save_npz('Network/chart.model', model)
 
-    test_data[0].sort()
-    test_data[int(n_epoch / 2)].sort()
-    test_data[-1].sort()
-    plt_data_init = [list(x) for x in zip(*test_data[0])]
-    plt_data_cent = [list(x) for x in zip(*test_data[int(n_epoch / 2)])]
-    plt_data_last = [list(x) for x in zip(*test_data[-1])]
+    if GUI:
+        # 精度と誤差をグラフ描画
+        plt.plot(range(len(train_loss)), train_loss)
+        plt.plot(range(len(test_loss)), test_loss)
+        plt.legend(["train","test"])
+        plt.yscale('log')
+        plt.show()
 
-    plt.plot(plt_data_init[0],range(N_test))
-    plt.plot(plt_data_last[1],range(N_test))
-    plt.legend(['Ans.', 'last'])
-    plt.show()
+        test_data[0].sort()
+        test_data[int(n_epoch / 2)].sort()
+        test_data[-1].sort()
+        plt_data_init = [list(x) for x in zip(*test_data[0])]
+        plt_data_cent = [list(x) for x in zip(*test_data[int(n_epoch / 2)])]
+        plt_data_last = [list(x) for x in zip(*test_data[-1])]
 
-def analyze():
-    pass
+        plt.plot(plt_data_init[0],range(N_test))
+        plt.plot(plt_data_last[1],range(N_test))
+        plt.legend(['Ans.', 'last'])
+        plt.show()
+
+def analyze(mvid):
+    model = ChartModel(n_units = 200, layer = 4)
+    serializers.load_npz('Network/chart.model', model)
 
 def main():
     learn()
