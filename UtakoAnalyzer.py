@@ -54,7 +54,7 @@ class UtakoModel(ChainList):
 def learn():
 
     batchsize = 400
-    n_epoch = 10000
+    n_epoch = 3000
     N_test = 300
 
     model = UtakoModel(n_units = 200, layer = 5)
