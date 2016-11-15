@@ -3,6 +3,7 @@ import codecs
 import json
 import datetime
 import math as m
+import os
 
 import UtakoServCore as core
 
@@ -10,6 +11,7 @@ class TagStatFile(core.JSONfile):
     #TagStatFile:[[tagname, valid, hits],...]
     def __init__(self, path = 'dat/tagstat.json'):
         super().__init__(path = path)
+        self.saved = True
 
     @property
     def data(self):
@@ -21,92 +23,125 @@ class TagStatFile(core.JSONfile):
         self.tags = list(zip(*data))[0]
         self.valid = list(map(lambda x:core.Time(stream = str(x), mode = 's'), list(zip(*data))[1] ))
         self.hits = list(map(int, list(zip(*data))[2] ))
+        self.saved = False
+
+    def update(self, tag):
+        if tag in self.tags:
+            x = self.tags.index(tag)
+            if self.valid[x].dt > core.now.dt:
+                return x
+        else:
+            x = len(self.data)
+            self.data.append(None)
+        core.rankfilereq(searchtag = tag)
+        hits = core.JSONfile('ranking/0.json').data['meta']['totalCount']
+        self.data[x] = [
+            tag,
+            core.Time( stream =
+                core.now.dt
+              + datetime.timedelta(days = 7 + 3 * m.log10(hits+1)),
+                mode = 'dt'
+            ).str12,
+            hits
+        ]
+        os.remove('ranking/0.json')
+        return x
+
+def normalizer(mvid, on_prog = False):
+    #chartfileからチャートを取得し、Analyzerで利用可能な形に変換する
+    #on_prog == Trueならば計測中データでも戻り値あり、FalseならばStatusのみ返ってくる
+    #戻り値は[Status('deleted', 'no_response', 'completed', 'broken', range(1,25)),x,y]
+
+    chartf = core.Chartfile()
+    tagstatf = TagStatFile()
+
+    try:
+        thumb = core.MovInfo(mvid)
+    except core.MovDeletedException:
+        print(mvid + ' has been deleted.')
+        return ['deleted', None, None]
+    except core.NoResponseException:
+        print('No response for '+ mvid)
+        return ['no_response', None, None]
+
+    #http://qiita.com/utgwkk/items/5ad2527f19150ae33322
+    chart = chartf.data[mvid][:]
+    status = True
+    for i,cell in enumerate(chart):
+        if i < 24:
+            if cell[0] < i*60 or ((i+1)*60 + 30 < cell[0]):
+                status = False
+                break
+        elif i > 24:
+            status = False
+            break
+        elif cell[0] < 10140 or 10200 + 30 < cell[0]:
+            status = False
+            break
+
+    if status and not on_prog and len(chart) != 25:
+        status = len(chart)
+        x = None
+        y = None
+    elif status:
+        x = []
+        tagstat = []
+        for cell in chart:
+            x.extend(cell)
+        if len(chart) == 25:
+            y = x[-4:]
+            x = x[:-4]
+            status = 'completed'
+        else:
+            y = None
+            status = len(chart)
+        for tag in thumb.tags:
+            i = tagstatf.update(tag)
+            tagstat.append(m.log10(tagstatf.data[i][2] + 1))
+        tagstat.sort()
+        tagstat.reverse()
+        if len(tagstat) > 11:
+            tagstat = tagstat[0:11]
+        elif len(tagstat) < 11:
+            tagstat.extend([0 for i in range(11 - len(tagstat))])
+        x.extend([thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()])
+        x.extend(tagstat)
+    else:
+        status = 'broken'
+        x = None
+        y = None
+
+    if not tagstatf.saved:
+        tagstatf.write()
+
+    return [status, x, y]
 
 def main(initialize = False):
 
     chartf = core.Chartfile()
-    initf = core.JSONfile('dat/chartlist_init.json')
-    tagstatf = TagStatFile()
+    initf  = core.InitChartfile()
+    queuef = core.Queuefile()
 
     if initialize:
         initf.data = []
     crushedList = []
 
     for mvid in chartf.data.keys():
-        try:
-            thumb = core.MovInfo(mvid)
-        except core.MovDeletedException:
-            status = False
-            print(mvid + ' has been deleted.', flush = True)
+        if mvid in initf.mvid:
+            continue
+        [status, x, y] = normalizer(mvid)
+        if status in ['broken', 'deleted']:
             crushedList.append(mvid)
-            continue
-        except core.NoResponseException:
-            print('No response for ' + mvid + '.', flush = True)
-            continue
+        elif status == 'completed':
+            initf.data.append([mvid,x,y])
 
-        #http://qiita.com/utgwkk/items/5ad2527f19150ae33322
-        chart = chartf.data[mvid][:]
-        status = True
-        for i,cell in enumerate(chart):
-            if i < 24:
-                if cell[0] < i*60 or ((i+1)*60 + 30 < cell[0]):
-                    status = False
-                    break
-            elif i > 24:
-                status = False
-                break
-            elif cell[0] < 10140 or 10200 + 30 < cell[0]:
-                status = False
-                break
-        if status and (chart not in initf.data) and (len(chart) == 25):
-            tagstat = []
-            for tag in thumb.tags:
-                if tag in tagstatf.tags:
-                    x = tagstatf.tags.index(tag)
-                    if tagstatf.valid[x].dt < core.now.dt:
-                        core.rankfilereq(searchtag = tag)
-                        hits = core.JSONfile('ranking/0.json').data['meta']['totalCount']
-                        tagstatf.data[x] = [
-                                            tag,
-                                            core.Time( stream =  core.now.dt
-                                                     + datetime.timedelta(days = 7 + 3 * m.log10(hits+1)),
-                                                       mode = 'dt').str12,
-                                            hits
-                                           ]
-                else:
-                    x = -1
-                    core.rankfilereq(searchtag = tag)
-                    hits = core.JSONfile('ranking/0.json').data['meta']['totalCount']
-                    tagstatf.data.append([
-                                          tag,
-                                          core.Time( stream =  core.now.dt
-                                                   + datetime.timedelta(days = 7 + 3 * m.log10(hits+1)),
-                                                     mode = 'dt').str12,
-                                          hits
-                                         ])
-                tagstat.append(m.log10(tagstatf.hits[x] + 1))
-            tagstat.sort()
-            tagstat.reverse()
-            if len(tagstat) > 11:
-                tagstat = tagstat[0:11]
-            elif len(tagstat) < 11:
-                tagstat.extend([0 for i in range(11 - len(tagstat))])
-            x = [thumb.first_retrieve.dt.hour, thumb.first_retrieve.dt.weekday()]
-            x.extend(tagstat)
-            chart.insert(-1, x)
-            initf.data.append(chart)
-        elif status:
-            pass
-        else:
-            crushedList.append(mvid)
     for mvid in crushedList:
         del chartf.data[mvid]
-    print(len(chartf.data))
-    print(len(initf.data))
+    print('len(chartf.data) :', len(chartf.data))
+    print('len(initf.data)  :', len(initf.data))
 
     chartf.write()
     initf.write()
-    tagstatf.write()
 
 if __name__ == '__main__':
     main(initialize = False)

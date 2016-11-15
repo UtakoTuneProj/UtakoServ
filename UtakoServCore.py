@@ -81,9 +81,16 @@ class Queue:
 
     def add_queue(self,start,mvidls):
         self.qcell.append(Queuecell({'start':start, 'list':mvidls}))
+        for cell in mvidls:
+            self.mvlist.append(cell)
+            self.mvdate.append(start)
 
     def del_queue(self,queue):
         self.qcell.remove(queue)
+        for cell in queue['list']:
+            i = self.mvlist.index(cell)
+            del self.mvlist[i]
+            del self.mvdate[i]
 
     def del_mv(self,mvid):
         start = self.mvdate.pop(self.mvlist.index(mvid))
@@ -231,15 +238,27 @@ class Chartfile(JSONfile):
 class InitChartfile(JSONfile):
     def __init__(self, encoding = 'utf-8'):
         super().__init__('dat/chartlist_init.json', encoding = encoding)
-        dump = self.read()
-        self.x = []
-        self.y = []
-        for mov in dump:
-            self.x.append([])
-            for cell in mov[0:-1]:
-                self.x[-1].extend(cell)
-            ydump = Chartcell(mov[-1])
-            self.y.append(ydump.vocaran)
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, d):
+        self._data = d
+        if len(d) == 0:
+            [self.mvid, self.x, self.y] = [[],[],[]]
+        else:
+            [self.mvid, self.x, self.y] = list(zip(*d))
+        self.write()
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, d):
+        self.vocaran = [Chartcell(e).vocaran for e in d]
 
 class MovInfo:
     def __init__(self, mvid):
