@@ -11,6 +11,7 @@ except:
     GUI = False
 
 import UtakoServCore as core
+import UtakoChartInitializer as chinit
 
 class ChartModel(ChainList):
     def __init__(self, in_layer = 109, n_units = 50, layer = 4):
@@ -40,7 +41,7 @@ class ChartModel(ChainList):
 def learn():
 
     batchsize = 400
-    n_epoch = 1000
+    n_epoch = 3000
 
     N_model = len(config)
     model = [None for i in range(N_model)]
@@ -165,7 +166,7 @@ def model_test():
         model[i] = ChartModel(n_units = config[i][0], layer = config[i][1])
         serializers.load_npz('Network/chart'+str(i)+'.model', model[i])
         e, y[i+1] = model[i].error(x, y[0].reshape((len(y[0]), 1)), train = False)
-        print(e.data)
+        print(e.data, flush = True)
 
     y = [list(z.reshape(len(z))) for z in y]
     y = list(zip(*y))
@@ -179,15 +180,21 @@ def model_test():
     plt.show()
 
 def analyze(mvid):
-    pass
+    model24 = ChartModel(n_units = 600, layer = 7)
+    serializers.load_npz('Network/chart24h.model', model)
+    [status, x, y] = chinit.normalizer(mvid, on_prog = True)
+    if status == 24:
+        y = model24(x)
+        return y
+    else:
+        return None
 
 def main():
     learn()
 
 if __name__ == '__main__':
     N_test = 500
-    config = [[200,9],
-              [200,9],
+    config = [[600,7],
               [600,7],
               [600,7]]
     main()

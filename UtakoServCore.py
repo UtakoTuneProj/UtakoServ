@@ -161,12 +161,12 @@ class Queuefile(JSONfile):
         newcomer = []
         exitstatus = False
 
-        for i in range(15):
+        for i in range(15): #15ページ目まで取得する
             rankfilereq(page = i)
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                if not mvid in self.data.mvlist: #最後に取得できたリストの中に含まれていないならば
+                if not mvid in self.data.mvlist: #取得済みリストの中に含まれていないならば
                     newcomer.append(mvid)
                 else:
                     break
@@ -197,6 +197,7 @@ class Queuefile(JSONfile):
         for d in deleted:
             self.data.del_mv(d)
         self.write()
+        return None
 
 class Chartfile(JSONfile):
     #self.deletedlist:
@@ -204,7 +205,7 @@ class Chartfile(JSONfile):
     def __init__(self, path = "dat/chartlist.json"):
         super().__init__(path)
 
-    def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
+    def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
         self.deletedlist = []
 
         if not isinstance(queue, (tuple, list)):
@@ -320,7 +321,7 @@ def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタ�
 
     return None
 
-def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定したタイトルのランキングを取得、指定のない場合はVOCALOIDタグ
+def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定したタイトルのランキングを取得、指定のない場合は"VOCALOID"
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtitle) + "&targets=title&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
 
     gurl(rankreqbase, "ranking/" + str(page) + ".json")
