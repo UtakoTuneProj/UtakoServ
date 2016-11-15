@@ -31,7 +31,7 @@ class ChartModel(ChainList):
         y = self(Variable(x_data))
         t = Variable(y_data)
         if not train:
-            ret = [t.data[0][0], y.data[0][0]]
+            ret = y.data
         else:
             ret = None
 
@@ -40,22 +40,23 @@ class ChartModel(ChainList):
 def learn():
 
     batchsize = 400
-    n_epoch = 3000
-    N_test = 500
+    n_epoch = 1000
 
-    model = ChartModel(n_units = 200, layer = 5)
-    optimizer = optimizers.Adam()
-    optimizer.setup(model)
+    N_model = len(config)
+    model = [None for i in range(N_model)]
+    optimizer = [None for i in range(N_model)]
 
-    train_loss = []
-    train_acc  = []
-    test_loss = []
-    test_acc  = []
+    for i,c in enumerate(config):
+        model[i] = ChartModel(n_units = c[0], layer = c[1])
+        optimizer[i] = optimizers.Adam()
+        optimizer[i].setup(model[i])
 
-    test_data = []
+    # train_loss = [[] for i in range(5)]
+    # train_acc  = [[] for i in range(5)]
+    test_loss = [[] for i in range(N_model)]
+    test_acc  = [[] for i in range(N_model)]
 
-    l1_W = []
-    l2_W = []
+    test_data = [[] for i in range(N_model)]
 
     lfile = core.InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
@@ -77,72 +78,116 @@ def learn():
         # training
         # N個の順番をランダムに並び替える
         perm = np.random.permutation(N)
-        sum_accuracy = 0
-        sum_loss = 0
+        # sum_accuracy = [0 for i in range(N_model)]
+        sum_loss     = [0 for i in range(N_model)]
         # 0〜Nまでのデータをバッチサイズごとに使って学習
         for i in range(0, N, batchsize):
             x_batch = x_train[perm[i:i+batchsize]]
             y_batch = y_train[perm[i:i+batchsize]]
 
-            # 勾配を初期化
-            optimizer.zero_grads()
-            # 順伝播させて誤差と精度を算出
-            loss, dump = model.error(x_batch, y_batch.reshape((len(y_batch),1)))
-            # 誤差逆伝播で勾配を計算
-            loss.backward()
-            optimizer.update()
-            sum_loss += loss.data * batchsize
+            for j in range(N_model):
+                # 勾配を初期化
+                optimizer[j].zero_grads()
+                # 順伝播させて誤差と精度を算出
+                loss, _ = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)))
+                # 誤差逆伝播で勾配を計算
+                loss.backward()
+                optimizer[j].update()
+                # sum_loss[j] += loss.data * batchsize
 
-        # 訓練データの誤差と、正解精度を表示
-        print('train mean loss={}'.format(sum_loss / N))
-        train_loss.append(sum_loss / N)
+        # # 訓練データの誤差と、正解精度を表示
+        # print('train mean loss={}'.format(sum_loss / N))
+        # train_loss.append(sum_loss / N)
 
         # evaluation
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
-        sum_loss     = 0
-        test_data.append([])
+        sum_loss  = [0 for i in range(N_model)]
+        test_data = [[] for i in range(N_model)]
+
         for i in range(0, N_test):
             x_batch = x_test[i:i+1]
             y_batch = y_test[i:i+1]
 
-            # 順伝播させて誤差と精度を算出
-            loss,dump = model.error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
-            test_data[-1].append(dump)
+            for j in range(N_model):
+                # 順伝播させて誤差と精度を算出
+                loss, op = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
+                sum_loss[j] += loss.data
+                if epoch == n_epoch - 1:
+                    test_data[j].append(list(op.reshape(len(op))))
 
-            sum_loss += loss.data
+        for j in range(N_model):
+            # テストデータでの誤差と、正解精度を表示
+            print('test{0} mean loss={1}'.format(j, sum_loss[j] / N_test))
+            test_loss[j].append(sum_loss[j] / N_test)
 
-        # テストデータでの誤差と、正解精度を表示
-        print('test  mean loss={}'.format(sum_loss / N_test))
-        test_loss.append(sum_loss / N_test)
-
-    serializers.save_npz('Network/chart.model', model)
+    for i in range(N_model):
+        serializers.save_npz('Network/chart'+str(i)+'.model', model[i])
 
     if GUI:
         # 精度と誤差をグラフ描画
-        plt.plot(range(len(train_loss)), train_loss)
-        plt.plot(range(len(test_loss)), test_loss)
-        plt.legend(["train","test"])
+        # plt.plot(range(len(train_loss)), train_loss)
+        kernel = np.ones(5)/5
+        for i in range(N_model):
+            test_loss[i] = np.convolve(np.array(test_loss[i]), kernel, mode = 'valid')
+            plt.plot(range(len(test_loss[i])), test_loss[i], label = config[i])
+        plt.legend()
         plt.yscale('log')
         plt.show()
 
-        test_data[0].sort()
-        test_data[int(n_epoch / 2)].sort()
-        test_data[-1].sort()
-        plt_data_init = [list(x) for x in zip(*test_data[0])]
-        plt_data_cent = [list(x) for x in zip(*test_data[int(n_epoch / 2)])]
-        plt_data_last = [list(x) for x in zip(*test_data[-1])]
+        test_data.insert(0,list(y_test))
+        dump = list(zip(*test_data))
+        dump.sort()
+        plt_data = list(zip(*dump))
 
-        plt.plot(plt_data_init[0],range(N_test))
-        plt.plot(plt_data_last[1],range(N_test))
-        plt.legend(['Ans.', 'last'])
+        plt.plot(plt_data[0], range(N_test), label = 'Ans.')
+        for i in range(N_model):
+            plt.plot(plt_data[i+1],range(N_test), label = config[i])
+        plt.legend()
         plt.show()
 
+def model_test():
+    N_model = len(config)
+    model = [None for i in range(N_model)]
+
+    lfile = core.InitChartfile()
+    x_dump = np.array(lfile.x[-N_test:], dtype = np.float32)
+    y_dump = 100 * np.log10(np.array(lfile.vocaran[-N_test:], dtype = np.float32))
+
+    N = len(x_dump) - N_test
+    perm = np.arange(len(x_dump))
+
+    y = [None for i in range(N_model + 1)]
+    e = [None for i in range(N_model)]
+    x = x_dump[perm[-N_test:]]
+    y[0] = y_dump[perm[-N_test:]]
+
+    for i in range(N_model):
+        model[i] = ChartModel(n_units = config[i][0], layer = config[i][1])
+        serializers.load_npz('Network/chart'+str(i)+'.model', model[i])
+        e, y[i+1] = model[i].error(x, y[0].reshape((len(y[0]), 1)), train = False)
+        print(e.data)
+
+    y = [list(z.reshape(len(z))) for z in y]
+    y = list(zip(*y))
+    y.sort()
+    y = list(zip(*y))
+
+    plt.plot(y[0], range(N_test), label = 'Ans.')
+    for i in range(N_model):
+        plt.plot(y[i+1], range(N_test), label = config[i])
+    plt.legend()
+    plt.show()
+
 def analyze(mvid):
-    model = ChartModel(n_units = 200, layer = 4)
-    serializers.load_npz('Network/chart.model', model)
+    pass
 
 def main():
     learn()
 
 if __name__ == '__main__':
+    N_test = 500
+    config = [[200,9],
+              [200,9],
+              [600,7],
+              [600,7]]
     main()
