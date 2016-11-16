@@ -10,6 +10,8 @@ import xml.etree.ElementTree as ET
 import re
 import glob
 import os
+
+import UtakoAnalyzer as analyzer
 from tweepyCore import chart_tw
 
 class MovDeletedException(Exception):
@@ -199,6 +201,13 @@ class Queuefile(JSONfile):
         self.write()
         return None
 
+    def tweet(self, hour, threshold):
+        for mvid in self.data[-hour-1].list:
+            y = analyzer.analyze(mvid)
+            if status == hour and y >= threshold:
+                chart_tw(hour, y, mvid, MovInfo(mvid).title)
+
+
 class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
@@ -335,6 +344,7 @@ def main():
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv)
     qf.delete(cf.deletedlist)
+    qf.tweet(24, 300)
 
     return None
 
