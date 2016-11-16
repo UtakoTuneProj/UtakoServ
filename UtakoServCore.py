@@ -10,6 +10,8 @@ import xml.etree.ElementTree as ET
 import re
 import glob
 import os
+
+import UtakoAnalyzer as analyzer
 from tweepyCore import chart_tw
 
 class MovDeletedException(Exception):
@@ -87,7 +89,7 @@ class Queue:
 
     def del_queue(self,queue):
         self.qcell.remove(queue)
-        for cell in queue['list']:
+        for cell in queue.list:
             i = self.mvlist.index(cell)
             del self.mvlist[i]
             del self.mvdate[i]
@@ -161,12 +163,12 @@ class Queuefile(JSONfile):
         newcomer = []
         exitstatus = False
 
-        for i in range(15):
+        for i in range(15): #15ページ目まで取得する
             rankfilereq(page = i)
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                if not mvid in self.data.mvlist: #最後に取得できたリストの中に含まれていないならば
+                if not mvid in self.data.mvlist: #取得済みリストの中に含まれていないならば
                     newcomer.append(mvid)
                 else:
                     break
@@ -197,6 +199,17 @@ class Queuefile(JSONfile):
         for d in deleted:
             self.data.del_mv(d)
         self.write()
+        return None
+
+    def tweet(self, hour, threshold):
+        for mvid in self.data.qcell[-hour-1].list:
+            y = analyzer.analyze(mvid)
+            if type(y) == None:
+                continue
+            elif y.data[0][0] >= threshold:
+                chart_tw(hour, y.data[0][0], mvid, MovInfo(mvid).title)
+
+        return None
 
 class Chartfile(JSONfile):
     #self.deletedlist:
@@ -204,7 +217,7 @@ class Chartfile(JSONfile):
     def __init__(self, path = "dat/chartlist.json"):
         super().__init__(path)
 
-    def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストが返ってくる
+    def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
         self.deletedlist = []
 
         if not isinstance(queue, (tuple, list)):
@@ -215,7 +228,8 @@ class Chartfile(JSONfile):
             except MovDeletedException:
                 if mvid in self.data:
                     del self.data[mvid]
-                self.deletedlist.append(mvid)
+                if not dltd:
+                    self.deletedlist.append(mvid)
             else:
                 movf.update()
                 passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
@@ -320,7 +334,7 @@ def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタ�
 
     return None
 
-def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定したタイトルのランキングを取得、指定のない場合はVOCALOIDタグ
+def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定したタイトルのランキングを取得、指定のない場合は"VOCALOID"
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtitle) + "&targets=title&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
 
     gurl(rankreqbase, "ranking/" + str(page) + ".json")
@@ -332,8 +346,9 @@ def main():
     qf.update()
     cf = Chartfile()
     cf.update(qf.todays_mv)
-    cf.update(qf.lastwks_mv)
+    cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
+    qf.tweet(24, 300)
 
     return None
 

@@ -4,6 +4,7 @@ import json
 import datetime
 import math as m
 import os
+import binascii
 
 import UtakoServCore as core
 
@@ -97,9 +98,9 @@ def normalizer(mvid, on_prog = False):
             status = len(chart)
         for tag in thumb.tags:
             i = tagstatf.update(tag)
-            tagstat.append(m.log10(tagstatf.data[i][2] + 1))
-        tagstat.sort()
-        tagstat.reverse()
+            tagstat.append(binascii.crc32(tagstatf.data[i][0].encode('utf-8')) & 0xffffff)
+        # tagstat.sort()
+        # tagstat.reverse()
         if len(tagstat) > 11:
             tagstat = tagstat[0:11]
         elif len(tagstat) < 11:
