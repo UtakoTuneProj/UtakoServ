@@ -181,10 +181,10 @@ def model_test():
 
 def analyze(mvid):
     model24 = ChartModel(n_units = 600, layer = 7)
-    serializers.load_npz('Network/chart24h.model', model)
+    serializers.load_npz('Network/chart24h.model', model24)
     [status, x, y] = chinit.normalizer(mvid, on_prog = True)
     if status == 24:
-        y = model24(x)
+        y = model24(np.array(x, dtype = np.float32).reshape((1, len(x))))
         return y
     else:
         return None

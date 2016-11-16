@@ -89,7 +89,7 @@ class Queue:
 
     def del_queue(self,queue):
         self.qcell.remove(queue)
-        for cell in queue['list']:
+        for cell in queue.list:
             i = self.mvlist.index(cell)
             del self.mvlist[i]
             del self.mvdate[i]
@@ -202,11 +202,14 @@ class Queuefile(JSONfile):
         return None
 
     def tweet(self, hour, threshold):
-        for mvid in self.data[-hour-1].list:
+        for mvid in self.data.qcell[-hour-1].list:
             y = analyzer.analyze(mvid)
-            if status == hour and y >= threshold:
-                chart_tw(hour, y, mvid, MovInfo(mvid).title)
+            if type(y) == None:
+                continue
+            elif y.data[0][0] >= threshold:
+                chart_tw(hour, y.data[0][0], mvid, MovInfo(mvid).title)
 
+        return None
 
 class Chartfile(JSONfile):
     #self.deletedlist:
@@ -214,7 +217,7 @@ class Chartfile(JSONfile):
     def __init__(self, path = "dat/chartlist.json"):
         super().__init__(path)
 
-    def update(self, queue):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
+    def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
         self.deletedlist = []
 
         if not isinstance(queue, (tuple, list)):
@@ -225,7 +228,8 @@ class Chartfile(JSONfile):
             except MovDeletedException:
                 if mvid in self.data:
                     del self.data[mvid]
-                self.deletedlist.append(mvid)
+                if not dltd:
+                    self.deletedlist.append(mvid)
             else:
                 movf.update()
                 passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
@@ -342,7 +346,7 @@ def main():
     qf.update()
     cf = Chartfile()
     cf.update(qf.todays_mv)
-    cf.update(qf.lastwks_mv)
+    cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
     qf.tweet(24, 300)
 
