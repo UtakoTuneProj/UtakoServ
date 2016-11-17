@@ -42,7 +42,7 @@ class ChartModel(ChainList):
 
 def learn():
 
-    batchsize = 400
+    batchsize = 500
     n_epoch = 3000
 
     N_model = len(config)
@@ -192,7 +192,7 @@ def analyze(mvid):
         return None
 
 def main():
-    learn()
+    model_test()
 
 if __name__ == '__main__':
     N_test = 500
