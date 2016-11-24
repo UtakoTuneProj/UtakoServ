@@ -1,4 +1,4 @@
-# coding: utf-8
+﻿# coding: utf-8
 # module for screening whether VOCALOID-using movies
 
 import sys
@@ -15,8 +15,8 @@ import ServCore as core
 # sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer)
 
 class ScreenerModel(ChainList):
-    def __init__(self, in_len, n_units = 50, layer = 2):
-        l = [L.Linear(in_len, n_units)]
+    def __init__(self, in_layer = 11, n_units = 50, layer = 10):
+        l = [L.Linear(in_layer, n_units)]
         if layer > 2:
             l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
         l.append(L.Linear(n_units, 1))
@@ -33,33 +33,13 @@ class ScreenerModel(ChainList):
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
         t = Variable(y_data)
-        if not train:
-            ret = [t.data[0][0], y.data[0][0]]
-        else:
-            ret = None
+        ret = y.data
 
         return F.mean_squared_error(y,t), ret
 
 class TeacherFile(core.JSONfile):
     def __init__(self, path = "Network/teacher.json"):
         super().__init__(path = path)
-
-class CorrtableFile(core.JSONfile):
-    def __init__(self, path = "Network/corr_table.json"):
-        super().__init__(path = path)
-        self.len = len(self.data)
-
-    def thumb2chainer(self, *keys):
-        ret = [0 for x in range(self.len)]
-        for key in keys:
-            if key in self.data:
-                ret[self.data.index(key)] = 1
-            else:
-                self.data.append(key)
-                self.len += 1
-                ret.append(1)
-
-        return np.array([ret], dtype = np.float32)
 
 def searchHit(query):#クエリに指定した検索結果の件数を返す:検索結果信用の基準は70程度
 
@@ -120,7 +100,10 @@ def teach():
     corrtablef.write()
 
 def learn():
-    pass
+    tagstatf = chinit.TagStatFile()
+    tf = TeacherFile()
+
+    model = ScreenerModel()
 
 def main(mode):
     if mode == "teach":
