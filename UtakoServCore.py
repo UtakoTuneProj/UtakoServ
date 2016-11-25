@@ -96,7 +96,7 @@ class Queue:
 
     def del_mv(self,mvid):
         start = self.mvdate.pop(self.mvlist.index(mvid))
-        for q in self:
+        for q in self.qcell:
             if q.start == start:
                 self[self.qcell.index(q)].q_delete(mvid)
                 break
