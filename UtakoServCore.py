@@ -317,30 +317,82 @@ class MovInfo:
 class DataBase:
     def __init__(self):
         self.cursor = sql.cursor
-        
-    def _select(table, query):
-        self.cursor.execute('SELECT %s from %s', (query, table))
 
-    def _append(table, query):
-        self.cursor.execute('INSERT into %s values %s', (table, query))
-
-    def addChart(ID, epoch, Time, View, Comment, Mylist):
-        q = '('
-        for s in [ID, epoch, Time, View, Comment, Mylist]:
-            q += str(s) + ','
-        self._append('chart', q)
-        
-    def getChart(query):
-        self._select('chart', q)
+    def _select(self, table, query):
+        self.cursor.execute('SELECT * from ' + table + ' where ' + query)
         return self.cursor.fetchall()
 
-    def addIDtag(ID, tag):
-        q = '(' + ID + ',' + tag + ')'
-        self._append('IDtag', q)
+    def _append(self, table, query):
+        self.cursor.execute('INSERT into ' + table + ' values ' + query)
 
-    def getIDtag(query):
-        self._select('IDtag', q)
-        return self.cursor.fetchall()
+    def _update(self, table, updateColumn, updateValue, searchQuery):
+        self.cursor.execute(
+            'UPDATE %s set %s = %s where ' + searchQuery,
+            (table, updateColumn, updateValue)
+        )
+
+    def setChart(
+        self, ID, epoch, Time, View, Comment, Mylist, overwrite = True
+    ):
+        columns = ['ID', 'epoch', 'Time', 'View', 'Comment', 'Mylist']
+        dbkey = "ID = '" + ID + "' AND epoch = '" + str(epoch) + "'"
+        x = self._select('chart', dbkey)
+
+        if len(x) != 0:
+            if not overwrite:
+                raise
+            else:
+                for i, xc in enumerate(x):
+                    if locals()[columns[i]] != xc:
+                        self._update('chart', columns[i], xc, dbkey)
+
+        else:
+            q = '('
+            for s in [ID, epoch, Time, View, Comment, Mylist]:
+                q += "'" + str(s) + "',"
+            q = q[:-1]
+            q += ')'
+            self._append('chart', q)
+
+    def getChart(self, query):
+        return self._select('chart', query)
+
+    def setIDtag(self, ID, tag):
+        columns = ['ID', 'tag']
+        dbkey = "ID = '"+ ID + "' AND tag = '" + tag + "'"
+        x = self._select('chart', dbkey)
+
+        if len(x) == 0:
+            q = '('
+            for s in [ID, tag]:
+                q += "'" + str(s) + "',"
+            q = q[:-1]
+            q += ')'
+            self._append('chart', q)
+
+    def getIDtag(self, query):
+        return self._select('IDtag', query)
+
+    def setTagColor(self, tag, color, value):
+        columns = ['tag', 'color', 'value']
+        dbkey = "tag = '"+ tag + "' AND color = '" + str(color) + "'"
+        x = self._select('chart', dbkey)
+
+        if len(x) != 0:
+            for i, xc in enumerate(x):
+                if locals()[columns[i]] != xc:
+                    self._update('tagColor', columns[i], xc, dbkey)
+
+        else:
+            q = '('
+            for s in [tag, color, value]:
+                q += "'" + str(s) + "',"
+            q = q[:-1]
+            q += ')'
+            self._append('chart', q)
+
+    def getTagColor(self, query):
+        return self._select('tagColor', query)
 
 def float_compressor(obj):
     if isinstance(obj, float):
