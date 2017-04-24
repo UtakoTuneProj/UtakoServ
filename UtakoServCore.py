@@ -12,6 +12,7 @@ import glob
 import os
 
 import UtakoAnalyzer as analyzer
+import sql
 from tweepyCore import chart_tw
 
 class MovDeletedException(Exception):
@@ -312,6 +313,34 @@ class MovInfo:
         self.title_split = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",self.title) if len(x) > 0] #指定文字でタイトルを分割
 
         return None
+
+class DataBase:
+    def __init__(self):
+        self.cursor = sql.cursor
+        
+    def _select(table, query):
+        self.cursor.execute('SELECT %s from %s', (query, table))
+
+    def _append(table, query):
+        self.cursor.execute('INSERT into %s values %s', (table, query))
+
+    def addChart(ID, epoch, Time, View, Comment, Mylist):
+        q = '('
+        for s in [ID, epoch, Time, View, Comment, Mylist]:
+            q += str(s) + ','
+        self._append('chart', q)
+        
+    def getChart(query):
+        self._select('chart', q)
+        return self.cursor.fetchall()
+
+    def addIDtag(ID, tag):
+        q = '(' + ID + ',' + tag + ')'
+        self._append('IDtag', q)
+
+    def getIDtag(query):
+        self._select('IDtag', q)
+        return self.cursor.fetchall()
 
 def float_compressor(obj):
     if isinstance(obj, float):

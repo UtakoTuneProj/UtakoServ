@@ -2,3 +2,4 @@
 getthumb/
 __pycache__/
 ranking/
+*.conf
