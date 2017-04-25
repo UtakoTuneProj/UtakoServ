@@ -327,9 +327,12 @@ class DataBase:
 
     def _update(self, table, updateColumn, updateValue, searchQuery):
         self.cursor.execute(
-            'UPDATE %s set %s = %s where ' + searchQuery,
-            (table, updateColumn, updateValue)
+            'UPDATE ' + table + ' set ' + updateColumn + ' = %s where ' + searchQuery,
+            (updateValue,)
         )
+
+    def commit(self):
+        sql.connection.commit()
 
     def setChart(
         self, ID, epoch, Time, View, Comment, Mylist, overwrite = True
@@ -342,7 +345,7 @@ class DataBase:
             if not overwrite:
                 raise
             else:
-                for i, xc in enumerate(x):
+                for i, xc in enumerate(x[0]):
                     if locals()[columns[i]] != xc:
                         self._update('chart', columns[i], xc, dbkey)
 
