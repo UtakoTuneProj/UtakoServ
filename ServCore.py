@@ -11,7 +11,10 @@ import re
 import glob
 import os
 
-import UtakoAnalyzer as analyzer
+class JSONfile:
+    pass
+
+import Analyzer as analyzer
 import sql
 from tweepyCore import chart_tw
 
@@ -314,51 +317,63 @@ class MovInfo:
 
         return None
 
-class DataBase:
-    def __init__(self):
-        self.cursor = sql.cursor
+class Table:
+    def __init__(self, name, cursor, primaryKey, columns):
+        self.name = name
+        self.cursor = cursor
+        self.primaryKey = primaryKey
+        self.columns = columns
 
-    def _select(self, table, query):
-        self.cursor.execute('SELECT * from ' + table + ' where ' + query)
+    def select(self, query):
+        self.cursor.execute('SELECT * from ' + self.name + ' where ' + query)
         return self.cursor.fetchall()
 
-    def _append(self, table, query):
-        self.cursor.execute('INSERT into ' + table + ' values ' + query)
+    def insert(self, query):
+        self.cursor.execute('INSERT into ' + self.name + ' values ' + query)
 
-    def _update(self, table, updateColumn, updateValue, searchQuery):
+    def update(self, updateColumn, updateValue, searchQuery):
         self.cursor.execute(
-            'UPDATE ' + table + ' set ' + updateColumn + ' = %s where ' + searchQuery,
+            'UPDATE ' + self.name + ' set ' + updateColumn + ' = %s where ' + searchQuery,
             (updateValue,)
         )
 
-    def commit(self):
-        sql.connection.commit()
+class Chart(Table):
+    def __init__(self):
+        super.__init__(
+            'chart'
+            sql.cursor,
+            'ID', 'epoch', 'Time', 'View', 'Comment', 'Mylist'
+        )
+        self.dbkey = \
+            "ID = '" + ID + "' AND " + \
+            "epoch = '" + str(epoch) + "'"
 
-    def setChart(
-        self, ID, epoch, Time, View, Comment, Mylist, overwrite = True
-    ):
-        columns = ['ID', 'epoch', 'Time', 'View', 'Comment', 'Mylist']
-        dbkey = "ID = '" + ID + "' AND epoch = '" + str(epoch) + "'"
-        x = self._select('chart', dbkey)
+    def insert(self, **query, overwrite = True):
+        querySet = set(query.keys())
+        columnSet = set(self.columns)
+
+        x = super.select('chart', dbkey)
 
         if len(x) != 0:
             if not overwrite:
                 raise
             else:
-                for i, xc in enumerate(x[0]):
-                    if locals()[columns[i]] != xc:
-                        self._update('chart', columns[i], xc, dbkey)
+                for key in (querySet & columnSet):
+                    if query[key] != xc[self.columns.index(key)]:
+                        self.update('chart', key, query[key], dbkey)
 
         else:
             q = '('
-            for s in [ID, epoch, Time, View, Comment, Mylist]:
-                q += "'" + str(s) + "',"
+            for key in self.columns:
+                q += "'" + str(query[key]) + "',"
             q = q[:-1]
             q += ')'
-            self._append('chart', q)
+            self.insert(q)
 
-    def getChart(self, query):
-        return self._select('chart', query)
+class DataBase:
+    def commit(self):
+        sql.connection.commit()
+
 
     def setIDtag(self, ID, tag):
         columns = ['ID', 'tag']

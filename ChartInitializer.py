@@ -6,7 +6,7 @@ import math as m
 import os
 import binascii
 
-import UtakoServCore as core
+import ServCore as core
 
 class TagStatFile(core.JSONfile):
     #TagStatFile:[[tagname, valid, hits],...]

@@ -3,7 +3,7 @@ import codecs
 import json
 import os
 
-import UtakoServCore as core
+import ServCore as core
 
 learnFile = codecs.open("Network/searchResult.json",'r','utf-8')
 learn_data = json.load(learnFile,encoding = 'utf-8')

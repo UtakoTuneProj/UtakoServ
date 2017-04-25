@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import UtakoChartInitializer
-import UtakoServCore as core
+import ServCore as core
 from progressbar import ProgressBar
 
 if __name__ == '__main__':
