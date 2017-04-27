@@ -1,1 +1,2 @@
-ServCore:325 PrimaryKeyQuery絡みの実装
+ServCore:422 QueueFile, ChartFileの動作から移行
+ServCore:320 テーブル構造が変更されてもコードを書き直さなくて良いように

@@ -323,94 +323,73 @@ class Table:
         self.cursor = cursor
         self.primaryKey = primaryKey
         self.columns = columns
+        self.allcolumns = primaryKey + columns
 
-    def select(self, query):
+    def primaryQuery(self, *unnamed, **named):
+        i = 0
+        q = ""
+        for pk in primaryKey:
+            if pk in named:
+                q += pk + " = '" + str(named[pk]) + "' AND "
+            else:
+                q += pk + " = '" + str(unnamed[i]) + "' AND "
+                i += 1
+
+        return q.rpartition(" AND ")[0]
+
+    def get(self, query):
         self.cursor.execute('SELECT * from ' + self.name + ' where ' + query)
         return self.cursor.fetchall()
 
-    def insert(self, query):
-        self.cursor.execute('INSERT into ' + self.name + ' values ' + query)
+    def primaryGet(self, *unnamed, **named):
+        return self.get(self.primaryQuery(*unnamed, **named))
 
-    def update(self, updateColumn, updateValue, searchQuery):
+    def _insert(self, *unnamed, **named):
+        i = 0
+        q = '('
+        for key in self.allcolumns:
+            if pk in named:
+                q += "'" + str(named[pk]) + "',"
+            else:
+                q += "'" + str(unnamed[i]) + "',"
+                i += 1
+        q = q[:-1]
+        q += ')'
+        self.cursor.execute('INSERT into ' + self.name + ' values ' + q)
+
+    def _update(self, updateColumn, updateValue, searchQuery):
         self.cursor.execute(
             'UPDATE ' + self.name + ' set ' + updateColumn + ' = %s where ' + searchQuery,
             (updateValue,)
         )
 
-class Chart(Table):
-    def __init__(self):
-        super.__init__(
-            'chart'
-            sql.cursor,
-            'ID', 'epoch', 'Time', 'View', 'Comment', 'Mylist'
-        )
-        self.dbkey = \
-            "ID = '" + ID + "' AND " + \
-            "epoch = '" + str(epoch) + "'"
+    def set(self, *unnamed, **named):
 
-    def insert(self, **query, overwrite = True):
-        querySet = set(query.keys())
-        columnSet = set(self.columns)
-
-        x = super.select('chart', dbkey)
+        x = self.primaryGet(*unnamed, **named)
 
         if len(x) != 0:
             if not overwrite:
                 raise
             else:
-                for key in (querySet & columnSet):
+                for key in self.allcolumns:
                     if query[key] != xc[self.columns.index(key)]:
-                        self.update('chart', key, query[key], dbkey)
+                        self._update(
+                            key,
+                            query[key],
+                            self.priaryQuery(*unnamed, **named)
+                        )
 
         else:
-            q = '('
-            for key in self.columns:
-                q += "'" + str(query[key]) + "',"
-            q = q[:-1]
-            q += ')'
-            self.insert(q)
+            self._insert(*unnamed, **named)
 
 class DataBase:
+    def __init__(self, name, connection):
+        self.name = name
+        self.connection = connection
+        self.cursor = connection.cursor()
+
     def commit(self):
         sql.connection.commit()
-
-
-    def setIDtag(self, ID, tag):
-        columns = ['ID', 'tag']
-        dbkey = "ID = '"+ ID + "' AND tag = '" + tag + "'"
-        x = self._select('chart', dbkey)
-
-        if len(x) == 0:
-            q = '('
-            for s in [ID, tag]:
-                q += "'" + str(s) + "',"
-            q = q[:-1]
-            q += ')'
-            self._append('chart', q)
-
-    def getIDtag(self, query):
-        return self._select('IDtag', query)
-
-    def setTagColor(self, tag, color, value):
-        columns = ['tag', 'color', 'value']
-        dbkey = "tag = '"+ tag + "' AND color = '" + str(color) + "'"
-        x = self._select('chart', dbkey)
-
-        if len(x) != 0:
-            for i, xc in enumerate(x):
-                if locals()[columns[i]] != xc:
-                    self._update('tagColor', columns[i], xc, dbkey)
-
-        else:
-            q = '('
-            for s in [tag, color, value]:
-                q += "'" + str(s) + "',"
-            q = q[:-1]
-            q += ')'
-            self._append('chart', q)
-
-    def getTagColor(self, query):
-        return self._select('tagColor', query)
 
 def float_compressor(obj):
     if isinstance(obj, float):
@@ -441,6 +420,20 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def main():
+    db = DataBase(sql.connection)
+    cdb = Table(
+        'chart'
+        db.cursor,
+        ('ID', 'epoch',)
+        ('Time', 'View', 'Comment', 'Mylist',)
+    )
+    qdb = Table(
+        'status'
+        db.cursor,
+        ('ID',)
+        ('validity', 'epoch', 'isComplete')
+    )
+    
     qf = Queuefile()
     qf.update()
     cf = Chartfile()
