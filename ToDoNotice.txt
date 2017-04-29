@@ -1,2 +1,1 @@
-ServCore:422 QueueFile, ChartFileの動作から移行
-ServCore:320 テーブル構造が変更されてもコードを書き直さなくて良いように
+ServCore:368:convertがクォート内に入る問題の解決:

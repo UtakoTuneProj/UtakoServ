@@ -333,12 +333,12 @@ class Table:
                 self.primaryKey.append(column[0])
             else:
                 self.columns.append(column[0])
-        self.allcolumns = primaryKey + columns
+        self.allcolumns = self.primaryKey + self.columns
 
     def primaryQuery(self, *unnamed, **named):
         i = 0
         q = ""
-        for pk in primaryKey:
+        for pk in self.primaryKey:
             if pk in named:
                 q += pk + " = '" + str(named[pk]) + "' AND "
             else:
@@ -384,7 +384,7 @@ class Table:
 
 class ChartTable(Table):
     def __init__(self, database):
-        super.__init__(
+        super().__init__(
             'chart',
             database
         )
@@ -432,7 +432,7 @@ class ChartTable(Table):
 
 class QueueTable(Table):
     def __init__(self, database):
-        super.__init__(
+        super().__init__(
             'status',
             database
         )
@@ -451,8 +451,8 @@ class QueueTable(Table):
                         validity = 1,
                         epoch = 0,
                         isComplete = 0,
-                        postdate = 'convert(' + mvdata['startTime'] + \
-                            ", datetime)"
+                        postdate = "convert('" + mvdata['startTime'] + \
+                            "', datetime)"
                     )
                 else:
                     break
@@ -506,7 +506,7 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def main():
-    db = DataBase(sql.connection)
+    db = DataBase("tesuto",sql.connection)
     ctbl = ChartTable(db)
     qtbl = QueueTable(db)
 
