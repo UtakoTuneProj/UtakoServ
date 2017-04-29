@@ -328,7 +328,7 @@ class Table:
         self.primaryKey = []
         self.columns = []
         self.cursor.execute("desc " + name)
-        for column in self.cursor.fetchall()
+        for column in self.cursor.fetchall():
             if 'PRI' in column[3]:
                 self.primaryKey.append(column[0])
             else:
@@ -354,7 +354,7 @@ class Table:
     def primaryGet(self, *unnamed, **named):
         return self.get(self.primaryQuery(*unnamed, **named))
 
-    def set(self, *unnamed, **named, overwrite = True):
+    def set(self, *unnamed, overwrite = True, **named):
         i = 0
 
         q = '('
@@ -396,7 +396,7 @@ class ChartTable(Table):
             = self.get(
                 'adddate(postdate, interval 1 day) > current_timestamp()'
             )
-        lastwks_mv
+        lastwks_mv \
             = self.get(
                 'adddate(postdate, interval 1 week) < current_timestamp()' + \
                 ' and (isComplete == 0)'
@@ -444,14 +444,14 @@ class QueueTable(Table):
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                if len(self.primaryGet('ID' = mvid)) == 0:
+                if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
-                        'ID' = mvid,
-                        'validity' = 1,
-                        'epoch' = 0,
-                        'isComplete' = 0,
-                        'postdate' = 'convert(' + mvdata['startTime'] + \
+                        ID = mvid,
+                        validity = 1,
+                        epoch = 0,
+                        isComplete = 0,
+                        postdate = 'convert(' + mvdata['startTime'] + \
                             ", datetime)"
                     )
                 else:
