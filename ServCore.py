@@ -320,11 +320,19 @@ class MovInfo:
         return None
 
 class Table:
-    def __init__(self, name, cursor, primaryKey, columns):
+    def __init__(self, name, db):
         self.name = name
-        self.cursor = cursor
-        self.primaryKey = primaryKey
-        self.columns = columns
+        self.cursor = db.cursor
+        self.parent = db
+
+        self.primaryKey = []
+        self.columns = []
+        self.cursor.execute("desc " + name)
+        for column in self.cursor.fetchall()
+            if 'PRI' in column[3]:
+                self.primaryKey.append(column[0])
+            else:
+                self.columns.append(column[0])
         self.allcolumns = primaryKey + columns
 
     def primaryQuery(self, *unnamed, **named):
@@ -346,43 +354,116 @@ class Table:
     def primaryGet(self, *unnamed, **named):
         return self.get(self.primaryQuery(*unnamed, **named))
 
-    def _insert(self, *unnamed, **named):
+    def set(self, *unnamed, **named, overwrite = True):
         i = 0
+
         q = '('
-        for key in self.allcolumns:
-            if pk in named:
-                q += "'" + str(named[pk]) + "',"
+        dupq = ''
+        for key in self.primaryKey:
+            if key in named:
+                q += "'" + str(named[key]) + "',"
             else:
                 q += "'" + str(unnamed[i]) + "',"
                 i += 1
+        for key in self.columns:
+            if key in named:
+                q += "'" + str(named[key]) + "',"
+                dupq += key + "=" + str(named[key]) + ", "
+            else:
+                q += "'" + str(unnamed[i]) + "',"
+                dupq += key + "=" + str(unnamed[i]) + ", "
+                i += 1
         q = q[:-1]
         q += ')'
-        self.cursor.execute('INSERT into ' + self.name + ' values ' + q)
+        dupq = dupq[:-2]
 
-    def _update(self, updateColumn, updateValue, searchQuery):
         self.cursor.execute(
-            'UPDATE ' + self.name + ' set ' + updateColumn + ' = %s where ' + searchQuery,
-            (updateValue,)
+            'INSERT into ' + self.name + ' values ' + q + ' ' + \
+            'ON DUPLICATE key update ' + dupq
         )
 
-    def set(self, *unnamed, **named):
+class ChartTable(Table):
+    def __init__(self, database):
+        super.__init__(
+            'chart',
+            database
+        )
 
-        x = self.primaryGet(*unnamed, **named)
+    def update(self):
+        #statusDBを読みチャートを更新
 
-        if len(x) != 0:
-            if not overwrite:
-                raise
+        todays_mv \
+            = self.get(
+                'adddate(postdate, interval 1 day) > current_timestamp()'
+            )
+        lastwks_mv
+            = self.get(
+                'adddate(postdate, interval 1 week) < current_timestamp()' + \
+                ' and (isComplete == 0)'
+            )
+
+        for query in todays_mv + lastwks_mv:
+            mvid = query[0]
+            epoch = query[2]
+            try:
+                movf = MovInfo(mvid)
+                movf.update()
+
+            except MovDeletedException:
+                self.parent.table['status'].set(query[0] + [0,] + query[2:])
+                continue
+
+            except NoResponseException:
+                continue
+
             else:
-                for key in self.allcolumns:
-                    if query[key] != xc[self.columns.index(key)]:
-                        self._update(
-                            key,
-                            query[key],
-                            self.priaryQuery(*unnamed, **named)
-                        )
+                passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
+                writequery = [
+                    mvid,
+                    epoch,
+                    passedmin,
+                    movf.view_counter,
+                    movf.comment_num,
+                    movf.mylist_counter
+                ]
+                self.set(*writequery)
 
-        else:
-            self._insert(*unnamed, **named)
+        return None
+
+class QueueTable(Table):
+    def __init__(self, database):
+        super.__init__(
+            'status',
+            database
+        )
+
+    def update(self): #ランキング取得・キュー生成部
+
+        for i in range(15): #15ページ目まで取得する
+            rankfilereq(page = i)
+            raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
+            for mvdata in raw_rank:
+                mvid = mvdata['contentId']
+                if len(self.primaryGet('ID' = mvid)) == 0:
+                    #取得済みリストの中に含まれていないならば
+                    self.set(
+                        'ID' = mvid,
+                        'validity' = 1,
+                        'epoch' = 0,
+                        'isComplete' = 0,
+                        'postdate' = 'convert(' + mvdata['startTime'] + \
+                            ", datetime)"
+                    )
+                else:
+                    break
+            else:
+                continue
+            break
+
+        for j in range(i+1):
+            os.remove("ranking/" + str(j) + ".json")
+
+        return None
 
 class DataBase:
     def __init__(self, name, connection):
@@ -392,6 +473,9 @@ class DataBase:
 
     def commit(self):
         sql.connection.commit()
+
+    def setTable(table):
+        self.table[table.name] = table
 
 def float_compressor(obj):
     if isinstance(obj, float):
@@ -423,26 +507,22 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
 
 def main():
     db = DataBase(sql.connection)
-    cdb = Table(
-        'chart'
-        db.cursor,
-        ('ID', 'epoch',)
-        ('Time', 'View', 'Comment', 'Mylist',)
-    )
-    qdb = Table(
-        'status'
-        db.cursor,
-        ('ID',)
-        ('validity', 'epoch', 'isComplete')
-    )
-    
+    ctbl = ChartTable(db)
+    qtbl = QueueTable(db)
+
     qf = Queuefile()
-    qf.update()
     cf = Chartfile()
+
+    qf.update()
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
     qf.tweet(24, 300)
+
+    qtbl.update()
+    ctbl.update()
+
+    db.commit()
 
     return None
 
