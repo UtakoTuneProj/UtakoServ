@@ -1,3 +1,5 @@
+# coding: utf-8
+# SQL core module
 import MySQLdb
 import configparser
 

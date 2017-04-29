@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+#convert Chartfile into SQL
 import UtakoChartInitializer
 import ServCore as core
 from progressbar import ProgressBar

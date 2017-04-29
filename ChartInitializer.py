@@ -1,4 +1,6 @@
 ﻿# coding: utf-8
+# ChartInitializer: makes formatted chart file from completed queues
+
 import codecs
 import json
 import datetime
@@ -49,9 +51,14 @@ class TagStatFile(core.JSONfile):
         return x
 
 def normalizer(mvid, on_prog = False):
-    #chartfileからチャートを取得し、Analyzerで利用可能な形に変換する
-    #on_prog == Trueならば計測中データでも戻り値あり、FalseならばStatusのみ返ってくる
-    #戻り値は[Status('deleted', 'no_response', 'completed', 'broken', range(1,25)),x,y]
+    #get chart from chartfile, and convert to Analyzer-readable format
+    #if on_prog == True then return value if on progress,
+    # else only returns status only
+    #return value:[
+    #     Status('deleted', 'no_response', 'completed', 'broken', range(1,25)),
+    #     x, (input data)
+    #     y  (output teacher data)
+    # ]
 
     chartf = core.Chartfile()
     tagstatf = TagStatFile()

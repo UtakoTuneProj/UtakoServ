@@ -1,4 +1,6 @@
 ﻿# coding: utf-8
+# ServCore: core module for hourly task
+
 import urllib.request
 import urllib.parse
 import datetime

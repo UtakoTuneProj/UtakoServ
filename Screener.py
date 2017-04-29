@@ -1,4 +1,6 @@
 # coding: utf-8
+# module for screening whether VOCALOID-using movies
+
 import sys
 import re
 import glob

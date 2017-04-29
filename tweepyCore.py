@@ -1,5 +1,5 @@
 # coding:utf-8
-
+# twitter core module
 #http://statsbeginner.hatenablog.com/entry/2015/10/21/131717
 import tweepy
 

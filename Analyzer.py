@@ -1,4 +1,6 @@
 # coding: utf-8
+# Analyzer: UtakoChainer core module
+
 import sys
 import numpy as np
 from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
