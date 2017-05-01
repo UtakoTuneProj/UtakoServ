@@ -6,7 +6,7 @@ from progressbar import ProgressBar
 import ServCore as core
 
 if __name__ == '__main__':
-    cf = core.Chartfile()
+    cf = core.Chartfile('dat/chartlist.json')
     dat = cf.read()
     p = ProgressBar(0, len(dat))
 
