@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 import re
 import glob
 import os
+import time
 
 class JSONfile:
     pass
@@ -220,7 +221,7 @@ class Queuefile(JSONfile):
 class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
-    def __init__(self, path = "dat/chartlist.json"):
+    def __init__(self, path = "dat/chartlist_alter.json"):
         super().__init__(path)
 
     def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
@@ -400,12 +401,15 @@ class ChartTable(Table):
 
         todays_mv \
             = self.qtbl.get(
-                'adddate(postdate, interval 1 day) > current_timestamp()'
+                "adddate(postdate, interval '1 1' day_hour)" + \
+                " > current_timestamp()" + \
+                " and (validity = 1)"
             )
         lastwks_mv \
             = self.qtbl.get(
-                'adddate(postdate, interval 1 week) < current_timestamp()' + \
-                ' and (isComplete = 0)'
+                "adddate(postdate, interval '7 1' day_hour)" + \
+                " < current_timestamp()" + \
+                " and (validity = 1) and (isComplete = 0)"
             )
 
         for query in todays_mv + lastwks_mv:
@@ -421,29 +425,29 @@ class ChartTable(Table):
                 continue
 
             except NoResponseException:
-                continue
+                while True:
+                    time.wait(5)
+                    movf.update()
 
-            else:
-                passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
-                writequery = [
-                    mvid,
-                    epoch,
-                    passedmin,
-                    movf.view_counter,
-                    movf.comment_num,
-                    movf.mylist_counter
-                ]
-                self.set(*writequery)
+            passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
+            writequery = [
+                mvid,
+                epoch,
+                passedmin,
+                movf.view_counter,
+                movf.comment_num,
+                movf.mylist_counter
+            ]
+            self.set(*writequery)
 
-                writequery = [
-                    mvid,
-                    1,
-                    epoch + 1,
-                    0 if query in todays_mv else 1,
-                    "convert('" + str(postdate) + "', datetime)"
-                ]
-                self.qtbl.set(*writequery)
-
+            writequery = [
+                mvid,
+                1,
+                epoch + 1,
+                0 if query in todays_mv else 1,
+                "convert('" + str(postdate) + "', datetime)"
+            ]
+            self.qtbl.set(*writequery)
 
         return None
 
