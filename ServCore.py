@@ -324,6 +324,7 @@ class Table:
         self.name = name
         self.cursor = db.cursor
         self.parent = db
+        db.setTable(self)
 
         self.primaryKey = []
         self.columns = []
@@ -408,12 +409,13 @@ class ChartTable(Table):
         lastwks_mv \
             = self.qtbl.get(
                 'adddate(postdate, interval 1 week) < current_timestamp()' + \
-                ' and (isComplete == 0)'
+                ' and (isComplete = 0)'
             )
 
         for query in todays_mv + lastwks_mv:
             mvid = query[0]
             epoch = query[2]
+            postdate = query[4]
             try:
                 movf = MovInfo(mvid)
                 movf.update()
@@ -436,6 +438,16 @@ class ChartTable(Table):
                     movf.mylist_counter
                 ]
                 self.set(*writequery)
+                
+                writequery = [
+                    mvid,
+                    1,
+                    epoch + 1,
+                    0 if query in todays_mv else 1,
+                    "convert('" + str(postdate) + "', datetime)"
+                ]
+                self.qtbl.set(*writequery)
+
 
         return None
 
@@ -480,11 +492,12 @@ class DataBase:
         self.name = name
         self.connection = connection
         self.cursor = connection.cursor()
+        self.table = {}
 
     def commit(self):
         sql.connection.commit()
 
-    def setTable(table):
+    def setTable(self, table):
         self.table[table.name] = table
 
 def float_compressor(obj):
@@ -517,8 +530,8 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
 
 def main():
     db = DataBase("tesuto",sql.connection)
-    ctbl = ChartTable(db)
     qtbl = QueueTable(db)
+    ctbl = ChartTable(db)
 
     qf = Queuefile()
     cf = Chartfile()
