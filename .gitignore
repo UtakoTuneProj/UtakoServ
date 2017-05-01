@@ -2,3 +2,5 @@
 getthumb/
 __pycache__/
 ranking/
+*.conf
+*.swp

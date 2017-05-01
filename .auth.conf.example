@@ -1,0 +1,6 @@
+[DEFAULT]
+    host=localhost
+    user=anonymous
+    passwd=hogehoge
+    db=test
+    charset=utf8
