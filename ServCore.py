@@ -232,12 +232,8 @@ class Chartfile(JSONfile):
             try:
                 movf = MovInfo(mvid)
             except MovDeletedException:
-                if mvid in self.data:
-                    del self.data[mvid]
-                if not dltd:
-                    self.deletedlist.append(mvid)
+                continue
             else:
-                movf.update()
                 passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
                 gotdata = [
                            passedmin,
@@ -438,7 +434,7 @@ class ChartTable(Table):
                     movf.mylist_counter
                 ]
                 self.set(*writequery)
-                
+
                 writequery = [
                     mvid,
                     1,
@@ -536,16 +532,16 @@ def main():
     qf = Queuefile()
     cf = Chartfile()
 
+    qtbl.update()
+    ctbl.update()
+
+    db.commit()
+
     qf.update()
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
     qf.tweet(24, 300)
-
-    qtbl.update()
-    ctbl.update()
-
-    db.commit()
 
     return None
 

@@ -1,1 +1,2 @@
-ServCore:368:convertがクォート内に入る問題の解決:
+ServCore:SQLとJSONの両立
+SQLexchanger:QueueFileの移行
