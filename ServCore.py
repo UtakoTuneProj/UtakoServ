@@ -541,10 +541,10 @@ def main():
 
     db.commit()
 
-    qf.update()
-    cf.update(qf.todays_mv)
-    cf.update(qf.lastwks_mv, dltd = True)
-    qf.delete(cf.deletedlist)
+    # qf.update()
+    # cf.update(qf.todays_mv)
+    # cf.update(qf.lastwks_mv, dltd = True)
+    # qf.delete(cf.deletedlist)
     # qf.tweet(24, 300)
 
     return None
