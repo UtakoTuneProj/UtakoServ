@@ -401,7 +401,7 @@ class ChartTable(Table):
 
         todays_mv \
             = self.qtbl.get(
-                "adddate(postdate, interval '1 1' day_hour)" + \
+                "adddate(postdate, interval '1 0' day_hour)" + \
                 " > current_timestamp()" + \
                 " and (validity = 1)"
             )
@@ -545,7 +545,7 @@ def main():
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
-    qf.tweet(24, 300)
+    # qf.tweet(24, 300)
 
     return None
 
