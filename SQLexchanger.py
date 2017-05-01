@@ -3,7 +3,6 @@
 import time
 from progressbar import ProgressBar
 
-import UtakoChartInitializer
 import ServCore as core
 
 if __name__ == '__main__':
@@ -11,9 +10,9 @@ if __name__ == '__main__':
     dat = cf.read()
     p = ProgressBar(0, len(dat))
 
-    db = core.DataBase()
-    ctbl = core.ChartTable(db)
+    db = core.DataBase('tesuto', core.sql.connection)
     qtbl = core.QueueTable(db)
+    ctbl = core.ChartTable(db)
 
     print('Migrating UtakoFiles...')
     for i, mvid in enumerate(dat):
@@ -23,17 +22,17 @@ if __name__ == '__main__':
 
         try:
             mvinfo = core.MovInfo(mvid)
-        except MovDeletedException:
+        except core.MovDeletedException:
             continue
-        except NoResponseException:
+        except core.NoResponseException:
             while True:
                 time.sleep(5)
                 mvinfo = core.MovInfo(mvid)
 
-        startTime = core.time('n', mvinfo.first_retrieve)
+        startTime = mvinfo.first_retrieve.dt
 
         for j, cell in enumerate(dat[mvid]):
-            ctbl.set([mvid, j,] + cell)
+            ctbl.set(mvid, j, *cell)
 
             if j < 24:
                 if cell[0] < j*60 or ((j+1)*60 + 30 < cell[0]):
@@ -46,12 +45,12 @@ if __name__ == '__main__':
         if status and len(dat[mvid]) == 25:
             completed = True
 
-        qtbl.set([
+        qtbl.set(
             mvid,
-            status,
-            len(dat),
-            completed,
-            "convert('" + str(startTime) + "')"
-        ])
+            1 if status    else 0,
+            len(dat[mvid]),
+            1 if completed else 0,
+            "convert('" + str(startTime) + "', datetime)"
+        )
 
     db.commit()

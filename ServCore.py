@@ -382,10 +382,10 @@ class Table:
         q += ')'
         dupq = dupq[:-2]
 
-        self.cursor.execute(
+        cmd = \
             'INSERT into ' + self.name + ' values ' + q + ' ' + \
             'ON DUPLICATE key update ' + dupq
-        )
+        self.cursor.execute(cmd)
 
 class ChartTable(Table):
     def __init__(self, database):
