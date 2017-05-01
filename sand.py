@@ -1,5 +1,5 @@
 # -*-coding: utf-8-*-
-import UtakoServCore as core
+import ServCore as core
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -2,7 +2,7 @@
 import codecs
 import json
 
-import UtakoServCore as core
+import ServCore as core
 
 def screen(chart, new):
 

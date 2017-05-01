@@ -1,4 +1,6 @@
 # coding: utf-8
+# Analyzer: UtakoChainer core module
+
 import sys
 import numpy as np
 from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
@@ -10,8 +12,8 @@ try:
 except:
     GUI = False
 
-import UtakoServCore as core
-import UtakoChartInitializer as chinit
+import ServCore as core
+import ChartInitializer as chinit
 
 class ChartModel(ChainList):
     def __init__(self, in_layer = 109, n_units = 50, layer = 4):

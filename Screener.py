@@ -1,4 +1,6 @@
 # coding: utf-8
+# module for screening whether VOCALOID-using movies
+
 import sys
 import re
 import glob
@@ -7,7 +9,7 @@ import chainer.functions  as F
 import chainer.links as L
 import numpy as np
 
-import UtakoServCore as core
+import ServCore as core
 
 # sys.stdout = _io.TextIOWrapper(sys.stdout.buffer, encoding = 'utf-8')
 # sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer)

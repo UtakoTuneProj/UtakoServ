@@ -1,4 +1,4 @@
-import UtakoServCore as core
+import ServCore as core
 import numpy as np
 import matplotlib.pyplot as plt
 

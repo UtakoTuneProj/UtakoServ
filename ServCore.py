@@ -1,4 +1,6 @@
 ﻿# coding: utf-8
+# ServCore: core module for hourly task
+
 import urllib.request
 import urllib.parse
 import datetime
@@ -10,8 +12,13 @@ import xml.etree.ElementTree as ET
 import re
 import glob
 import os
+import time
 
-import UtakoAnalyzer as analyzer
+class JSONfile:
+    pass
+
+import Analyzer as analyzer
+import sql
 from tweepyCore import chart_tw
 
 class MovDeletedException(Exception):
@@ -51,7 +58,7 @@ class Time:
         return dt.strftime("%Y%m%d%H%M")
 
     def __d2n(self,dt):
-        return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
+        return dt.strftime("%Y-%m-%dT%H:%M:%S")
 
 class Queuecell:
     def __init__(self,queue):
@@ -214,7 +221,7 @@ class Queuefile(JSONfile):
 class Chartfile(JSONfile):
     #self.deletedlist:
     #self.update()
-    def __init__(self, path = "dat/chartlist.json"):
+    def __init__(self, path = "dat/chartlist_alter.json"):
         super().__init__(path)
 
     def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
@@ -226,12 +233,8 @@ class Chartfile(JSONfile):
             try:
                 movf = MovInfo(mvid)
             except MovDeletedException:
-                if mvid in self.data:
-                    del self.data[mvid]
-                if not dltd:
-                    self.deletedlist.append(mvid)
+                continue
             else:
-                movf.update()
                 passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
                 gotdata = [
                            passedmin,
@@ -313,6 +316,190 @@ class MovInfo:
 
         return None
 
+class Table:
+    def __init__(self, name, db):
+        self.name = name
+        self.cursor = db.cursor
+        self.parent = db
+        db.setTable(self)
+
+        self.primaryKey = []
+        self.columns = []
+        self.cursor.execute("desc " + name)
+        for column in self.cursor.fetchall():
+            if 'PRI' in column[3]:
+                self.primaryKey.append(column[0])
+            else:
+                self.columns.append(column[0])
+        self.allcolumns = self.primaryKey + self.columns
+
+    def primaryQuery(self, *unnamed, **named):
+        i = 0
+        q = ""
+        for pk in self.primaryKey:
+            if pk in named:
+                q += pk + " = '" + str(named[pk]) + "' AND "
+            else:
+                q += pk + " = '" + str(unnamed[i]) + "' AND "
+                i += 1
+
+        return q.rpartition(" AND ")[0]
+
+    def get(self, query):
+        self.cursor.execute('SELECT * from ' + self.name + ' where ' + query)
+        return self.cursor.fetchall()
+
+    def primaryGet(self, *unnamed, **named):
+        return self.get(self.primaryQuery(*unnamed, **named))
+
+    def set(self, *unnamed, overwrite = True, **named):
+        i = 0
+
+        q = '('
+        dupq = ''
+        for key in self.primaryKey:
+            if key in named:
+                q += "'" + str(named[key]) + "',"
+            else:
+                q += "'" + str(unnamed[i]) + "',"
+                i += 1
+        for key in self.columns:
+            if not key == 'postdate':
+                q += "'"
+
+            if key in named:
+                q += str(named[key])
+                dupq += key + "=" + str(named[key]) + ", "
+            else:
+                q += str(unnamed[i])
+                dupq += key + "=" + str(unnamed[i]) + ", "
+                i += 1
+
+            if key == 'postdate':
+                q += ", "
+            else:
+                q += "', "
+        q = q[:-2]
+        q += ')'
+        dupq = dupq[:-2]
+
+        cmd = \
+            'INSERT into ' + self.name + ' values ' + q + ' ' + \
+            'ON DUPLICATE key update ' + dupq
+        self.cursor.execute(cmd)
+
+class ChartTable(Table):
+    def __init__(self, database):
+        super().__init__(
+            'chart',
+            database
+        )
+        self.qtbl = self.parent.table['status']
+
+    def update(self):
+        #statusDBを読みチャートを更新
+
+        todays_mv \
+            = self.qtbl.get(
+                "adddate(postdate, interval '1 1' day_hour)" + \
+                " > current_timestamp()" + \
+                " and (validity = 1)"
+            )
+        lastwks_mv \
+            = self.qtbl.get(
+                "adddate(postdate, interval '7 1' day_hour)" + \
+                " < current_timestamp()" + \
+                " and (validity = 1) and (isComplete = 0)"
+            )
+
+        for query in todays_mv + lastwks_mv:
+            mvid = query[0]
+            epoch = query[2]
+            postdate = query[4]
+            try:
+                movf = MovInfo(mvid)
+                movf.update()
+
+            except MovDeletedException:
+                self.qtbl.set(query[0] + [0,] + query[2:])
+                continue
+
+            except NoResponseException:
+                while True:
+                    time.wait(5)
+                    movf.update()
+
+            passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
+            writequery = [
+                mvid,
+                epoch,
+                passedmin,
+                movf.view_counter,
+                movf.comment_num,
+                movf.mylist_counter
+            ]
+            self.set(*writequery)
+
+            writequery = [
+                mvid,
+                1,
+                epoch + 1,
+                0 if query in todays_mv else 1,
+                "convert('" + str(postdate) + "', datetime)"
+            ]
+            self.qtbl.set(*writequery)
+
+        return None
+
+class QueueTable(Table):
+    def __init__(self, database):
+        super().__init__(
+            'status',
+            database
+        )
+
+    def update(self): #ランキング取得・キュー生成部
+
+        for i in range(15): #15ページ目まで取得する
+            rankfilereq(page = i)
+            raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
+            for mvdata in raw_rank:
+                mvid = mvdata['contentId']
+                postdate = Time('n', mvdata['startTime']).nico
+                if len(self.primaryGet(ID = mvid)) == 0:
+                    #取得済みリストの中に含まれていないならば
+                    self.set(
+                        ID = mvid,
+                        validity = 1,
+                        epoch = 0,
+                        isComplete = 0,
+                        postdate = "convert('" + postdate + \
+                            "', datetime)"
+                    )
+                else:
+                    break
+            else:
+                continue
+            break
+
+        for j in range(i+1):
+            os.remove("ranking/" + str(j) + ".json")
+
+        return None
+
+class DataBase:
+    def __init__(self, name, connection):
+        self.name = name
+        self.connection = connection
+        self.cursor = connection.cursor()
+        self.table = {}
+
+    def commit(self):
+        sql.connection.commit()
+
+    def setTable(self, table):
+        self.table[table.name] = table
+
 def float_compressor(obj):
     if isinstance(obj, float):
         return round(obj,2)
@@ -342,9 +529,19 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def main():
+    db = DataBase("tesuto",sql.connection)
+    qtbl = QueueTable(db)
+    ctbl = ChartTable(db)
+
     qf = Queuefile()
-    qf.update()
     cf = Chartfile()
+
+    qtbl.update()
+    ctbl.update()
+
+    db.commit()
+
+    qf.update()
     cf.update(qf.todays_mv)
     cf.update(qf.lastwks_mv, dltd = True)
     qf.delete(cf.deletedlist)
