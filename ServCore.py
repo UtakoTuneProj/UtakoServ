@@ -396,16 +396,17 @@ class ChartTable(Table):
             'chart',
             database
         )
+        self.qtbl = self.parent.table['status']
 
     def update(self):
         #statusDBを読みチャートを更新
 
         todays_mv \
-            = self.get(
+            = self.qtbl.get(
                 'adddate(postdate, interval 1 day) > current_timestamp()'
             )
         lastwks_mv \
-            = self.get(
+            = self.qtbl.get(
                 'adddate(postdate, interval 1 week) < current_timestamp()' + \
                 ' and (isComplete == 0)'
             )
@@ -418,7 +419,7 @@ class ChartTable(Table):
                 movf.update()
 
             except MovDeletedException:
-                self.parent.table['status'].set(query[0] + [0,] + query[2:])
+                self.qtbl.set(query[0] + [0,] + query[2:])
                 continue
 
             except NoResponseException:
