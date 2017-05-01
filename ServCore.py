@@ -57,7 +57,7 @@ class Time:
         return dt.strftime("%Y%m%d%H%M")
 
     def __d2n(self,dt):
-        return dt.strftime("%Y-%m-%dT%H:%M:%S+09:00")
+        return dt.strftime("%Y-%m-%dT%H:%M:%S")
 
 class Queuecell:
     def __init__(self,queue):
@@ -366,14 +366,22 @@ class Table:
                 q += "'" + str(unnamed[i]) + "',"
                 i += 1
         for key in self.columns:
+            if not key == 'postdate':
+                q += "'"
+
             if key in named:
-                q += "'" + str(named[key]) + "',"
+                q += str(named[key])
                 dupq += key + "=" + str(named[key]) + ", "
             else:
-                q += "'" + str(unnamed[i]) + "',"
+                q += str(unnamed[i])
                 dupq += key + "=" + str(unnamed[i]) + ", "
                 i += 1
-        q = q[:-1]
+
+            if key == 'postdate':
+                q += ", "
+            else:
+                q += "', "
+        q = q[:-2]
         q += ')'
         dupq = dupq[:-2]
 
@@ -444,6 +452,7 @@ class QueueTable(Table):
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
+                postdate = Time('n', mvdata['startTime']).nico
                 if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
@@ -451,7 +460,7 @@ class QueueTable(Table):
                         validity = 1,
                         epoch = 0,
                         isComplete = 0,
-                        postdate = "convert('" + mvdata['startTime'] + \
+                        postdate = "convert('" + postdate + \
                             "', datetime)"
                     )
                 else:
