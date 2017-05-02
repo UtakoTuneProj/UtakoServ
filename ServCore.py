@@ -421,7 +421,12 @@ class ChartTable(Table):
                 movf.update()
 
             except MovDeletedException:
-                self.qtbl.set(mvid, 0, *query[2:])
+                self.qtbl.set(
+                    mvid,
+                    0,
+                    *query[2:4],
+                    "convert('" + str(postdate) + "', datetime)"
+                    )
                 continue
 
             except NoResponseException:
@@ -440,15 +445,17 @@ class ChartTable(Table):
             ]
             self.set(*writequery)
 
+            completed = False
+            status = True
             if epoch < 24:
-                if epoch < j*60 or ((epoch+1)*60 + 30 < passedmin):
+                if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
                     status = False
             elif epoch > 24:
                 status = False
             elif passedmin < 10140 or 10200 + 30 < passedmin:
                 status = False
 
-            if status and len(dat[mvid]) == 25:
+            if status and epoch == 24:
                 completed = True
 
             writequery = [
