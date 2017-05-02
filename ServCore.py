@@ -421,7 +421,7 @@ class ChartTable(Table):
                 movf.update()
 
             except MovDeletedException:
-                self.qtbl.set(query[0] + [0,] + query[2:])
+                self.qtbl.set(mvid, 0, *query[2:])
                 continue
 
             except NoResponseException:
