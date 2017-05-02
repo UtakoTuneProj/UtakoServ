@@ -440,11 +440,22 @@ class ChartTable(Table):
             ]
             self.set(*writequery)
 
+            if epoch < 24:
+                if epoch < j*60 or ((epoch+1)*60 + 30 < passedmin):
+                    status = False
+            elif epoch > 24:
+                status = False
+            elif passedmin < 10140 or 10200 + 30 < passedmin:
+                status = False
+
+            if status and len(dat[mvid]) == 25:
+                completed = True
+
             writequery = [
                 mvid,
-                1,
+                1 if status else 0,
                 epoch + 1,
-                0 if query in todays_mv else 1,
+                1 if completed else 0,
                 "convert('" + str(postdate) + "', datetime)"
             ]
             self.qtbl.set(*writequery)
