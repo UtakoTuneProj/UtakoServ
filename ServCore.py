@@ -13,6 +13,7 @@ import re
 import glob
 import os
 import time
+import random
 
 class JSONfile:
     pass
@@ -416,6 +417,7 @@ class ChartTable(Table):
             mvid = query[0]
             epoch = query[2]
             postdate = query[4]
+            isCompleted = True if query in lastwks_mv else False
             try:
                 movf = MovInfo(mvid)
                 movf.update()
@@ -444,8 +446,9 @@ class ChartTable(Table):
                 mvid,
                 1,
                 epoch + 1,
-                0 if query in todays_mv else 1,
-                "convert('" + str(postdate) + "', datetime)"
+                0 if isComplete else 1,
+                "convert('" + str(postdate) + "', datetime)",
+                random.randint(0,19) if isCompleted else None
             ]
             self.qtbl.set(*writequery)
 
@@ -469,12 +472,13 @@ class QueueTable(Table):
                 if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
-                        ID = mvid,
-                        validity = 1,
-                        epoch = 0,
-                        isComplete = 0,
-                        postdate = "convert('" + postdate + \
-                            "', datetime)"
+                        ID          = mvid,
+                        validity    = 1,
+                        epoch       = 0,
+                        isComplete  = 0,
+                        postdate    = "convert('" + postdate + \
+                                        "', datetime)"
+                        group       = None
                     )
                 else:
                     break
@@ -533,19 +537,11 @@ def main():
     qtbl = QueueTable(db)
     ctbl = ChartTable(db)
 
-    qf = Queuefile()
-    cf = Chartfile()
-
     qtbl.update()
     ctbl.update()
 
-    db.commit()
-
-    # qf.update()
-    # cf.update(qf.todays_mv)
-    # cf.update(qf.lastwks_mv, dltd = True)
-    # qf.delete(cf.deletedlist)
     # qf.tweet(24, 300)
+    db.commit()
 
     return None
 
