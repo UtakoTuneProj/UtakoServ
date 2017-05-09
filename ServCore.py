@@ -13,6 +13,7 @@ import re
 import glob
 import os
 import time
+import random
 
 class JSONfile:
     pass
@@ -445,7 +446,7 @@ class ChartTable(Table):
             ]
             self.set(*writequery)
 
-            completed = False
+            isCompleted = False
             status = True
             if epoch < 24:
                 if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
@@ -456,14 +457,15 @@ class ChartTable(Table):
                 status = False
 
             if status and epoch == 24:
-                completed = True
+                isCompleted = True
 
             writequery = [
                 mvid,
                 1 if status else 0,
                 epoch + 1,
-                1 if completed else 0,
-                "convert('" + str(postdate) + "', datetime)"
+                0 if isCompleted else 1,
+                "convert('" + str(postdate) + "', datetime)",
+                random.randint(0,19) if isCompleted else None
             ]
             self.qtbl.set(*writequery)
 
@@ -487,12 +489,13 @@ class QueueTable(Table):
                 if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
-                        ID = mvid,
-                        validity = 1,
-                        epoch = 0,
-                        isComplete = 0,
-                        postdate = "convert('" + postdate + \
-                            "', datetime)"
+                        ID          = mvid,
+                        validity    = 1,
+                        epoch       = 0,
+                        isComplete  = 0,
+                        postdate    = "convert('" + postdate + \
+                                        "', datetime)"
+                        group       = None
                     )
                 else:
                     break
@@ -551,19 +554,11 @@ def main():
     qtbl = QueueTable(db)
     ctbl = ChartTable(db)
 
-    qf = Queuefile()
-    cf = Chartfile()
-
     qtbl.update()
     ctbl.update()
 
-    db.commit()
-
-    # qf.update()
-    # cf.update(qf.todays_mv)
-    # cf.update(qf.lastwks_mv, dltd = True)
-    # qf.delete(cf.deletedlist)
     # qf.tweet(24, 300)
+    db.commit()
 
     return None
 
