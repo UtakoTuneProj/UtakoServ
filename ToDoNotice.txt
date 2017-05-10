@@ -1,4 +1,0 @@
-Analyzer:   DBからデータ利用可能にする
-Visualizer: DBの可視化
-Initializer:DBのデータを整理する
-tweepyCore: アクセストークンの別ファイル化
