@@ -225,7 +225,9 @@ class Chartfile(JSONfile):
     def __init__(self, path = "dat/chartlist_alter.json"):
         super().__init__(path)
 
-    def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
+    def update(self, queue, dltd = False):
+        # queueで与えられた動画についてチャートを更新、
+        # 削除された動画リストをself.deletedlistとして保持する
         self.deletedlist = []
 
         if not isinstance(queue, (tuple, list)):
@@ -494,7 +496,7 @@ class QueueTable(Table):
                         epoch       = 0,
                         isComplete  = 0,
                         postdate    = "convert('" + postdate + \
-                                        "', datetime)"
+                                        "', datetime)",
                         group       = None
                     )
                 else:
@@ -509,7 +511,7 @@ class QueueTable(Table):
         return None
 
 class DataBase:
-    def __init__(self, name, connection):
+    def __init__(self, name, connection = sql.connection):
         self.name = name
         self.connection = connection
         self.cursor = connection.cursor()
@@ -517,6 +519,9 @@ class DataBase:
 
     def commit(self):
         sql.connection.commit()
+
+    def select(self, query):
+        self.cursor.execute(query)
 
     def setTable(self, table):
         self.table[table.name] = table
@@ -550,7 +555,7 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def main():
-    db = DataBase("tesuto",sql.connection)
+    db = DataBase("tesuto", sql.connection)
     qtbl = QueueTable(db)
     ctbl = ChartTable(db)
 
