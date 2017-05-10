@@ -362,26 +362,36 @@ class Table:
         dupq = ''
         for key in self.primaryKey:
             if key in named:
-                q += "'" + str(named[key]) + "',"
+                tmp = named[key]
             else:
-                q += "'" + str(unnamed[i]) + "',"
+                tmp = unnamed[i]
                 i += 1
+            q += "'" + str(tmp) + "',"
+
         for key in self.columns:
-            if not key == 'postdate':
-                q += "'"
 
             if key in named:
-                q += str(named[key])
-                dupq += key + "=" + str(named[key]) + ", "
+                tmp = named[key]
             else:
-                q += str(unnamed[i])
-                dupq += key + "=" + str(unnamed[i]) + ", "
+                tmp = unnamed[i]
                 i += 1
 
-            if key == 'postdate':
+            if not (key == 'postdate' or tmp == None):
+                q += "'"
+
+            if tmp == None:
+                q += "NULL"
+                dupq += key + "=NULL, "
+
+            else:
+                q += str(tmp)
+                dupq += key + "=" + str(tmp) + ", "
+
+            if key == 'postdate' or tmp == None:
                 q += ", "
             else:
                 q += "', "
+
         q = q[:-2]
         q += ')'
         dupq = dupq[:-2]
@@ -428,7 +438,8 @@ class ChartTable(Table):
                     mvid,
                     0,
                     *query[2:4],
-                    "convert('" + str(postdate) + "', datetime)"
+                    "convert('" + str(postdate) + "', datetime)",
+                    None
                     )
                 continue
 
@@ -438,17 +449,17 @@ class ChartTable(Table):
                     movf.update()
 
             passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
-            writequery = [
-                mvid,
-                epoch,
-                passedmin,
-                movf.view_counter,
-                movf.comment_num,
-                movf.mylist_counter
-            ]
-            self.set(*writequery)
+            writequery = {
+                "ID":       mvid,
+                "epoch":    epoch,
+                "Time":     passedmin,
+                "View":     movf.view_counter,
+                "Comment":  movf.comment_num,
+                "Mylist":   movf.mylist_counter
+            }
+            self.set(**writequery)
 
-            isCompleted = False
+            isComplete = False
             status = True
             if epoch < 24:
                 if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
@@ -459,17 +470,17 @@ class ChartTable(Table):
                 status = False
 
             if status and epoch == 24:
-                isCompleted = True
+                isComplete = True
 
-            writequery = [
-                mvid,
-                1 if status else 0,
-                epoch + 1,
-                0 if isCompleted else 1,
-                "convert('" + str(postdate) + "', datetime)",
-                random.randint(0,19) if isCompleted else None
-            ]
-            self.qtbl.set(*writequery)
+            writequery = {
+                "ID":           mvid,
+                "validity":     1 if status else 0,
+                "epoch":        epoch + 1,
+                "isComplete":  0 if isComplete else 1,
+                "postdate":     "convert('" + str(postdate) + "', datetime)",
+                "analyzeGroup": random.randint(0,19) if isComplete else None
+            }
+            self.qtbl.set(**writequery)
 
         return None
 
@@ -487,7 +498,7 @@ class QueueTable(Table):
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                postdate = Time('n', mvdata['startTime']).nico
+                postdate = Time('n', mvdata['startTime'])
                 if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
@@ -495,9 +506,9 @@ class QueueTable(Table):
                         validity    = 1,
                         epoch       = 0,
                         isComplete  = 0,
-                        postdate    = "convert('" + postdate + \
+                        postdate    = "convert('" + str(postdate.dt) + \
                                         "', datetime)",
-                        group       = None
+                        analyzeGroup= None
                     )
                 else:
                     break
