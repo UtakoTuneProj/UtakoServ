@@ -18,7 +18,8 @@ import ChartInitializer as chinit
 class ChartModel(ChainList):
     def __init__(self, in_layer = 109, n_units = 50, layer = 4):
         l = [L.Linear(in_layer, n_units)]
-        l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
+        if layer > 2:
+            l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
         l.append(L.Linear(n_units, 1))
         super().__init__(*l)
 
@@ -33,19 +34,12 @@ class ChartModel(ChainList):
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
         t = Variable(y_data)
-        if not train:
-            ret = y.data
-        else:
-            ret = None
+        ret = y.data
 
         return F.mean_squared_error(y,t), ret
 
 def learn():
 
-    batchsize = 400
-    n_epoch = 3000
-
-    N_model = len(config)
     model = [None for i in range(N_model)]
     optimizer = [None for i in range(N_model)]
 
@@ -58,12 +52,11 @@ def learn():
     # train_acc  = [[] for i in range(5)]
     test_loss = [[] for i in range(N_model)]
     test_acc  = [[] for i in range(N_model)]
-
-    test_data = [[] for i in range(N_model)]
+    test_data = np.zeros((N_test,N_model), np.float)
 
     lfile = core.InitChartfile()
     x_dump = np.array(lfile.x, dtype = np.float32)
-    y_dump = 100 * np.log10(np.array(lfile.vocaran, dtype = np.float32))
+    y_dump = 100 * np.log10(np.array([lfile.vocaran], dtype = np.float32)).T
 
     N = len(x_dump) - N_test
     perm = np.arange(len(x_dump))
@@ -105,18 +98,17 @@ def learn():
         # evaluation
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
         sum_loss  = [0 for i in range(N_model)]
-        test_data = [[] for i in range(N_model)]
 
-        for i in range(0, N_test):
-            x_batch = x_test[i:i+1]
-            y_batch = y_test[i:i+1]
+        for i in range(0, N_test, batchsize):
+            x_batch = x_test[i:i+batchsize]
+            y_batch = y_test[i:i+batchsize]
 
             for j in range(N_model):
                 # 順伝播させて誤差と精度を算出
                 loss, op = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
                 sum_loss[j] += loss.data
                 if epoch == n_epoch - 1:
-                    test_data[j].append(list(op.reshape(len(op))))
+                    test_data[i:i+batchsize, j] = op.reshape(batchsize)
 
         for j in range(N_model):
             # テストデータでの誤差と、正解精度を表示
@@ -137,19 +129,19 @@ def learn():
         plt.yscale('log')
         plt.show()
 
-        test_data.insert(0,list(y_test))
-        dump = list(zip(*test_data))
-        dump.sort()
-        plt_data = list(zip(*dump))
+        index = np.argsort(y_test, axis = 0)
+        plt_data = np.append(y_test[index[:,0],:], test_data[index[:,0],:], axis = 1)
+        # dump = list(zip(*test_data))
+        # dump.sort()
+        # plt_data = list(zip(*dump))
 
-        plt.plot(plt_data[0], range(N_test), label = 'Ans.')
+        plt.plot(plt_data[:,0], range(N_test), label = 'Ans.')
         for i in range(N_model):
-            plt.plot(plt_data[i+1],range(N_test), label = config[i])
+            plt.plot(plt_data[:,i+1],range(N_test), label = config[i])
         plt.legend()
         plt.show()
 
 def model_test():
-    N_model = len(config)
     model = [None for i in range(N_model)]
 
     lfile = core.InitChartfile()
@@ -194,9 +186,14 @@ def analyze(mvid):
 def main():
     learn()
 
+N_test = 1000
+config = [[600,7],
+          [600,7],
+          [600,7]]
+batchsize = 1000
+n_epoch = 2000
+
+N_model = len(config)
+
 if __name__ == '__main__':
-    N_test = 500
-    config = [[600,7],
-              [600,7],
-              [600,7]]
     main()

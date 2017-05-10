@@ -105,7 +105,9 @@ def normalizer(mvid, on_prog = False):
             status = len(chart)
         for tag in thumb.tags:
             i = tagstatf.update(tag)
-            tagstat.append(binascii.crc32(tagstatf.data[i][0].encode('utf-8')) & 0xffffff)
+            if tagstatf.data[i][2] >= 50:
+                tagstat.append(i)
+            # tagstat.append(binascii.crc32(tagstatf.data[i][0].encode('utf-8')) & 0xffffff)
         # tagstat.sort()
         # tagstat.reverse()
         if len(tagstat) > 11:

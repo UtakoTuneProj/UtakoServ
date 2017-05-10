@@ -13,6 +13,7 @@ import re
 import glob
 import os
 import time
+import random
 
 class JSONfile:
     pass
@@ -224,7 +225,9 @@ class Chartfile(JSONfile):
     def __init__(self, path = "dat/chartlist_alter.json"):
         super().__init__(path)
 
-    def update(self, queue, dltd = False):#queueで与えられた動画についてチャートを更新、削除された動画リストをself.deletedlistとして保持する
+    def update(self, queue, dltd = False):
+        # queueで与えられた動画についてチャートを更新、
+        # 削除された動画リストをself.deletedlistとして保持する
         self.deletedlist = []
 
         if not isinstance(queue, (tuple, list)):
@@ -359,26 +362,36 @@ class Table:
         dupq = ''
         for key in self.primaryKey:
             if key in named:
-                q += "'" + str(named[key]) + "',"
+                tmp = named[key]
             else:
-                q += "'" + str(unnamed[i]) + "',"
+                tmp = unnamed[i]
                 i += 1
+            q += "'" + str(tmp) + "',"
+
         for key in self.columns:
-            if not key == 'postdate':
-                q += "'"
 
             if key in named:
-                q += str(named[key])
-                dupq += key + "=" + str(named[key]) + ", "
+                tmp = named[key]
             else:
-                q += str(unnamed[i])
-                dupq += key + "=" + str(unnamed[i]) + ", "
+                tmp = unnamed[i]
                 i += 1
 
-            if key == 'postdate':
+            if not (key == 'postdate' or tmp == None):
+                q += "'"
+
+            if tmp == None:
+                q += "NULL"
+                dupq += key + "=NULL, "
+
+            else:
+                q += str(tmp)
+                dupq += key + "=" + str(tmp) + ", "
+
+            if key == 'postdate' or tmp == None:
                 q += ", "
             else:
                 q += "', "
+
         q = q[:-2]
         q += ')'
         dupq = dupq[:-2]
@@ -425,7 +438,8 @@ class ChartTable(Table):
                     mvid,
                     0,
                     *query[2:4],
-                    "convert('" + str(postdate) + "', datetime)"
+                    "convert('" + str(postdate) + "', datetime)",
+                    None
                     )
                 continue
 
@@ -435,17 +449,17 @@ class ChartTable(Table):
                     movf.update()
 
             passedmin = (now.dt - movf.first_retrieve.dt).total_seconds() / 60
-            writequery = [
-                mvid,
-                epoch,
-                passedmin,
-                movf.view_counter,
-                movf.comment_num,
-                movf.mylist_counter
-            ]
-            self.set(*writequery)
+            writequery = {
+                "ID":       mvid,
+                "epoch":    epoch,
+                "Time":     passedmin,
+                "View":     movf.view_counter,
+                "Comment":  movf.comment_num,
+                "Mylist":   movf.mylist_counter
+            }
+            self.set(**writequery)
 
-            completed = False
+            isComplete = False
             status = True
             if epoch < 24:
                 if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
@@ -456,16 +470,17 @@ class ChartTable(Table):
                 status = False
 
             if status and epoch == 24:
-                completed = True
+                isComplete = True
 
-            writequery = [
-                mvid,
-                1 if status else 0,
-                epoch + 1,
-                1 if completed else 0,
-                "convert('" + str(postdate) + "', datetime)"
-            ]
-            self.qtbl.set(*writequery)
+            writequery = {
+                "ID":           mvid,
+                "validity":     1 if status else 0,
+                "epoch":        epoch + 1,
+                "isComplete":  0 if isComplete else 1,
+                "postdate":     "convert('" + str(postdate) + "', datetime)",
+                "analyzeGroup": random.randint(0,19) if isComplete else None
+            }
+            self.qtbl.set(**writequery)
 
         return None
 
@@ -483,16 +498,17 @@ class QueueTable(Table):
             raw_rank = JSONfile("ranking/" + str(i) + ".json").data['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                postdate = Time('n', mvdata['startTime']).nico
+                postdate = Time('n', mvdata['startTime'])
                 if len(self.primaryGet(ID = mvid)) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
-                        ID = mvid,
-                        validity = 1,
-                        epoch = 0,
-                        isComplete = 0,
-                        postdate = "convert('" + postdate + \
-                            "', datetime)"
+                        ID          = mvid,
+                        validity    = 1,
+                        epoch       = 0,
+                        isComplete  = 0,
+                        postdate    = "convert('" + str(postdate.dt) + \
+                                        "', datetime)",
+                        analyzeGroup= None
                     )
                 else:
                     break
@@ -506,7 +522,7 @@ class QueueTable(Table):
         return None
 
 class DataBase:
-    def __init__(self, name, connection):
+    def __init__(self, name, connection = sql.connection):
         self.name = name
         self.connection = connection
         self.cursor = connection.cursor()
@@ -514,6 +530,9 @@ class DataBase:
 
     def commit(self):
         sql.connection.commit()
+
+    def select(self, query):
+        self.cursor.execute(query)
 
     def setTable(self, table):
         self.table[table.name] = table
@@ -547,23 +566,15 @@ def rankfilereqTITLE(searchtitle = "VOCALOID", page = 0): #searchtitleに指定�
     return None
 
 def main():
-    db = DataBase("tesuto",sql.connection)
+    db = DataBase("tesuto", sql.connection)
     qtbl = QueueTable(db)
     ctbl = ChartTable(db)
-
-    qf = Queuefile()
-    cf = Chartfile()
 
     qtbl.update()
     ctbl.update()
 
-    db.commit()
-
-    # qf.update()
-    # cf.update(qf.todays_mv)
-    # cf.update(qf.lastwks_mv, dltd = True)
-    # qf.delete(cf.deletedlist)
     # qf.tweet(24, 300)
+    db.commit()
 
     return None
 
