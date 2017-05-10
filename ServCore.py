@@ -476,7 +476,7 @@ class ChartTable(Table):
                 "ID":           mvid,
                 "validity":     1 if status else 0,
                 "epoch":        epoch + 1,
-                "isComplete":   0 if isComplete else 1,
+                "isComplete":   1 if isComplete else 0,
                 "postdate":     "convert('" + str(postdate) + "', datetime)",
                 "analyzeGroup": random.randint(0,19) if isComplete else None
             }
