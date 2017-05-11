@@ -1,7 +1,11 @@
 # coding: utf-8
 # Analyzer: UtakoChainer core module
 
+print("importing modules...")
 import sys
+import time
+
+from progressbar import ProgressBar
 import numpy as np
 from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
 import chainer.functions  as F
@@ -14,9 +18,10 @@ except:
 
 import ServCore as core
 import ChartInitializer as chinit
+print('imported modules')
 
 class ChartModel(ChainList):
-    def __init__(self, in_layer = 109, n_units = 50, layer = 4):
+    def __init__(self, in_layer = 96, n_units = 50, layer = 4):
         l = [L.Linear(in_layer, n_units)]
         if layer > 2:
             l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
@@ -39,6 +44,7 @@ class ChartModel(ChainList):
         return F.mean_squared_error(y,t), ret
 
 def learn():
+    startTime = time.time()
 
     model = [None for i in range(N_model)]
     optimizer = [None for i in range(N_model)]
@@ -48,24 +54,70 @@ def learn():
         optimizer[i] = optimizers.Adam()
         optimizer[i].setup(model[i])
 
+    db = core.DataBase('test')
+    qtbl = core.QueueTable(db)
+    ctbl = core.ChartTable(db)
+
+    rawCharts = []
+    shapedInputs = []
+    shapedOutputs = []
+
+    pb = ProgressBar(0, 20)
+    print("Fetching from database...")
+    for i in range(20):
+        rawCharts.append(db.get(
+            'select chart.* from chart join status using(ID)' +
+            'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1'
+        ))
+        pb.update(i+1)
+    print("Fetch completed. Got data size is "\
+        + str(sum([len(rawCharts[i]) for i in range(20)])))
+
+    mvid = None
+    for rawGroup in rawCharts:
+        shapedInputs.append([])
+        shapedOutputs.append([])
+        for cell in rawGroup:
+            if mvid != cell[0]:
+                shapedInputs[-1].append([])
+                mvid = cell[0]
+
+            if cell[1] != 24:
+                shapedInputs[-1][-1].extend(cell[2:])
+            else:
+                view = cell[3]
+                comment = cell[4]
+                mylist = cell[5]
+
+                cm_cor = (view + mylist) / (view + comment + mylist)
+                shapedOutputs[-1].append(
+                    [view + comment * cm_cor + mylist ** 2 / view * 2]
+                )
+
+    x_train = []
+    y_train = []
+    for i in range(19):
+        x_train += shapedInputs[i]
+        y_train += shapedOutputs[i]
+    x_test = shapedInputs[19]
+    y_test = shapedOutputs[19]
+
+    x_train = np.array(x_train, dtype = np.float32)
+    x_test  = np.array(x_test,  dtype = np.float32)
+    y_train = 100 * np.log10(np.array(y_train, dtype = np.float32))
+    y_test  = 100 * np.log10(np.array(y_test,  dtype = np.float32))
+
+    N = len(x_train)
+    N_test = len(x_test)
+    perm = np.arange(len(x_train) + len(x_test))
+    # perm = np.random.permutation(N + N_test)
+
+
     # train_loss = [[] for i in range(5)]
     # train_acc  = [[] for i in range(5)]
     test_loss = [[] for i in range(N_model)]
     test_acc  = [[] for i in range(N_model)]
-    test_data = np.zeros((N_test,N_model), np.float)
-
-    lfile = core.InitChartfile()
-    x_dump = np.array(lfile.x, dtype = np.float32)
-    y_dump = 100 * np.log10(np.array([lfile.vocaran], dtype = np.float32)).T
-
-    N = len(x_dump) - N_test
-    perm = np.arange(len(x_dump))
-    # perm = np.random.permutation(N + N_test)
-
-    x_train = x_dump[perm[:-N_test]]
-    y_train = y_dump[perm[:-N_test]]
-    x_test = x_dump[perm[-N_test:]]
-    y_test = y_dump[perm[-N_test:]]
+    test_data = np.zeros((N_test, N_model), np.float)
 
     # Learning loop
     for epoch in range(n_epoch):
@@ -108,12 +160,16 @@ def learn():
                 loss, op = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
                 sum_loss[j] += loss.data
                 if epoch == n_epoch - 1:
-                    test_data[i:i+batchsize, j] = op.reshape(batchsize)
+                    size = batchsize if i + batchsize < N_test else N_test - i
+                    test_data[i:i+size, j] = op.reshape(size)
 
         for j in range(N_model):
             # テストデータでの誤差と、正解精度を表示
             print('test{0} mean loss={1}'.format(j, sum_loss[j] / N_test))
             test_loss[j].append(sum_loss[j] / N_test)
+
+    elapsedTime = time.time() - startTime
+    print('Total Time: {0}[m]'.format(elapsedTime / 60))
 
     for i in range(N_model):
         serializers.save_npz('Network/chart'+str(i)+'.model', model[i])
@@ -186,12 +242,11 @@ def analyze(mvid):
 def main():
     learn()
 
-N_test = 1000
 config = [[600,7],
           [600,7],
           [600,7]]
 batchsize = 1000
-n_epoch = 2000
+n_epoch = 2
 
 N_model = len(config)
 
