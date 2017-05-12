@@ -531,8 +531,9 @@ class DataBase:
     def commit(self):
         sql.connection.commit()
 
-    def select(self, query):
+    def get(self, query):
         self.cursor.execute(query)
+        return self.cursor.fetchall()
 
     def setTable(self, table):
         self.table[table.name] = table

@@ -4,3 +4,4 @@ __pycache__/
 ranking/
 *.conf
 *.swp
+chart[0-9]*.model
