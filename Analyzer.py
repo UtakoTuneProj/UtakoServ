@@ -1,9 +1,11 @@
 # coding: utf-8
 # Analyzer: UtakoChainer core module
+if __name__ == '__main__':
+    print("importing modules...")
 
-print("importing modules...")
 import sys
 import time
+import argparse
 
 from progressbar import ProgressBar
 import numpy as np
@@ -18,7 +20,9 @@ except:
 
 import ServCore as core
 import ChartInitializer as chinit
-print('imported modules')
+
+if __name__ == '__main__':
+    print('imported modules')
 
 class ChartModel(ChainList):
     def __init__(self, in_layer = 96, n_units = 50, layer = 4):
@@ -51,6 +55,9 @@ def learn():
 
     for i,c in enumerate(config):
         model[i] = ChartModel(n_units = c[0], layer = c[1])
+        if args.gpu:
+            model[i].to_gpu()  # Copy the model to the GPU
+
         optimizer[i] = optimizers.Adam()
         optimizer[i].setup(model[i])
 
@@ -112,12 +119,17 @@ def learn():
     perm = np.arange(len(x_train) + len(x_test))
     # perm = np.random.permutation(N + N_test)
 
-
     # train_loss = [[] for i in range(5)]
     # train_acc  = [[] for i in range(5)]
     test_loss = [[] for i in range(N_model)]
     test_acc  = [[] for i in range(N_model)]
     test_data = np.zeros((N_test, N_model), np.float)
+
+    if args.gpu:
+        x_train = cuda.to_gpu(x_train)
+        x_test  = cuda.to_gpu(x_test)
+        y_train = cuda.to_gpu(y_train)
+        y_test  = cuda.to_gpu(y_test)
 
     # Learning loop
     for epoch in range(n_epoch):
@@ -161,6 +173,7 @@ def learn():
                 sum_loss[j] += loss.data
                 if epoch == n_epoch - 1:
                     size = batchsize if i + batchsize < N_test else N_test - i
+                    op = cuda.to_cpu(op)
                     test_data[i:i+size, j] = op.reshape(size)
 
         for j in range(N_model):
@@ -185,6 +198,9 @@ def learn():
         plt.yscale('log')
         plt.show()
 
+        if args.gpu:
+            y_test = cuda.to_cpu(y_test)
+
         index = np.argsort(y_test, axis = 0)
         plt_data = np.append(y_test[index[:,0],:], test_data[index[:,0],:], axis = 1)
         # dump = list(zip(*test_data))
@@ -201,11 +217,11 @@ def model_test():
     model = [None for i in range(N_model)]
 
     lfile = core.InitChartfile()
-    x_dump = np.array(lfile.x[-N_test:], dtype = np.float32)
-    y_dump = 100 * np.log10(np.array(lfile.vocaran[-N_test:], dtype = np.float32))
+    x_dump = xp.array(lfile.x[-N_test:], dtype = xp.float32)
+    y_dump = 100 * xp.log10(xp.array(lfile.vocaran[-N_test:], dtype = xp.float32))
 
     N = len(x_dump) - N_test
-    perm = np.arange(len(x_dump))
+    perm = xp.arange(len(x_dump))
 
     y = [None for i in range(N_model + 1)]
     e = [None for i in range(N_model)]
@@ -234,7 +250,7 @@ def analyze(mvid):
     serializers.load_npz('Network/chart24h.model', model24)
     [status, x, y] = chinit.normalizer(mvid, on_prog = True)
     if status == 24:
-        y = model24(np.array(x, dtype = np.float32).reshape((1, len(x))))
+        y = model24(xp.array(x, dtype = np.float32).reshape((1, len(x))))
         return y
     else:
         return None
@@ -242,11 +258,46 @@ def analyze(mvid):
 def main():
     learn()
 
-config = [[600,7],
-          [600,7],
-          [600,7]]
-batchsize = 1000
-n_epoch = 2
+argparser = argparse.ArgumentParser(
+description = "U.Orihara Analyzer: analyze core module for utako with chainer."
+)
+argparser.add_argument('-v', '--verbose',
+help = "Select verbose level. "\
++ "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
+action = 'count',
+default = 3,
+# type = int,
+# choices = range(1,6)
+)
+argparser.add_argument('-e', '--epoch',
+help = "Sets iteration epoch. Default is 50",
+type = int,
+nargs = '?',
+default = 50
+)
+argparser.add_argument('-b', '--batch',
+help = "Sets batch size. Default is 1000",
+type = int,
+nargs = '?',
+default = 1000
+)
+argparser.add_argument('-g', '--gpu',
+help = "Use first GPU if flag exists. Default is False",
+action = 'store_true'
+)
+
+args = argparser.parse_args()
+
+print(args)
+
+if args.gpu:
+    cuda.get_device(0).use()  # Make a specified GPU current
+
+config = [[200,20],
+          [200,20],
+          [200,20]]
+batchsize = args.batch
+n_epoch = args.epoch
 
 N_model = len(config)
 
