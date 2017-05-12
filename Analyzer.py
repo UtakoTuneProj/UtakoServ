@@ -259,7 +259,10 @@ def examine(n_units = 200, layer = 20):
         plt.legend()
         plt.show()
 
-    return e.data
+        plt.hist(l-y, bins = 50)
+        plt.show()
+
+    return e.data, np.std(l-y)
 
 def analyze(mvid, n_units = 200, layer = 20):
     model = ChartModel(n_units = n_units, layer = layer)
