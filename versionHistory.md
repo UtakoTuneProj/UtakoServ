@@ -1,3 +1,8 @@
+## utako v0.6
+- AnalyzerでのDB/CUDA利用開始
+- Analyzerのコマンドラインオプションの実装
+- ファイル構造の見直し
+
 ## utako v0.5
 - Analyzerでのデータ利用を見越し、乱数により20グループに分割
 - File依存の一部削除/軽量化
