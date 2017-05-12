@@ -1,11 +1,69 @@
 # coding: utf-8
 # Analyzer: UtakoChainer core module
-if __name__ == '__main__':
-    print("importing modules...")
-
 import sys
 import time
 import argparse
+
+argparser = argparse.ArgumentParser(
+description = "U.Orihara Analyzer: analyze core module for utako with chainer."
+)
+argparser.add_argument('-v', '--verbose',
+help = "Select verbose level. "\
++ "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
+action = 'count',
+default = 3,
+# type = int,
+# choices = range(1,6)
+)
+argparser.add_argument('-e', '--epoch',
+help = "Sets iteration epoch. Default is 250",
+type = int,
+nargs = '?',
+default = 250
+)
+argparser.add_argument('-b', '--batch',
+help = "Sets batch size. Default is 1000",
+type = int,
+nargs = '?',
+default = 1000
+)
+argparser.add_argument('-t', '--testgroup',
+help = "Select which analyze group to test data. Default is 19 (the last).",
+type = int,
+nargs = '?',
+choices = range(20),
+default = 19
+)
+argparser.add_argument('-m', '--mode',
+help  = "Select analyzer mode. " +\
+        "l/learn : Learn from database. (Default) | " +\
+        "x/examine : Examine learned model. | " +\
+        "a/analyze : Analyze specified movie. -i param is needed. | " ,
+type = str,
+nargs = '?',
+choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
+default = 'l',
+)
+argparser.add_argument('-f', '--modelfile',
+help = "Specify which model to examine or analyze. Use with -m x or -m a.",
+type = str,
+nargs = '+',
+default = ['Network/chart24h.model',],
+)
+argparser.add_argument('-i', '--mvid',
+help = "Specify which movie to analyze. Use with -m a.",
+type = str,
+nargs = '?',
+)
+argparser.add_argument('-g', '--gpu',
+help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
+action = 'store_true'
+)
+
+args = argparser.parse_args()
+
+if __name__ == '__main__':
+    print("importing modules...")
 
 from progressbar import ProgressBar
 import numpy as np
@@ -239,7 +297,7 @@ def learn():
         plt.legend()
         plt.show()
 
-def examine(n_units = 200, layer = 20):
+def examine(modelpath, n_units = 200, layer = 20):
     f = fetch(isTrain = True)
     x = np.array(f[0][args.testgroup], dtype = np.float32)
     y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
@@ -247,7 +305,7 @@ def examine(n_units = 200, layer = 20):
     N_test = len(y)
 
     model = ChartModel(n_units = n_units, layer = layer)
-    serializers.load_npz(args.modelfile, model)
+    serializers.load_npz(modelpath, model)
     e, l = model.error(x, y.reshape((len(y), 1)), train = False)
 
     if GUI:
@@ -262,11 +320,11 @@ def examine(n_units = 200, layer = 20):
         plt.hist(l-y, bins = 50)
         plt.show()
 
-    return e.data, np.std(l-y)
+    return e.data, np.mean(l-y), np.std(l-y)
 
 def analyze(mvid, n_units = 200, layer = 20):
     model = ChartModel(n_units = n_units, layer = layer)
-    serializers.load_npz(args.modelfile, model)
+    serializers.load_npz(args.modelfile[0], model)
 
     [x, _] = fetch(mvid = mvid)
     return model(np.array(x, dtype = np.float32).reshape((1, len(x)))).data[0][0]
@@ -275,67 +333,10 @@ def main():
     if args.mode in ['l', 'learn']:
         learn()
     elif args.mode in ['x', 'examine']:
-        print(examine())
+        for mp in args.modelfile:
+            print(examine(modelpath = mp))
     else:
         print(analyze(args.mvid))
-
-argparser = argparse.ArgumentParser(
-description = "U.Orihara Analyzer: analyze core module for utako with chainer."
-)
-argparser.add_argument('-v', '--verbose',
-help = "Select verbose level. "\
-+ "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
-action = 'count',
-default = 3,
-# type = int,
-# choices = range(1,6)
-)
-argparser.add_argument('-e', '--epoch',
-help = "Sets iteration epoch. Default is 250",
-type = int,
-nargs = '?',
-default = 250
-)
-argparser.add_argument('-b', '--batch',
-help = "Sets batch size. Default is 1000",
-type = int,
-nargs = '?',
-default = 1000
-)
-argparser.add_argument('-t', '--testgroup',
-help = "Select which analyze group to test data. Default is 19 (the last).",
-type = int,
-nargs = '?',
-choices = range(20),
-default = 19
-)
-argparser.add_argument('-m', '--mode',
-help  = "Select analyzer mode. " +\
-        "l/learn : Learn from database. (Default) | " +\
-        "x/examine : Examine learned model. | " +\
-        "a/analyze : Analyze specified movie. -i param is needed. | " ,
-type = str,
-nargs = '?',
-choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
-default = 'l',
-)
-argparser.add_argument('-f', '--modelfile',
-help = "Specify which model to examine or analyze. Use with -m x or -m a.",
-type = str,
-nargs = '?',
-default = 'Network/chart24h.model',
-)
-argparser.add_argument('-i', '--mvid',
-help = "Specify which movie to analyze. Use with -m a.",
-type = str,
-nargs = '?',
-)
-argparser.add_argument('-g', '--gpu',
-help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
-action = 'store_true'
-)
-
-args = argparser.parse_args()
 
 if args.gpu:
     cuda.get_device(0).use()  # Make a specified GPU current
