@@ -19,7 +19,6 @@ except:
     GUI = False
 
 import ServCore as core
-import ChartInitializer as chinit
 
 if __name__ == '__main__':
     print('imported modules')
@@ -47,6 +46,66 @@ class ChartModel(ChainList):
 
         return F.mean_squared_error(y,t), ret
 
+def fetch(isTrain = False, mvid = None):
+    if mvid == None and not isTrain:
+        raise ValueError('Neither mvid nor isTrain was given.')
+
+    db = core.DataBase('test')
+    qtbl = core.QueueTable(db)
+    ctbl = core.ChartTable(db)
+
+    shapedInputs = []
+    shapedOutputs = []
+
+    if isTrain:
+        rawCharts = []
+
+        print("Fetching from database...")
+        for i in range(20):
+            rawCharts.append(db.get(
+                'select chart.* from chart join status using(ID) ' +
+                'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1 ' +
+                'order by ID, epoch'
+            ))
+        print("Fetch completed. Got data size is "\
+            + str(sum([len(rawCharts[i]) for i in range(20)])))
+
+        mvid = None
+        for rawGroup in rawCharts:
+            shapedInputs.append([])
+            shapedOutputs.append([])
+            for cell in rawGroup:
+                if mvid != cell[0]:
+                    shapedInputs[-1].append([])
+                    mvid = cell[0]
+
+                if cell[1] != 24:
+                    shapedInputs[-1][-1].extend(cell[2:])
+                else:
+                    view = cell[3]
+                    comment = cell[4]
+                    mylist = cell[5]
+
+                    cm_cor = (view + mylist) / (view + comment + mylist)
+                    shapedOutputs[-1].append(
+                        [view + comment * cm_cor + mylist ** 2 / view * 2]
+                    )
+
+    else:
+        rawCharts = db.get(
+            "select chart.* from chart join status using(ID) " +
+            "where ID = '" + mvid + "' and isComplete = 1 order by chart.epoch"
+        )
+
+        if len(rawCharts) < 24:
+            raise ValueError(mvid + 'is not analyzable')
+
+        for i,cell in enumerate(rawCharts):
+            if i != 24:
+                shapedInputs.extend(cell[2:])
+
+    return [shapedInputs, shapedOutputs]
+
 def learn():
     startTime = time.time()
 
@@ -61,53 +120,17 @@ def learn():
         optimizer[i] = optimizers.Adam()
         optimizer[i].setup(model[i])
 
-    db = core.DataBase('test')
-    qtbl = core.QueueTable(db)
-    ctbl = core.ChartTable(db)
-
-    rawCharts = []
-    shapedInputs = []
-    shapedOutputs = []
-
-    pb = ProgressBar(0, 20)
-    print("Fetching from database...")
-    for i in range(20):
-        rawCharts.append(db.get(
-            'select chart.* from chart join status using(ID)' +
-            'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1'
-        ))
-        pb.update(i+1)
-    print("Fetch completed. Got data size is "\
-        + str(sum([len(rawCharts[i]) for i in range(20)])))
-
-    mvid = None
-    for rawGroup in rawCharts:
-        shapedInputs.append([])
-        shapedOutputs.append([])
-        for cell in rawGroup:
-            if mvid != cell[0]:
-                shapedInputs[-1].append([])
-                mvid = cell[0]
-
-            if cell[1] != 24:
-                shapedInputs[-1][-1].extend(cell[2:])
-            else:
-                view = cell[3]
-                comment = cell[4]
-                mylist = cell[5]
-
-                cm_cor = (view + mylist) / (view + comment + mylist)
-                shapedOutputs[-1].append(
-                    [view + comment * cm_cor + mylist ** 2 / view * 2]
-                )
+    fetchData = fetch(isTrain = True)
 
     x_train = []
     y_train = []
-    for i in range(19):
-        x_train += shapedInputs[i]
-        y_train += shapedOutputs[i]
-    x_test = shapedInputs[19]
-    y_test = shapedOutputs[19]
+    for i in range(20):
+        if i == args.testgroup:
+            x_test = fetchData[0][i]
+            y_test = fetchData[1][i]
+        else:
+            x_train += fetchData[0][i]
+            y_train += fetchData[1][i]
 
     x_train = np.array(x_train, dtype = np.float32)
     x_test  = np.array(x_test,  dtype = np.float32)
@@ -166,13 +189,15 @@ def learn():
         for i in range(0, N_test, batchsize):
             x_batch = x_test[i:i+batchsize]
             y_batch = y_test[i:i+batchsize]
+            size = len(y_batch)
 
             for j in range(N_model):
                 # 順伝播させて誤差と精度を算出
-                loss, op = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)), train = False)
-                sum_loss[j] += loss.data
+                loss, op = model[j].error(
+                    x_batch, y_batch.reshape((size,1)), train = False
+                )
+                sum_loss[j] += loss.data * size
                 if epoch == n_epoch - 1:
-                    size = batchsize if i + batchsize < N_test else N_test - i
                     op = cuda.to_cpu(op)
                     test_data[i:i+size, j] = op.reshape(size)
 
@@ -213,50 +238,42 @@ def learn():
         plt.legend()
         plt.show()
 
-def model_test():
-    model = [None for i in range(N_model)]
+def examine(n_units = 200, layer = 20):
+    f = fetch(isTrain = True)
+    x = np.array(f[0][args.testgroup], dtype = np.float32)
+    y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
 
-    lfile = core.InitChartfile()
-    x_dump = xp.array(lfile.x[-N_test:], dtype = xp.float32)
-    y_dump = 100 * xp.log10(xp.array(lfile.vocaran[-N_test:], dtype = xp.float32))
+    N_test = len(y)
 
-    N = len(x_dump) - N_test
-    perm = xp.arange(len(x_dump))
+    model = ChartModel(n_units = n_units, layer = layer)
+    serializers.load_npz(args.modelfile, model)
+    e, l = model.error(x, y.reshape((len(y), 1)), train = False)
 
-    y = [None for i in range(N_model + 1)]
-    e = [None for i in range(N_model)]
-    x = x_dump[perm[-N_test:]]
-    y[0] = y_dump[perm[-N_test:]]
+    if GUI:
+        index = np.argsort(y, axis = 0)
+        y = y[index[:,0],:]
+        l = l[index[:,0],:]
+        plt.plot(y, range(N_test), label = 'Ans.')
+        plt.plot(l, range(N_test), label = 'Exam.')
+        plt.legend()
+        plt.show()
 
-    for i in range(N_model):
-        model[i] = ChartModel(n_units = config[i][0], layer = config[i][1])
-        serializers.load_npz('Network/chart'+str(i)+'.model', model[i])
-        e, y[i+1] = model[i].error(x, y[0].reshape((len(y[0]), 1)), train = False)
-        print(e.data, flush = True)
+    return e.data
 
-    y = [list(z.reshape(len(z))) for z in y]
-    y = list(zip(*y))
-    y.sort()
-    y = list(zip(*y))
+def analyze(mvid, n_units = 200, layer = 20):
+    model = ChartModel(n_units = n_units, layer = layer)
+    serializers.load_npz(args.modelfile, model)
 
-    plt.plot(y[0], range(N_test), label = 'Ans.')
-    for i in range(N_model):
-        plt.plot(y[i+1], range(N_test), label = config[i])
-    plt.legend()
-    plt.show()
-
-def analyze(mvid):
-    model24 = ChartModel(n_units = 600, layer = 7)
-    serializers.load_npz('Network/chart24h.model', model24)
-    [status, x, y] = chinit.normalizer(mvid, on_prog = True)
-    if status == 24:
-        y = model24(xp.array(x, dtype = np.float32).reshape((1, len(x))))
-        return y
-    else:
-        return None
+    [x, _] = fetch(mvid = mvid)
+    return model(np.array(x, dtype = np.float32).reshape((1, len(x))))
 
 def main():
-    learn()
+    if args.mode in ['l', 'learn']:
+        learn()
+    elif args.mode in ['x', 'examine']:
+        print(examine())
+    else:
+        print(analyze(args.mvid))
 
 argparser = argparse.ArgumentParser(
 description = "U.Orihara Analyzer: analyze core module for utako with chainer."
@@ -270,10 +287,10 @@ default = 3,
 # choices = range(1,6)
 )
 argparser.add_argument('-e', '--epoch',
-help = "Sets iteration epoch. Default is 50",
+help = "Sets iteration epoch. Default is 250",
 type = int,
 nargs = '?',
-default = 50
+default = 250
 )
 argparser.add_argument('-b', '--batch',
 help = "Sets batch size. Default is 1000",
@@ -281,14 +298,40 @@ type = int,
 nargs = '?',
 default = 1000
 )
+argparser.add_argument('-t', '--testgroup',
+help = "Select which analyze group to test data. Default is 19 (the last).",
+type = int,
+nargs = '?',
+choices = range(20),
+default = 19
+)
+argparser.add_argument('-m', '--mode',
+help  = "Select analyzer mode. " +\
+        "l/learn : Learn from database. (Default) | " +\
+        "x/examine : Examine learned model. | " +\
+        "a/analyze : Analyze specified movie. -i param is needed. | " ,
+type = str,
+nargs = '?',
+choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
+default = 'l',
+)
+argparser.add_argument('-f', '--modelfile',
+help = "Specify which model to examine or analyze. Use with -m x or -m a.",
+type = str,
+nargs = '?',
+default = 'Network/chart24h.model',
+)
+argparser.add_argument('-i', '--mvid',
+help = "Specify which movie to analyze. Use with -m a.",
+type = str,
+nargs = '?',
+)
 argparser.add_argument('-g', '--gpu',
-help = "Use first GPU if flag exists. Default is False",
+help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
 action = 'store_true'
 )
 
 args = argparser.parse_args()
-
-print(args)
 
 if args.gpu:
     cuda.get_device(0).use()  # Make a specified GPU current
