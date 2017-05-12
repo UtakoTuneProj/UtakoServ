@@ -153,11 +153,11 @@ def fetch(isTrain = False, mvid = None):
     else:
         rawCharts = db.get(
             "select chart.* from chart join status using(ID) " +
-            "where ID = '" + mvid + "' and isComplete = 1 order by chart.epoch"
+            "where ID = '" + mvid + "' order by chart.epoch"
         )
 
         if len(rawCharts) < 24:
-            raise ValueError(mvid + 'is not analyzable')
+            raise ValueError(mvid + ' is not analyzable')
 
         for i,cell in enumerate(rawCharts):
             if i != 24:
