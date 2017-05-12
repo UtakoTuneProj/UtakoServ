@@ -18,7 +18,8 @@ try:
 except:
     GUI = False
 
-import ServCore as core
+import sql
+cmdf = sql.cmdf
 
 if __name__ == '__main__':
     print('imported modules')
@@ -50,9 +51,9 @@ def fetch(isTrain = False, mvid = None):
     if mvid == None and not isTrain:
         raise ValueError('Neither mvid nor isTrain was given.')
 
-    db = core.DataBase('test')
-    qtbl = core.QueueTable(db)
-    ctbl = core.ChartTable(db)
+    db = sql.DataBase('test')
+    qtbl = sql.QueueTable(db)
+    ctbl = sql.ChartTable(db)
 
     shapedInputs = []
     shapedOutputs = []
@@ -265,7 +266,7 @@ def analyze(mvid, n_units = 200, layer = 20):
     serializers.load_npz(args.modelfile, model)
 
     [x, _] = fetch(mvid = mvid)
-    return model(np.array(x, dtype = np.float32).reshape((1, len(x))))
+    return model(np.array(x, dtype = np.float32).reshape((1, len(x)))).data[0][0]
 
 def main():
     if args.mode in ['l', 'learn']:
