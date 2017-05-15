@@ -65,7 +65,6 @@ args = argparser.parse_args()
 if __name__ == '__main__':
     print("importing modules...")
 
-from progressbar import ProgressBar
 import numpy as np
 from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
 import chainer.functions  as F

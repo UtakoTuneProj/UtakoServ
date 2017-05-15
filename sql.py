@@ -101,20 +101,21 @@ class ChartTable(Table):
             'chart',
             database
         )
-        self.qtbl = self.parent.table['status']
 
     def update(self):
         #statusDBを読みチャートを更新
 
+        qtbl = self.parent.table['status']
+        ittbl = self.parent.table['IDtag']
         todays_mv \
-            = self.qtbl.get(
+            = qtbl.get(
                 "adddate(postdate, interval '1 0' day_hour)" + \
                 " > current_timestamp()" + \
                 " and (validity = 1)",
                 (),
             )
         lastwks_mv \
-            = self.qtbl.get(
+            = qtbl.get(
                 "adddate(postdate, interval '7 1' day_hour)" + \
                 " < current_timestamp()" + \
                 " and (validity = 1) and (isComplete = 0)",
@@ -130,7 +131,7 @@ class ChartTable(Table):
                 movf.update()
 
             except cmdf.MovDeletedException:
-                self.qtbl.set(
+                qtbl.set(
                     mvid,
                     0,
                     *query[2:4],
@@ -166,6 +167,13 @@ class ChartTable(Table):
                 status = False
 
             if status and epoch == 24:
+                for tag in movf.tags:
+                    writequery = {
+                        "ID"      : mvid,
+                        "tagName" : tag,
+                        "count"   : 1,
+                    }
+                    ittbl.set(**writequery)
                 isComplete = True
 
             writequery = {
@@ -176,7 +184,7 @@ class ChartTable(Table):
                 "postdate":     "convert('" + str(postdate) + "', datetime)",
                 "analyzeGroup": random.randint(0,19) if isComplete else None
             }
-            self.qtbl.set(**writequery)
+            qtbl.set(**writequery)
 
         return None
 
@@ -216,6 +224,13 @@ class QueueTable(Table):
             os.remove("ranking/" + str(j) + ".json")
 
         return None
+
+class IDTagTable(Table):
+    def __init__(self, database):
+        super().__init__(
+            'IDtag',
+            database,
+        )
 
 class DataBase:
     def __init__(self, name, connection = connection):

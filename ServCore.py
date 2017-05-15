@@ -3,12 +3,14 @@
 
 import Analyzer as analyzer
 sql = analyzer.sql
+cmdf = analyzer.cmdf
 from tweepyCore import chart_tw
 
 def main():
-    db   = sql.DataBase("tesuto", sql.connection)
-    qtbl = sql.QueueTable(db)
-    ctbl = sql.ChartTable(db)
+    db    = sql.DataBase("tesuto", sql.connection)
+    qtbl  = sql.QueueTable(db)
+    ctbl  = sql.ChartTable(db)
+    ittbl = sql.IDTagTable(db)
 
     qtbl.update()
     ctbl.update()
