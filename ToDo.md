@@ -1,5 +1,6 @@
 |File|ToDo|priority|target version|
 |:---|:---|:---|:---|
+|core, sql|タグデータの収集/移行|high|v0.6.1|
 |core|ロガー実装|high|v0.7|
 |Analyzer|入力に曜日データ/時間データ/タグデータを与える|high|v0.7|
 |tweepy, core|ツイッター連携の実装|medium|v0.8|
