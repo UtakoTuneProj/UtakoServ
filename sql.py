@@ -29,31 +29,12 @@ class Table:
                 self.columns.append(column[0])
         self.allcolumns = self.primaryKey + self.columns
 
-    def primaryQuery(self, *unnamed, **named):
-        i = 0
-        q = (
-            "`{}` = %s AND " * (len(self.primaryKey)) - 1 * "`{}` = %s"
-        ).format(*self.primaryKey)
-        args = []
-
-        for pk in self.primaryKey:
-            if pk in named:
-                args.append(named[key])
-            else:
-                args.append(unnamed[i])
-                i += 1
-
-        return connection.literal(q, args)
-
     def get(self, query, args):
         self.cursor.execute(
             'SELECT * from `{0}` where {1}'.format(self.name, query),
-            (args,)
+            args,
         )
         return self.cursor.fetchall()
-
-    def primaryGet(self, *unnamed, **named):
-        return self.get(self.primaryQuery(*unnamed, **named))
 
     def set(self, *unnamed, overwrite = True, **named):
         i = 0
@@ -87,7 +68,8 @@ class Table:
             '( ' + '{}, ' * (len(self.allcolumns) - 1) + '{} )'
         ).format(*ql)
         dupq = (
-            '`{0[0]}` = {0[1]} ' * len(self.columns)
+            '`{0[0]}` = {0[1]}, ' * (len(self.columns) - 1) + \
+            '`{0[0]}` = {0[1]}'
         ).format(*zip(self.columns, ql[len(self.primaryKey):]))
         cmd = \
             'INSERT into {} \n'.format(self.name) + \
@@ -203,7 +185,7 @@ class QueueTable(Table):
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
                 postdate = cmdf.Time('n', mvdata['startTime'])
-                if len(self.primaryGet(ID = mvid)) == 0:
+                if len(self.get('ID = %s', (mvid,))) == 0:
                     #取得済みリストの中に含まれていないならば
                     self.set(
                         ID          = mvid,
