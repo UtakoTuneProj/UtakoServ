@@ -1,3 +1,7 @@
+## utako v0.6.1
+- タグデータのSQL移行
+- SQLインジェクション対策
+
 ## utako v0.6
 - AnalyzerでのDB/CUDA利用開始
 - Analyzerのコマンドラインオプションの実装
