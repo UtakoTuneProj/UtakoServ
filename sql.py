@@ -21,7 +21,7 @@ class Table:
 
         self.primaryKey = []
         self.columns = []
-        self.cursor.execute("desc " + name)
+        self.cursor.execute('desc `{}`'.format(name))
         for column in self.cursor.fetchall():
             if 'PRI' in column[3]:
                 self.primaryKey.append(column[0])
@@ -31,18 +31,25 @@ class Table:
 
     def primaryQuery(self, *unnamed, **named):
         i = 0
-        q = ""
+        q = (
+            "`{}` = %s AND " * (len(self.primaryKey)) - 1 * "`{}` = %s"
+        ).format(*self.primaryKey)
+        args = []
+
         for pk in self.primaryKey:
             if pk in named:
-                q += pk + " = '" + str(named[pk]) + "' AND "
+                args.append(named[key])
             else:
-                q += pk + " = '" + str(unnamed[i]) + "' AND "
+                args.append(unnamed[i])
                 i += 1
 
-        return q.rpartition(" AND ")[0]
+        return connection.literal(q, args)
 
-    def get(self, query):
-        self.cursor.execute('SELECT * from ' + self.name + ' where ' + query)
+    def get(self, query, args):
+        self.cursor.execute(
+            'SELECT * from `{0}` where {1}'.format(self.name, query),
+            (args,)
+        )
         return self.cursor.fetchall()
 
     def primaryGet(self, *unnamed, **named):
@@ -51,15 +58,15 @@ class Table:
     def set(self, *unnamed, overwrite = True, **named):
         i = 0
 
-        q = '('
-        dupq = ''
+        ql = []
+
         for key in self.primaryKey:
             if key in named:
                 tmp = named[key]
             else:
                 tmp = unnamed[i]
                 i += 1
-            q += "'" + str(tmp) + "',"
+            ql.append(connection.literal(tmp))
 
         for key in self.columns:
 
@@ -69,28 +76,22 @@ class Table:
                 tmp = unnamed[i]
                 i += 1
 
-            if not (key == 'postdate' or tmp == None):
-                q += "'"
-
             if tmp == None:
-                q += "NULL"
-                dupq += key + "=NULL, "
+                tmp = 'NULL'
+            elif not key == 'postdate':
+                tmp = connection.literal(tmp)
 
-            else:
-                q += str(tmp)
-                dupq += key + "=" + str(tmp) + ", "
+            ql.append(tmp)
 
-            if key == 'postdate' or tmp == None:
-                q += ", "
-            else:
-                q += "', "
-
-        q = q[:-2]
-        q += ')'
-        dupq = dupq[:-2]
-
+        q = (
+            '( ' + '{}, ' * (len(self.allcolumns) - 1) + '{} )'
+        ).format(*ql)
+        dupq = (
+            '`{0[0]}` = {0[1]} ' * len(self.columns)
+        ).format(*zip(self.columns, ql[len(self.primaryKey):]))
         cmd = \
-            'INSERT into ' + self.name + ' values ' + q + ' ' + \
+            'INSERT into {} \n'.format(self.name) + \
+            'values ' + q + '\n'\
             'ON DUPLICATE key update ' + dupq
         self.cursor.execute(cmd)
 
@@ -109,13 +110,15 @@ class ChartTable(Table):
             = self.qtbl.get(
                 "adddate(postdate, interval '1 0' day_hour)" + \
                 " > current_timestamp()" + \
-                " and (validity = 1)"
+                " and (validity = 1)",
+                (),
             )
         lastwks_mv \
             = self.qtbl.get(
                 "adddate(postdate, interval '7 1' day_hour)" + \
                 " < current_timestamp()" + \
-                " and (validity = 1) and (isComplete = 0)"
+                " and (validity = 1) and (isComplete = 0)",
+                (),
             )
 
         for query in todays_mv + lastwks_mv:
@@ -224,8 +227,8 @@ class DataBase:
     def commit(self):
         self.connection.commit()
 
-    def get(self, query):
-        self.cursor.execute(query)
+    def get(self, query, args):
+        self.cursor.execute(query, args,)
         return self.cursor.fetchall()
 
     def setTable(self, table):
