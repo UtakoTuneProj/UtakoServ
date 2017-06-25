@@ -1,4 +1,4 @@
-﻿# coding: utf-8
+# -*- coding: utf-8 -*-
 # module for screening whether VOCALOID-using movies
 
 import sys

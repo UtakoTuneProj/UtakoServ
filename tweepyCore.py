@@ -4,6 +4,9 @@
 import tweepy
 from configparser import ConfigParser
 
+from loginit import *
+logger = getLogger(__name__)
+
 conf = ConfigParser()
 conf.read('conf/auth.conf')
 

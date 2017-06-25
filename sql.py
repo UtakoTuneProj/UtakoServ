@@ -1,10 +1,13 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 # SQL core module
 import os
 import random
 import configparser
 import MySQLdb
 import commondef as cmdf
+
+from loginit import *
+logger = getLogger(__name__)
 
 cnfp = configparser.ConfigParser()
 cnfp.read('conf/auth.conf')

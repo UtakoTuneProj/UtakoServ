@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -7,6 +9,9 @@ import codecs
 import xml.etree.ElementTree as ET
 import re
 import os
+
+from loginit import *
+logger = getLogger(__name__)
 
 class MovDeletedException(Exception):
     def __init__(self,e):

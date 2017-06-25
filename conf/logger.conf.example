@@ -1,0 +1,41 @@
+[formatters]
+    keys = default, progress
+
+[formatter_default]
+    class   = loginit.UtakoFormatter
+    format  = %(levelname)-8s| %(message)s\n%(name)s, %(lineno)s
+
+[formatter_progress]
+    class   = loginit.UtakoFormatter
+    format  = %(levelname)-8s| %(message)s
+
+[handlers]
+    keys = default, progress
+
+[handler_default]
+    class       = logging.handlers.RotatingFileHandler
+    formatter   = default
+    level       = WARNING
+    args        = ('logs/utako.log', 'a')
+    maxBytes    = 65536
+    backupCount = 3
+
+[handler_progress]
+    class       = logging.handlers.RotatingFileHandler
+    formatter   = progress
+    level       = INFO
+    args        = ('logs/utako.log', 'a')
+    maxBytes    = 65536
+    backupCount = 3
+
+[loggers]
+    keys = root, progress
+
+[logger_root]
+    level       = WARNING
+    handlers    = default
+
+[logger_progress]
+    level       = INFO
+    handlers    = progress
+    qualname    = progress

@@ -1,8 +1,11 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
 import sys
 import time
 import argparse
+
+from loginit import *
+logger = getLogger(__name__)
 
 argparser = argparse.ArgumentParser(
 description = "U.Orihara Analyzer: analyze core module for utako with chainer."
