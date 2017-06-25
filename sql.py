@@ -7,9 +7,9 @@ import MySQLdb
 import commondef as cmdf
 
 cnfp = configparser.ConfigParser()
-cnfp.read('.auth.conf')
+cnfp.read('conf/auth.conf')
 
-connection = MySQLdb.connect(**cnfp['DEFAULT'])
+connection = MySQLdb.connect(**cnfp['db'])
 cursor = connection.cursor()
 
 class Table:

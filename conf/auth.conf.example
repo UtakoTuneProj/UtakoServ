@@ -1,0 +1,12 @@
+[db]
+    host    = localhost
+    user    = anonymous
+    passwd  = hogehoge
+    db      = hoge
+    charset = utf8
+
+[tweepy]
+    API_KEY         = Twitter-API-key
+    API_SECRET      = Twitter-API-secret-key
+    ACCESS_TOKEN    = Twitter-Access-token
+    ACCESS_SECRET   = Twitter-Access-secret
