@@ -7,64 +7,6 @@ import argparse
 from loginit import *
 logger = getLogger(__name__)
 
-argparser = argparse.ArgumentParser(
-description = "U.Orihara Analyzer: analyze core module for utako with chainer."
-)
-argparser.add_argument('-v', '--verbose',
-help = "Select verbose level. "\
-+ "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
-action = 'count',
-default = 3,
-# type = int,
-# choices = range(1,6)
-)
-argparser.add_argument('-e', '--epoch',
-help = "Sets iteration epoch. Default is 250",
-type = int,
-nargs = '?',
-default = 250
-)
-argparser.add_argument('-b', '--batch',
-help = "Sets batch size. Default is 1000",
-type = int,
-nargs = '?',
-default = 1000
-)
-argparser.add_argument('-t', '--testgroup',
-help = "Select which analyze group to test data. Default is 19 (the last).",
-type = int,
-nargs = '?',
-choices = range(20),
-default = 19
-)
-argparser.add_argument('-m', '--mode',
-help  = "Select analyzer mode. " +\
-        "l/learn : Learn from database. (Default) | " +\
-        "x/examine : Examine learned model. | " +\
-        "a/analyze : Analyze specified movie. -i param is needed. | " ,
-type = str,
-nargs = '?',
-choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
-default = 'l',
-)
-argparser.add_argument('-f', '--modelfile',
-help = "Specify which model to examine or analyze. Use with -m x or -m a.",
-type = str,
-nargs = '+',
-default = ['Network/chart24h.model',],
-)
-argparser.add_argument('-i', '--mvid',
-help = "Specify which movie to analyze. Use with -m a.",
-type = str,
-nargs = '?',
-)
-argparser.add_argument('-g', '--gpu',
-help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
-action = 'store_true'
-)
-
-args = argparser.parse_args()
-
 if __name__ == '__main__':
     logger.debug("importing modules...")
 
@@ -167,7 +109,7 @@ def fetch(isTrain = False, mvid = None):
 
     return [shapedInputs, shapedOutputs]
 
-def learn():
+def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
     startTime = time.time()
 
     model = [None for i in range(N_model)]
@@ -175,7 +117,7 @@ def learn():
 
     for i,c in enumerate(config):
         model[i] = ChartModel(n_units = c[0], layer = c[1])
-        if args.gpu:
+        if isgpu:
             model[i].to_gpu()  # Copy the model to the GPU
 
         optimizer[i] = optimizers.Adam()
@@ -186,7 +128,7 @@ def learn():
     x_train = []
     y_train = []
     for i in range(20):
-        if i == args.testgroup:
+        if i == testgroup:
             x_test = fetchData[0][i]
             y_test = fetchData[1][i]
         else:
@@ -209,7 +151,7 @@ def learn():
     test_acc  = [[] for i in range(N_model)]
     test_data = np.zeros((N_test, N_model), np.float)
 
-    if args.gpu:
+    if isgpu:
         x_train = cuda.to_gpu(x_train)
         x_test  = cuda.to_gpu(x_test)
         y_train = cuda.to_gpu(y_train)
@@ -284,7 +226,7 @@ def learn():
         plt.yscale('log')
         plt.show()
 
-        if args.gpu:
+        if isgpu:
             y_test = cuda.to_cpu(y_test)
 
         index = np.argsort(y_test, axis = 0)
@@ -299,10 +241,10 @@ def learn():
         plt.legend()
         plt.show()
 
-def examine(modelpath, n_units = 200, layer = 20):
+def examine(modelpath, n_units = 200, layer = 20, testgroup = 0):
     f = fetch(isTrain = True)
-    x = np.array(f[0][args.testgroup], dtype = np.float32)
-    y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
+    x = np.array(f[0][testgroup], dtype = np.float32)
+    y = 100 * np.log10(np.array(f[1][testgroup], dtype = np.float32))
 
     N_test = len(y)
 
@@ -324,32 +266,107 @@ def examine(modelpath, n_units = 200, layer = 20):
 
     return e.data, np.mean(l-y), np.std(l-y)
 
-def analyze(mvid, n_units = 200, layer = 20):
+def analyze(mvid, modelfile, n_units = 200, layer = 20):
+    modelArch = np.load(modelfile)
+
     model = ChartModel(n_units = n_units, layer = layer)
-    serializers.load_npz(args.modelfile[0], model)
+    serializers.load_npz(modelfile, model)
 
     [x, _] = fetch(mvid = mvid)
     return model(np.array(x, dtype = np.float32).reshape((1, len(x)))).data[0][0]
 
-def main():
-    if args.mode in ['l', 'learn']:
-        learn()
-    elif args.mode in ['x', 'examine']:
-        for mp in args.modelfile:
-            print(examine(modelpath = mp))
-    else:
-        print(analyze(args.mvid))
-
-if args.gpu:
-    cuda.get_device(0).use()  # Make a specified GPU current
+def usegpu(deviceid = 0):
+    isgpu = True
+    cuda.get_device(deviceid)
+    return None
 
 config = [[200,20],
           [200,20],
           [200,20]]
-batchsize = args.batch
-n_epoch = args.epoch
 
 N_model = len(config)
+isgpu = False
 
 if __name__ == '__main__':
-    main()
+
+    argparser = argparse.ArgumentParser(
+        description = "U.Orihara Analyzer: analyze core module for utako with chainer."
+    )
+    argparser.add_argument(
+        '-v', '--verbose',
+        help = "Select verbose level. "\
+        + "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
+        action = 'count',
+        default = 3,
+        # type = int,
+        # choices = range(1,6)
+    )
+    argparser.add_argument(
+        '-e', '--epoch',
+        help = "Sets iteration epoch. Default is 250",
+        type = int,
+        nargs = '?',
+        default = 250
+    )
+    argparser.add_argument(
+        '-b', '--batch',
+        help = "Sets batch size. Default is 1000",
+        type = int,
+        nargs = '?',
+        default = 1000
+    )
+    argparser.add_argument(
+        '-t', '--testgroup',
+        help = "Select which analyze group to test data. Default is 19 (the last).",
+        type = int,
+        nargs = '?',
+        choices = range(20),
+        default = 19
+    )
+    argparser.add_argument(
+        '-m', '--mode',
+        help  = "Select analyzer mode. " +\
+            "l/learn : Learn from database. (Default) | " +\
+            "x/examine : Examine learned model. | " +\
+            "a/analyze : Analyze specified movie. -i param is needed. | " ,
+        type = str,
+        nargs = '?',
+        choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
+        default = 'l',
+    )
+    argparser.add_argument(
+        '-f', '--modelfile',
+        help = "Specify which model to examine or analyze. Use with -m x or -m a.",
+        type = str,
+        nargs = '+',
+        default = ['Network/chart24h.model',],
+    )
+    argparser.add_argument(
+        '-i', '--mvid',
+        help = "Specify which movie to analyze. Use with -m a.",
+        type = str,
+        nargs = '+',
+    )
+    argparser.add_argument(
+        '-g', '--gpu',
+        help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
+        action = 'store_true'
+    )
+
+    args = argparser.parse_args()
+
+    vbs = args.verbose
+    if vbs in range(1,6):
+        logger.setLevel((6 - vbs) * 10)
+
+    if args.gpu:
+        usegpu(0)
+
+    if args.mode in ['l', 'learn']:
+        learn(epoch = args.epoch, args.batch, args.testgroup)
+    elif args.mode in ['x', 'examine']:
+        for mp in args.modelfile:
+            logger.info(examine(modelpath = mp))
+    else:
+        for mvid in mvid:
+            logger.info(analyze(mvid, modelfile[0]))
