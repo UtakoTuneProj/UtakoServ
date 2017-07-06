@@ -66,7 +66,7 @@ action = 'store_true'
 args = argparser.parse_args()
 
 if __name__ == '__main__':
-    print("importing modules...")
+    logger.debug("importing modules...")
 
 import numpy as np
 from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
@@ -82,7 +82,7 @@ import sql
 cmdf = sql.cmdf
 
 if __name__ == '__main__':
-    print('imported modules')
+    logger.debug('imported modules')
 
 class ChartModel(ChainList):
     def __init__(self, in_layer = 96, n_units = 50, layer = 4):
@@ -121,14 +121,14 @@ def fetch(isTrain = False, mvid = None):
     if isTrain:
         rawCharts = []
 
-        print("Fetching from database...")
+        logger.info("Fetching from database...")
         for i in range(20):
             rawCharts.append(db.get(
                 'select chart.* from chart join status using(ID) ' +
                 'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1 ' +
                 'order by ID, epoch'
             ))
-        print("Fetch completed. Got data size is "\
+        logger.info("Fetch completed. Got data size is "\
             + str(sum([len(rawCharts[i]) for i in range(20)])))
 
         mvid = None
@@ -217,7 +217,7 @@ def learn():
 
     # Learning loop
     for epoch in range(n_epoch):
-        print('epoch', epoch + 1, flush = True)
+        logger.info('epoch', epoch + 1, flush = True)
 
         # training
         # N個の順番をランダムに並び替える
@@ -240,7 +240,7 @@ def learn():
                 # sum_loss[j] += loss.data * batchsize
 
         # # 訓練データの誤差と、正解精度を表示
-        # print('train mean loss={}'.format(sum_loss / N))
+        # logger.info('train mean loss={}'.format(sum_loss / N))
         # train_loss.append(sum_loss / N)
 
         # evaluation
@@ -264,11 +264,11 @@ def learn():
 
         for j in range(N_model):
             # テストデータでの誤差と、正解精度を表示
-            print('test{0} mean loss={1}'.format(j, sum_loss[j] / N_test))
+            logger.info('test{0} mean loss={1}'.format(j, sum_loss[j] / N_test))
             test_loss[j].append(sum_loss[j] / N_test)
 
     elapsedTime = time.time() - startTime
-    print('Total Time: {0}[m]'.format(elapsedTime / 60))
+    logger.info('Total Time: {0}[m]'.format(elapsedTime / 60))
 
     for i in range(N_model):
         serializers.save_npz('Network/chart'+str(i)+'.model', model[i])
