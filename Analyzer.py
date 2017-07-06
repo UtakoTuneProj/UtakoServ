@@ -67,8 +67,9 @@ def fetch(isTrain = False, mvid = None):
         for i in range(20):
             rawCharts.append(db.get(
                 'select chart.* from chart join status using(ID) ' +
-                'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1 ' +
-                'order by ID, epoch'
+                'where status.analyzeGroup = %s and isComplete = 1 ' +
+                'order by ID, epoch',
+                (i,)
             ))
         logger.info("Fetch completed. Got data size is "\
             + str(sum([len(rawCharts[i]) for i in range(20)])))
@@ -97,7 +98,8 @@ def fetch(isTrain = False, mvid = None):
     else:
         rawCharts = db.get(
             "select chart.* from chart join status using(ID) " +
-            "where ID = '" + mvid + "' order by chart.epoch"
+            "where ID = '%s' order by chart.epoch",
+            (mvid,)
         )
 
         if len(rawCharts) < 24:
