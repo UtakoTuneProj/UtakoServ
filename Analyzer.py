@@ -365,7 +365,11 @@ if __name__ == '__main__':
         usegpu(0)
 
     if args.mode in ['l', 'learn']:
-        learn(epoch = args.epoch, args.batch, args.testgroup)
+        learn(
+            epoch = args.epoch,
+            batchsize = args.batch,
+            testgroup = args.testgroup
+        )
     elif args.mode in ['x', 'examine']:
         for mp in args.modelfile:
             logger.info(examine(modelpath = mp))

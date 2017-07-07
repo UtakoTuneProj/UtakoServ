@@ -3,51 +3,25 @@ import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions  as F
 import sys
+import random
 
-def dataimport(filename): #テストフォーマット形式のデータ読み込み、出力:[入力ストリーム,出力]
-    Input = [[]]
-    Output = []
-
-    fp = open(filename,'r')
-    fstream = fp.read()
-    fstream = fstream.split('\n')
-
-    is_INPUT = True
-    for fsline in fstream:
-        tmp = fsline.split(' ')
-        line = []
-        if fsline != '':
-            for cell in tmp:
-                if cell != '':
-                    line.append(int(cell))
-            if is_INPUT:
-                Input[-1].extend(line)
-            else:
-                Output[-1].extend(line)
-        else:
-            is_INPUT = not is_INPUT
-            if is_INPUT:
-                Output[-1] = Output[-1].index(1)
-                Input.append([])
-            else:
-                Output.append([])
-    Input.pop()
-
-    return [Input,Output]
-
+f = lambda x,y: x*y
 
 if __name__ == '__main__':
 
     batchsize = 10
-    n_epoch = 10
+    n_epoch = 5
     n_units = 100
 
-    N = 100
-    N_test = 100
+    N = 81
+    N_test = 20
 
-    model = FunctionSet(l1 = F.Linear(81, n_units),
+    thresh = 30
+
+    model = FunctionSet(
+        l1 = F.Linear(2, n_units),
         l2 = F.Linear(n_units, n_units),
-        l3 = F.Linear(n_units, 10)
+        l3 = F.Linear(n_units, 2)
     )
 
     def forward(x_data, y_data, train = True):
@@ -55,6 +29,8 @@ if __name__ == '__main__':
         h1 = F.relu(model.l1(x))
         h2 = F.relu(model.l2(h1))
         y = model.l3(h2)
+
+        print(x_data, y.data, t.data)
 
         return F.softmax_cross_entropy(y,t), F.accuracy(y,t)
 
@@ -69,11 +45,17 @@ if __name__ == '__main__':
     l1_W = []
     l2_W = []
 
-    [x_dump, y_dump] = dataimport('mlp_train.data')
+    dump = [ [[i,j], 1 if f(i,j) > thresh else 0]
+            for i in range(1,10) for j in range(1,10)]
+    [x_dump, y_dump] = zip(*dump)
     x_train = np.array(x_dump, dtype = np.float32)
     y_train = np.array(y_dump, dtype = np.int32)
 
-    [x_dump, y_dump] = dataimport('mlp_test10.data')
+    gena = [random.random() * 9 + 1 for i in range(20)]
+    genb = [random.random() * 9 + 1 for i in range(20)]
+    dump = [ [[i,j], 1 if f(i,j) > thresh else 0]
+            for i in gena for j in genb]
+    [x_dump, y_dump] = zip(*dump)
     x_test = np.array(x_dump, dtype = np.float32)
     y_test = np.array(y_dump, dtype = np.int32)
 
