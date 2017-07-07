@@ -67,10 +67,13 @@ class Table:
         q = (
             '( ' + '{}, ' * (len(self.allcolumns) - 1) + '{} )'
         ).format(*ql)
-        dupq = (
-            '`{0[0]}` = {0[1]}, ' * (len(self.columns) - 1) + \
-            '`{0[0]}` = {0[1]}'
-        ).format(*zip(self.columns, ql[len(self.primaryKey):]))
+
+        dupq = ""
+        for i in range(len(self.columns) - 1):
+            dupq += '`{'+ str(i) +'[0]}` = {'+ str(i) +'[1]}, '
+        dupq += '`{'+ str(i+1) +'[0]}` = {'+ str(i+1) +'[1]} '
+        dupq = dupq.format(*zip(self.columns, ql[len(self.primaryKey):]))
+
         cmd = \
             'INSERT into {} \n'.format(self.name) + \
             'values ' + q + '\n'\
@@ -140,6 +143,7 @@ class ChartTable(Table):
 
             isComplete = False
             status = True
+
             if epoch < 24:
                 if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
                     status = False

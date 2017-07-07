@@ -18,7 +18,7 @@ def main():
     # qf.tweet(24, 300)
     db.commit()
 
-    return None
+    return 0
 
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='UTF-8')
 if __name__ == '__main__':
