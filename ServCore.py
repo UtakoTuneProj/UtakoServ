@@ -7,16 +7,18 @@ cmdf = analyzer.cmdf
 from tweepyCore import chart_tw
 
 def main():
-    db    = sql.DataBase("tesuto", sql.connection)
-    qtbl  = sql.QueueTable(db)
-    ctbl  = sql.ChartTable(db)
-    ittbl = sql.IDTagTable(db)
+    try:
+        db    = sql.DataBase("tesuto", sql.connection)
+        qtbl  = sql.QueueTable(db)
+        ctbl  = sql.ChartTable(db)
+        ittbl = sql.IDTagTable(db)
 
-    qtbl.update()
-    ctbl.update()
+        qtbl.update()
+        ctbl.update()
 
-    # qf.tweet(24, 300)
-    db.commit()
+        # qf.tweet(24, 300)
+    finally:
+        db.commit()
 
     return 0
 
