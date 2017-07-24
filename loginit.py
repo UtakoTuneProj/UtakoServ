@@ -4,8 +4,6 @@ from logging.handlers import RotatingFileHandler
 from logging.config import fileConfig
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 import os
-import sys
-import configparser
 
 _op = os.path
 

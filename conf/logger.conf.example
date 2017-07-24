@@ -3,19 +3,18 @@
 
 [formatter_default]
     class   = loginit.UtakoFormatter
-    format  = %(levelname)-8s| %(message)s\n%(name)s, %(lineno)s
+    format  = %(levelname)-8s| %(message)s \n%(name)s, %(lineno)s
 
 [formatter_progress]
     class   = loginit.UtakoFormatter
     format  = %(levelname)-8s| %(message)s
 
 [handlers]
-    keys = default, progress
+    keys = default, progress, console
 
 [handler_default]
     class       = logging.handlers.RotatingFileHandler
     formatter   = default
-    level       = WARNING
     args        = ('logs/utako.log', 'a')
     maxBytes    = 65536
     backupCount = 3
@@ -23,13 +22,17 @@
 [handler_progress]
     class       = logging.handlers.RotatingFileHandler
     formatter   = progress
-    level       = INFO
     args        = ('logs/utako.log', 'a')
     maxBytes    = 65536
     backupCount = 3
 
+[handler_console]
+    class       = logging.StreamHandler
+    formatter   = progress
+    args        = ()
+
 [loggers]
-    keys = root, progress
+    keys = root, progress, console
 
 [logger_root]
     level       = WARNING
@@ -39,3 +42,8 @@
     level       = INFO
     handlers    = progress
     qualname    = progress
+
+[logger_console]
+    level       = INFO
+    handlers    = console
+    qualname    = console

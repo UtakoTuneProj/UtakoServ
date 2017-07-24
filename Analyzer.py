@@ -4,6 +4,79 @@ import sys
 import time
 import argparse
 
+if __name__ == '__main__':
+
+    argparser = argparse.ArgumentParser(
+        description = "U.Orihara Analyzer: analyze core module for utako with chainer."
+    )
+    argparser.add_argument(
+        '-v', '--verbose',
+        help = "Select verbose level. "\
+        + "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
+        action = 'count',
+        default = 0,
+        # type = int,
+        # choices = range(1,6)
+    )
+    argparser.add_argument(
+        '-c', '--console',
+        help = "Print logs on console. Default is False.",
+        action = 'store_true'
+    )
+    argparser.add_argument(
+        '-m', '--mode',
+        help  = "Select analyzer mode. " +\
+            "l/learn : Learn from database. (Default) | " +\
+            "x/examine : Examine learned model. | " +\
+            "a/analyze : Analyze specified movie. -i param is needed. | " ,
+        type = str,
+        nargs = '?',
+        choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
+        default = 'l',
+    )
+    argparser.add_argument(
+        '-e', '--epoch',
+        help = "Sets iteration epoch. Default is 250",
+        type = int,
+        nargs = '?',
+        default = 250
+    )
+    argparser.add_argument(
+        '-b', '--batch',
+        help = "Sets batch size. Default is 1000",
+        type = int,
+        nargs = '?',
+        default = 1000
+    )
+    argparser.add_argument(
+        '-t', '--testgroup',
+        help = "Select which analyze group to test data. Default is 19 (the last).",
+        type = int,
+        nargs = '?',
+        choices = range(20),
+        default = 19
+    )
+    argparser.add_argument(
+        '-f', '--modelfile',
+        help = "Specify which model to examine or analyze. Use with -m x or -m a.",
+        type = str,
+        nargs = '+',
+        default = ['Network/chart24h.model',],
+    )
+    argparser.add_argument(
+        '-i', '--mvid',
+        help = "Specify which movie to analyze. Use with -m a.",
+        type = str,
+        nargs = '+',
+    )
+    argparser.add_argument(
+        '-g', '--gpu',
+        help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
+        action = 'store_true'
+    )
+
+    args = argparser.parse_args()
+
 from loginit import *
 logger = getLogger(__name__)
 
@@ -161,7 +234,7 @@ def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
 
     # Learning loop
     for epoch in range(n_epoch):
-        logger.info('epoch', epoch + 1, flush = True)
+        logger.info('epoch %s', epoch + 1)
 
         # training
         # N個の順番をランダムに並び替える
@@ -290,83 +363,19 @@ N_model = len(config)
 isgpu = False
 
 if __name__ == '__main__':
-
-    argparser = argparse.ArgumentParser(
-        description = "U.Orihara Analyzer: analyze core module for utako with chainer."
-    )
-    argparser.add_argument(
-        '-v', '--verbose',
-        help = "Select verbose level. "\
-        + "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
-        action = 'count',
-        default = 3,
-        # type = int,
-        # choices = range(1,6)
-    )
-    argparser.add_argument(
-        '-e', '--epoch',
-        help = "Sets iteration epoch. Default is 250",
-        type = int,
-        nargs = '?',
-        default = 250
-    )
-    argparser.add_argument(
-        '-b', '--batch',
-        help = "Sets batch size. Default is 1000",
-        type = int,
-        nargs = '?',
-        default = 1000
-    )
-    argparser.add_argument(
-        '-t', '--testgroup',
-        help = "Select which analyze group to test data. Default is 19 (the last).",
-        type = int,
-        nargs = '?',
-        choices = range(20),
-        default = 19
-    )
-    argparser.add_argument(
-        '-m', '--mode',
-        help  = "Select analyzer mode. " +\
-            "l/learn : Learn from database. (Default) | " +\
-            "x/examine : Examine learned model. | " +\
-            "a/analyze : Analyze specified movie. -i param is needed. | " ,
-        type = str,
-        nargs = '?',
-        choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
-        default = 'l',
-    )
-    argparser.add_argument(
-        '-f', '--modelfile',
-        help = "Specify which model to examine or analyze. Use with -m x or -m a.",
-        type = str,
-        nargs = '+',
-        default = ['Network/chart24h.model',],
-    )
-    argparser.add_argument(
-        '-i', '--mvid',
-        help = "Specify which movie to analyze. Use with -m a.",
-        type = str,
-        nargs = '+',
-    )
-    argparser.add_argument(
-        '-g', '--gpu',
-        help = "Use first GPU if flag exists. Default is False. Only usable on learn mode",
-        action = 'store_true'
-    )
-
-    args = argparser.parse_args()
-
     vbs = args.verbose
     if vbs in range(1,6):
         logger.setLevel((6 - vbs) * 10)
+
+    if args.console:
+        logger.addHandler(getLogger('console').handlers[0])
 
     if args.gpu:
         usegpu(0)
 
     if args.mode in ['l', 'learn']:
         learn(
-            epoch = args.epoch,
+            n_epoch = args.epoch,
             batchsize = args.batch,
             testgroup = args.testgroup
         )
