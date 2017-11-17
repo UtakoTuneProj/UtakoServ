@@ -104,7 +104,7 @@ def fetch(isTrain = False, mvid = None):
                     mvid = cell[0]
 
                 if cell[1] != 24:
-                    shapedInputs[-1][-1].extend(cell[2:])
+                    shapedInputs[-1][-1].extend(cell[3:])
                 else:
                     view = cell[3]
                     comment = cell[4]
@@ -146,8 +146,10 @@ def learn():
             x_train += fetchData[0][i]
             y_train += fetchData[1][i]
 
-    x_train = np.array(x_train, dtype = np.float32)
-    x_test  = np.array(x_test,  dtype = np.float32)
+    tmp = np.array(x_train, dtype = np.float32)
+    x_train = np.log10(tmp + np.ones(tmp.shape))
+    tmp = np.array(x_test,  dtype = np.float32)
+    x_test  = np.log10(tmp + np.ones(tmp.shape))
     y_train = 100 * np.log10(np.array(y_train, dtype = np.float32))
     y_test  = 100 * np.log10(np.array(y_test,  dtype = np.float32))
 
@@ -181,7 +183,8 @@ def learn():
 
 def examine(modelpath):
     f = fetch(isTrain = True)
-    x = np.array(f[0][args.testgroup], dtype = np.float32)
+    tmp = np.array(f[0][args.testgroup], dtype = np.float32)
+    x = np.log10(tmp + np.ones(tmp.shape))
     y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
 
     N_test = len(y)
