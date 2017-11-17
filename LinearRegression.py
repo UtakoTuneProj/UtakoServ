@@ -154,8 +154,6 @@ def learn():
     N = len(x_train)
     N_test = len(x_test)
 
-    print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
-
     # Learn
     linRegAnaly.fit(x_train, y_train)
 
@@ -164,16 +162,15 @@ def learn():
 
     with open('linRegAnaly.json', 'w') as f:
         stream = json.dump({
-            'coef': list(map(float, lin.RegAnaly.coef_.flatten())),
+            'coef': list(map(float, linRegAnaly.coef_.flatten())),
             'intercept': float(linRegAnaly.intercept_[0])
         }, f)
 
     if GUI:
-        print(GUI)
         index = np.argsort(y_test, axis = 0)
         plt_data = np.append(
             y_test[index[:,0],:],
-            np.dot(linRegAnaly.coef_, x_test)[index[:,0],:],
+            linRegAnaly.predict(x_test)[index[:,0],:],
             axis = 1
         )
 
@@ -201,7 +198,6 @@ def examine(modelpath):
 
     if GUI:
         index = np.argsort(y, axis = 0)
-        print(y.shape, l.shape, index.shape)
         y = y[index[:,0],:]
         l = l[index[:,0],:]
         plt.plot(y, range(N_test), label = 'Ans.')
@@ -215,11 +211,16 @@ def examine(modelpath):
     return e, np.mean(l-y), np.std(l-y)
 
 def analyze(mvid, n_units = 200, layer = 20):
-    model = ChartModel(n_units = n_units, layer = layer)
-    serializers.load_npz(args.modelfile[0], model)
+    with open(args.modelfile[0]) as f:
+        tmp = json.load(f)
+
+    linRegAnaly = LinearRegressionAnalyzer()
+
+    linRegAnaly.coef_ = np.array(tmp['coef'])
+    linRegAnaly.intercept_ = np.array(tmp['intercept'])
 
     [x, _] = fetch(mvid = mvid)
-    return model(np.array(x, dtype = np.float32).reshape((1, len(x)))).data[0][0]
+    return linRegAnaly.predict(x)[0]
 
 def main():
     if args.mode in ['l', 'learn']:
