@@ -4,3 +4,6 @@
     passwd=hogehoge
     db=test
     charset=utf8
+[alch]
+    alch.url=mysql://user:pass@host:db
+    alch.encoding=utf8

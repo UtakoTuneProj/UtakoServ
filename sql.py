@@ -3,7 +3,10 @@
 import os
 import random
 import configparser
+
 import MySQLdb
+import sqlalchemy as alch
+
 import commondef as cmdf
 
 cnfp = configparser.ConfigParser()
@@ -11,6 +14,9 @@ cnfp.read('.auth.conf')
 
 connection = MySQLdb.connect(**cnfp['DEFAULT'])
 cursor = connection.cursor()
+
+engine = alch.engine_from_config(cnfp['alch'], prefix = 'alch.')
+metadata = alch.MetaData(bind = engine, reflect = True)
 
 class Table:
     def __init__(self, name, db):
