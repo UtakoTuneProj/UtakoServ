@@ -1,6 +1,6 @@
 chainer
+mysqlclient
 numpy
 progressbar2
-psycopg2
 sqlalchemy
 tweepy
