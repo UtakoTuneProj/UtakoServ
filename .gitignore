@@ -5,3 +5,5 @@ ranking/
 *.conf
 *.swp
 chart[0-9]*.model
+
+Chainertest/result/
