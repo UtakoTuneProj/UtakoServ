@@ -66,7 +66,7 @@ if __name__ == '__main__':
     print("importing modules...")
 
 import numpy as np
-from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
+from chainer import cuda, Variable, optimizers, ChainList, serializers
 import chainer.functions  as F
 import chainer.links as L
 try:
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     print('imported modules')
 
 class ChartModel(ChainList):
-    def __init__(self, in_layer = 96, n_units = 50, layer = 4):
+    def __init__(self, in_layer = 72, n_units = 50, layer = 4):
         l = [L.Linear(in_layer, n_units)]
         if layer > 2:
             l.extend([L.Linear(n_units, n_units) for x in range(layer - 2)])
@@ -90,7 +90,7 @@ class ChartModel(ChainList):
         super().__init__(*l)
 
     def __call__(self, x):
-        h = x
+        h = -x
         for i in range(self.__len__() - 1):
             layer = self.__getitem__(i)
             h = F.relu(layer(h))
@@ -103,66 +103,6 @@ class ChartModel(ChainList):
         ret = y.data
 
         return F.mean_squared_error(y,t), ret
-
-def fetch(isTrain = False, mvid = None):
-    if mvid == None and not isTrain:
-        raise ValueError('Neither mvid nor isTrain was given.')
-
-    db = sql.DataBase('test')
-    qtbl = sql.QueueTable(db)
-    ctbl = sql.ChartTable(db)
-
-    shapedInputs = []
-    shapedOutputs = []
-
-    if isTrain:
-        rawCharts = []
-
-        print("Fetching from database...")
-        for i in range(20):
-            rawCharts.append(db.get(
-                'select chart.* from chart join status using(ID) ' +
-                'where status.analyzeGroup = ' + str(i) + ' and isComplete = 1 ' +
-                'order by ID, epoch'
-            ))
-        print("Fetch completed. Got data size is "\
-            + str(sum([len(rawCharts[i]) for i in range(20)])))
-
-        mvid = None
-        for rawGroup in rawCharts:
-            shapedInputs.append([])
-            shapedOutputs.append([])
-            for cell in rawGroup:
-                if mvid != cell[0]:
-                    shapedInputs[-1].append([])
-                    mvid = cell[0]
-
-                if cell[1] != 24:
-                    shapedInputs[-1][-1].extend(cell[2:])
-                else:
-                    view = cell[3]
-                    comment = cell[4]
-                    mylist = cell[5]
-
-                    cm_cor = (view + mylist) / (view + comment + mylist)
-                    shapedOutputs[-1].append(
-                        [view + comment * cm_cor + mylist ** 2 / view * 2]
-                    )
-
-    else:
-        rawCharts = db.get(
-            "select chart.* from chart join status using(ID) " +
-            "where ID = '" + mvid + "' order by chart.epoch"
-        )
-
-        if len(rawCharts) < 24:
-            raise ValueError(mvid + ' is not analyzable')
-
-        for i,cell in enumerate(rawCharts):
-            if i != 24:
-                shapedInputs.extend(cell[2:])
-
-    return [shapedInputs, shapedOutputs]
 
 def learn():
     startTime = time.time()
@@ -178,7 +118,7 @@ def learn():
         optimizer[i] = optimizers.Adam()
         optimizer[i].setup(model[i])
 
-    fetchData = fetch(isTrain = True)
+    fetchData = sql.fetch(isTrain = True)
 
     x_train = []
     y_train = []
@@ -228,7 +168,7 @@ def learn():
 
             for j in range(N_model):
                 # 勾配を初期化
-                optimizer[j].zero_grads()
+                model[j].cleargrads()
                 # 順伝播させて誤差と精度を算出
                 loss, _ = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)))
                 # 誤差逆伝播で勾配を計算
@@ -297,7 +237,7 @@ def learn():
         plt.show()
 
 def examine(modelpath, n_units = 200, layer = 20):
-    f = fetch(isTrain = True)
+    f = sql.fetch(isTrain = True)
     x = np.array(f[0][args.testgroup], dtype = np.float32)
     y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
 
@@ -325,8 +265,8 @@ def analyze(mvid, n_units = 200, layer = 20):
     model = ChartModel(n_units = n_units, layer = layer)
     serializers.load_npz(args.modelfile[0], model)
 
-    [x, _] = fetch(mvid = mvid)
-    return model(np.array(x, dtype = np.float32).reshape((1, len(x)))).data[0][0]
+    [x, _] = sql.fetch(mvid = mvid)
+    return model(np.array(x, dtype = np.float32).reshape((1, len(x[0][0])))).data[0][0]
 
 def main():
     if args.mode in ['l', 'learn']:
