@@ -7,6 +7,7 @@ import configparser
 import MySQLdb
 import sqlalchemy as alch
 import sqlalchemy.sql as alchsql
+import sqlalchemy.exc as alchexc
 from sqlalchemy.orm.session import sessionmaker
 
 import commondef as cmdf
