@@ -6,3 +6,5 @@ ranking/
 *.swp
 *.log
 chart[0-9]*.model
+
+Chainertest/result/

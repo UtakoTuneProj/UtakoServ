@@ -84,7 +84,7 @@ if __name__ == '__main__':
     logger.debug("importing modules...")
 
 import numpy as np
-from chainer import cuda, Variable, optimizers, Chain, ChainList, serializers
+from chainer import cuda, Variable, optimizers, ChainList, serializers
 import chainer.functions  as F
 import chainer.links as L
 try:
@@ -122,68 +122,6 @@ class ChartModel(ChainList):
 
         return F.mean_squared_error(y,t), ret
 
-def fetch(isTrain = False, mvid = None):
-    if mvid == None and not isTrain:
-        raise ValueError('Neither mvid nor isTrain was given.')
-
-    db = sql.DataBase('test')
-    qtbl = sql.QueueTable(db)
-    ctbl = sql.ChartTable(db)
-
-    shapedInputs = []
-    shapedOutputs = []
-
-    if isTrain:
-        rawCharts = []
-
-        logger.info("Fetching from database...")
-        for i in range(20):
-            rawCharts.append(db.get(
-                'select chart.* from chart join status using(ID) ' +
-                'where status.analyzeGroup = %s and isComplete = 1 ' +
-                'order by ID, epoch',
-                (i,)
-            ))
-        logger.info("Fetch completed. Got data size is "\
-            + str(sum([len(rawCharts[i]) for i in range(20)])))
-
-        mvid = None
-        for rawGroup in rawCharts:
-            shapedInputs.append([])
-            shapedOutputs.append([])
-            for cell in rawGroup:
-                if mvid != cell[0]:
-                    shapedInputs[-1].append([])
-                    mvid = cell[0]
-
-                if cell[1] != 24:
-                    shapedInputs[-1][-1].extend(cell[2:])
-                else:
-                    view = cell[3]
-                    comment = cell[4]
-                    mylist = cell[5]
-
-                    cm_cor = (view + mylist) / (view + comment + mylist)
-                    shapedOutputs[-1].append(
-                        [view + comment * cm_cor + mylist ** 2 / view * 2]
-                    )
-
-    else:
-        rawCharts = db.get(
-            "select chart.* from chart join status using(ID) " +
-            "where ID = '%s' order by chart.epoch",
-            (mvid,)
-        )
-
-        if len(rawCharts) < 24:
-            raise ValueError(mvid + ' is not analyzable')
-
-        for i,cell in enumerate(rawCharts):
-            if i != 24:
-                shapedInputs.extend(cell[2:])
-
-    return [shapedInputs, shapedOutputs]
-
 def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
     startTime = time.time()
 
@@ -198,7 +136,7 @@ def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
         optimizer[i] = optimizers.Adam()
         optimizer[i].setup(model[i])
 
-    fetchData = fetch(isTrain = True)
+    fetchData = sql.fetch(isTrain = True)
 
     x_train = []
     y_train = []
@@ -248,7 +186,7 @@ def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
 
             for j in range(N_model):
                 # 勾配を初期化
-                optimizer[j].zero_grads()
+                model[j].cleargrads()
                 # 順伝播させて誤差と精度を算出
                 loss, _ = model[j].error(x_batch, y_batch.reshape((len(y_batch),1)))
                 # 誤差逆伝播で勾配を計算
@@ -317,7 +255,7 @@ def learn( n_epoch = 250, batchsize = 1000, testgroup = 19 ):
         plt.show()
 
 def examine(modelpath, n_units = 200, layer = 20, testgroup = 0):
-    f = fetch(isTrain = True)
+    f = sql.fetch(isTrain = True)
     x = np.array(f[0][testgroup], dtype = np.float32)
     y = 100 * np.log10(np.array(f[1][testgroup], dtype = np.float32))
 

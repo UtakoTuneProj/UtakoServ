@@ -1,12 +1,14 @@
 # -*-coding: utf-8-*-
-import ServCore as core
-import matplotlib.pyplot as plt
-import numpy as np
+import sqlalchemy as alch
+import configparser
 
-f = core.JSONfile('dat/tagstat.json')
-print(len(f.data))
-x = list(list(zip(*f.data))[2])
-x.sort()
-plt.plot(x, np.arange(len(x)) / len(x))
-plt.xscale('log')
-plt.show()
+cnfp = configparser.ConfigParser()
+cnfp.read('.auth.conf')
+
+engine = alch.engine_from_config(cnfp['alch'], prefix = 'alch.')
+metadata = alch.MetaData(bind = engine, reflect = True)
+
+fetch = metadata.tables['status'].select().execute().fetchall()
+for c in fetch:
+    print(c)
+print(len(fetch))

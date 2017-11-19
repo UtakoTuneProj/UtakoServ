@@ -1,0 +1,8 @@
+chainer
+mysqlclient
+numpy
+progressbar2
+scipy
+sqlalchemy
+tweepy
+youtube-dl

@@ -3,7 +3,13 @@
 import os
 import random
 import configparser
+
 import MySQLdb
+import sqlalchemy as alch
+import sqlalchemy.sql as alchsql
+import sqlalchemy.exc as alchexc
+from sqlalchemy.orm.session import sessionmaker
+
 import commondef as cmdf
 
 from loginit import *
@@ -12,224 +18,79 @@ logger = getLogger(__name__)
 cnfp = configparser.ConfigParser()
 cnfp.read('conf/auth.conf')
 
-connection = MySQLdb.connect(**cnfp['db'])
-cursor = connection.cursor()
+engine = alch.engine_from_config(cnfp['alch'], prefix = 'alch.')
+connection = engine.connect()
+session = sessionmaker(bind = connection)()
+metadata = alch.MetaData(bind = connection, reflect = True)
+tables = metadata.tables
 
-class Table:
-    def __init__(self, name, db):
-        self.name = name
-        self.cursor = db.cursor
-        self.parent = db
-        db.setTable(self)
+def fetch(isTrain = False, mvid = None):
+    if mvid == None and not isTrain:
+        raise ValueError('Neither mvid nor isTrain was given.')
 
-        self.primaryKey = []
-        self.columns = []
-        self.cursor.execute('desc `{}`'.format(name))
-        for column in self.cursor.fetchall():
-            if 'PRI' in column[3]:
-                self.primaryKey.append(column[0])
-            else:
-                self.columns.append(column[0])
-        self.allcolumns = self.primaryKey + self.columns
+    shapedInputs = []
+    shapedOutputs = []
 
-    def get(self, query, args):
-        self.cursor.execute(
-            'SELECT * from `{0}` where {1}'.format(self.name, query),
-            args,
-        )
-        return self.cursor.fetchall()
+    rawCharts = []
+    if isTrain:
 
-    def set(self, *unnamed, overwrite = True, **named):
-        i = 0
+        print("Fetching from database...")
+        for i in range(20):
+            rawCharts.append(
+                connection.execute(
+                    alchsql.select([
+                        tables['chart']
+                    ]).select_from(
+                        tables['chart'].join(
+                            tables['status'],
+                            tables['status'].c.ID ==
+                            tables['chart'].c.ID
+                        )
+                    ).where(
+                        alchsql.and_(
+                            tables['status'].c.analyzeGroup == i,
+                            tables['status'].c.isComplete == 1
+                    )).order_by(
+                        tables['chart'].c.ID,
+                        tables['chart'].c.epoch
+            )).fetchall())
+        print("Fetch completed. Got data size is "\
+            + str(sum([len(rawCharts[i]) for i in range(20)])))
 
-        ql = []
+    else:
+        rawCharts.append(
+            connection.execute(
+                alchsql.select([
+                    tables['chart']
+                ]).where(
+                    tables['chart'].c.ID == mvid
+                ).order_by(
+                    tables['chart'].c.epoch
+        )).fetchall())
 
-        for key in self.primaryKey:
-            if key in named:
-                tmp = named[key]
-            else:
-                tmp = unnamed[i]
-                i += 1
-            ql.append(connection.literal(tmp))
+        if len(rawCharts[0]) < 24:
+            raise ValueError(mvid + ' is not analyzable')
 
-        for key in self.columns:
+    mvid = None
 
-            if key in named:
-                tmp = named[key]
-            else:
-                tmp = unnamed[i]
-                i += 1
+    for rawGroup in rawCharts:
+        shapedInputs.append([])
+        shapedOutputs.append([])
+        for cell in rawGroup:
+            if mvid != cell[0]:
+                shapedInputs[-1].append([])
+                mvid = cell[0]
 
-            if tmp == None:
-                tmp = 'NULL'
-            elif not key == 'postdate':
-                tmp = connection.literal(tmp)
+            if cell[1] != 24:
+                shapedInputs[-1][-1].extend(cell[3:])
+            elif isTrain:
+                view = cell[3]
+                comment = cell[4]
+                mylist = cell[5]
 
-            ql.append(tmp)
+                cm_cor = (view + mylist) / (view + comment + mylist)
+                shapedOutputs[-1].append(
+                    [view + comment * cm_cor + mylist ** 2 / view * 2]
+                )
 
-        q = (
-            '( ' + '{}, ' * (len(self.allcolumns) - 1) + '{} )'
-        ).format(*ql)
-        dupq = (
-            '`{0[0]}` = {0[1]}, ' * (len(self.columns) - 1) + \
-            '`{0[0]}` = {0[1]}'
-        ).format(*zip(self.columns, ql[len(self.primaryKey):]))
-        cmd = \
-            'INSERT into {} \n'.format(self.name) + \
-            'values ' + q + '\n'\
-            'ON DUPLICATE key update ' + dupq
-        self.cursor.execute(cmd)
-
-class ChartTable(Table):
-    def __init__(self, database):
-        super().__init__(
-            'chart',
-            database
-        )
-
-    def update(self):
-        #statusDBを読みチャートを更新
-
-        qtbl = self.parent.table['status']
-        ittbl = self.parent.table['IDtag']
-        todays_mv \
-            = qtbl.get(
-                "adddate(postdate, interval '1 0' day_hour)" + \
-                " > current_timestamp()" + \
-                " and (validity = 1)",
-                (),
-            )
-        lastwks_mv \
-            = qtbl.get(
-                "adddate(postdate, interval '7 1' day_hour)" + \
-                " < current_timestamp()" + \
-                " and (validity = 1) and (isComplete = 0)",
-                (),
-            )
-
-        for query in todays_mv + lastwks_mv:
-            mvid = query[0]
-            epoch = query[2]
-            postdate = query[4]
-            try:
-                movf = cmdf.MovInfo(mvid)
-                movf.update()
-
-            except cmdf.MovDeletedException:
-                qtbl.set(
-                    mvid,
-                    0,
-                    *query[2:4],
-                    "convert('" + str(postdate) + "', datetime)",
-                    None
-                    )
-                continue
-
-            except cmdf.NoResponseException:
-                while True:
-                    time.wait(5)
-                    movf.update()
-
-            passedmin = (cmdf.now.dt - movf.first_retrieve.dt).total_seconds() / 60
-            writequery = {
-                "ID":       mvid,
-                "epoch":    epoch,
-                "Time":     passedmin,
-                "View":     movf.view_counter,
-                "Comment":  movf.comment_num,
-                "Mylist":   movf.mylist_counter
-            }
-            self.set(**writequery)
-
-            isComplete = False
-            status = True
-            if epoch < 24:
-                if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
-                    status = False
-            elif epoch > 24:
-                status = False
-            elif passedmin < 10140 or 10200 + 30 < passedmin:
-                status = False
-
-            if status and epoch == 24:
-                for tag in movf.tags:
-                    writequery = {
-                        "ID"      : mvid,
-                        "tagName" : tag,
-                        "count"   : 1,
-                    }
-                    ittbl.set(**writequery)
-                isComplete = True
-
-            writequery = {
-                "ID":           mvid,
-                "validity":     1 if status else 0,
-                "epoch":        epoch + 1,
-                "isComplete":   1 if isComplete else 0,
-                "postdate":     "convert('" + str(postdate) + "', datetime)",
-                "analyzeGroup": random.randint(0,19) if isComplete else None
-            }
-            qtbl.set(**writequery)
-
-        return None
-
-class QueueTable(Table):
-    def __init__(self, database):
-        super().__init__(
-            'status',
-            database
-        )
-
-    def update(self): #ランキング取得・キュー生成部
-
-        for i in range(15): #15ページ目まで取得する
-            cmdf.rankfilereq(page = i)
-            raw_rank = cmdf.JSONfile("ranking/" + str(i) + ".json").data['data']
-            for mvdata in raw_rank:
-                mvid = mvdata['contentId']
-                postdate = cmdf.Time('n', mvdata['startTime'])
-                if len(self.get('ID = %s', (mvid,))) == 0:
-                    #取得済みリストの中に含まれていないならば
-                    self.set(
-                        ID          = mvid,
-                        validity    = 1,
-                        epoch       = 0,
-                        isComplete  = 0,
-                        postdate    = "convert('" + str(postdate.dt) + \
-                                        "', datetime)",
-                        analyzeGroup= None
-                    )
-                else:
-                    break
-            else:
-                continue
-            break
-
-        for j in range(i+1):
-            os.remove("ranking/" + str(j) + ".json")
-
-        return None
-
-class IDTagTable(Table):
-    def __init__(self, database):
-        super().__init__(
-            'IDtag',
-            database,
-        )
-
-class DataBase:
-    def __init__(self, name, connection = connection):
-        self.name = name
-        self.connection = connection
-        self.cursor = connection.cursor()
-        self.table = {}
-
-    def commit(self):
-        self.connection.commit()
-
-    def get(self, query, args):
-        self.cursor.execute(query, args,)
-        return self.cursor.fetchall()
-
-    def setTable(self, table):
-        self.table[table.name] = table
+    return [shapedInputs, shapedOutputs]
