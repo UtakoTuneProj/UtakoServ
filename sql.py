@@ -34,36 +34,36 @@ def fetch(isTrain = False, mvid = None):
         print("Fetching from database...")
         for i in range(20):
             rawCharts.append(
-                connection.execute(
-                    alchsql.select([
-                        tables['chart']
-                    ]).select_from(
-                        tables['chart'].join(
-                            tables['status'],
-                            tables['status'].c.ID ==
-                            tables['chart'].c.ID
-                        )
-                    ).where(
-                        alchsql.and_(
-                            tables['status'].c.analyzeGroup == i,
-                            tables['status'].c.isComplete == 1
-                    )).order_by(
-                        tables['chart'].c.ID,
-                        tables['chart'].c.epoch
-            )).fetchall())
+                alchsql.select([
+                    tables['chart']
+                ]).select_from(
+                    tables['chart'].join(
+                        tables['status'],
+                        tables['status'].c.ID ==
+                        tables['chart'].c.ID
+                    )
+                ).where(
+                    alchsql.and_(
+                        tables['status'].c.analyzeGroup == i,
+                        tables['status'].c.isComplete == 1
+                )).order_by(
+                    tables['chart'].c.ID,
+                    tables['chart'].c.epoch
+                ).execute().fetchall()
+            )
         print("Fetch completed. Got data size is "\
             + str(sum([len(rawCharts[i]) for i in range(20)])))
 
     else:
         rawCharts.append(
-            connection.execute(
-                alchsql.select([
-                    tables['chart']
-                ]).where(
-                    tables['chart'].c.ID == mvid
-                ).order_by(
-                    tables['chart'].c.epoch
-        )).fetchall())
+            alchsql.select([
+                tables['chart']
+            ]).where(
+                tables['chart'].c.ID == mvid
+            ).order_by(
+                tables['chart'].c.epoch
+            ).execute().fetchall()
+        )
 
         if len(rawCharts[0]) < 24:
             raise ValueError(mvid + ' is not analyzable')
