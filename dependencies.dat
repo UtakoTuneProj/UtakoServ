@@ -3,6 +3,7 @@ mysqlclient
 numpy
 progressbar2
 scipy
+sklearn
 sqlalchemy
 tweepy
 youtube-dl
