@@ -1,4 +1,5 @@
-# coding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
 import sys
 import time
