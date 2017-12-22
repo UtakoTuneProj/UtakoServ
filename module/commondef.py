@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import urllib.request
-import urllib.parse
-import urllib.error
-import datetime
-import json
-import codecs
-import xml.etree.ElementTree as ET
-import re
-import os
-
+from common_import import *
 
 class MovInfo:
     def __init__(self, mvid):

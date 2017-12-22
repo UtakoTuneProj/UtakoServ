@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import argparse
+import codecs
 import datetime
 import glob
 import json
@@ -11,6 +12,10 @@ import re
 import sys
 import struct
 import time
+import urllib.request
+import urllib.parse
+import urllib.error
+import xml.etree.ElementTree as ET
 
 from chainer import cuda, Variable, optimizers, Chain, ChainList
 import chainer.functions  as F
