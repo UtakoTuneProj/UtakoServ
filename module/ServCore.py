@@ -9,11 +9,13 @@ sql = analyzer.sql
 cmdf = analyzer.cmdf
 from tweepyCore import chart_tw
 
+from presenter.json_reader import JsonReader
+
 def qtblUpdate(): #ランキング取得・キュー生成部
 
     for i in range(15): #15ページ目まで取得する
         cmdf.rankfilereq(page = i)
-        raw_rank = cmdf.JSONfile("ranking/" + str(i) + ".json").data['data']
+        raw_rank = JsonReader()("ranking/" + str(i) + ".json")['data']
         for mvdata in raw_rank:
             mvid = mvdata['contentId']
             postdate = cmdf.Time('n', mvdata['startTime'])
