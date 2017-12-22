@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import glob
-
-from progressbar import ProgressBar
+from common_import import *
 
 import sql
 cmdf = sql.cmdf

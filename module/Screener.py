@@ -2,13 +2,7 @@
 # -*- coding: utf-8 -*-
 # module for screening whether VOCALOID-using movies
 
-import sys
-import re
-import glob
-from chainer import cuda, Variable, optimizers, Chain, ChainList
-import chainer.functions  as F
-import chainer.links as L
-import numpy as np
+from common_import import *
 
 import ServCore as core
 

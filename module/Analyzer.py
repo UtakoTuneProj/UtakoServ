@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
-import sys
-import time
-import argparse
+from common_import import *
 
 argparser = argparse.ArgumentParser(
 description = "U.Orihara Analyzer: analyze core module for utako with chainer."

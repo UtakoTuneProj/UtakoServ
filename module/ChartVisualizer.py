@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from common_import import *
+
 import ServCore as core
-import numpy as np
 import matplotlib.pyplot as plt
 
 def main():

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 # ServCore: core module for hourly task
 
-import os
-import random
-import datetime
+from common_import import *
 
 import Analyzer as analyzer
 sql = analyzer.sql

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # from http://aidiary.hatenablog.com/entry/20121014/1350211413
-import os
-import sys
+from common_import import *
 
 # mp3_to_mfcc.py
 # usage: python mp3_to_mfcc.py [mp3dir] [mfccdir] [rawdir]
