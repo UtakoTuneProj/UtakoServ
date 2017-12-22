@@ -41,17 +41,6 @@ class MovInfo:
 
         return None
 
-def float_compressor(obj):
-    if isinstance(obj, float):
-        return round(obj,2)
-        # return CompressedFloat(obj)
-    elif isinstance(obj, dict):
-        return dict((k, float_compressor(v)) for k, v in obj.items())
-    elif isinstance(obj,(list,tuple)):
-        return list(map(float_compressor, obj))
-    else:
-        return obj
-
 def rankfilereq(searchtag = "VOCALOID", page = 0): #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
     rankreqbase = "http://api.search.nicovideo.jp/api/v2/video/contents/search?q=" + urllib.parse.quote(searchtag) + "&targets=tags&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime&_sort=-startTime&_offset=" + str(page * 100) + "&_limit=100&_context=UtakoOrihara(VocaloidRankingBot)"
 
