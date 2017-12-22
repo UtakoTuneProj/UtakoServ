@@ -10,37 +10,6 @@ import xml.etree.ElementTree as ET
 import re
 import os
 
-class Time:
-    def __init__(self, mode = "now", stream = None):
-        if mode == "now":
-            self.dt = datetime.datetime.now()
-        elif mode in ["nico","n"]:
-            self.dt = self.__n2d(stream)
-        elif mode in ["str12","str","s"]:
-            self.dt = self.__s2d(stream)
-        elif mode in ["datetime","dt","d"]:
-            self.dt = stream
-        else:
-            raise ValueError
-        self.nico = self.__d2n(self.dt)
-        self.str12 = self.__d2s(self.dt)
-        return None
-
-    def __repr__(self):
-        return('{} <Utako Time Object>'.format(self.nico))
-
-    def __n2d(self,nicodate): #ニコ動形式の時刻をPython内部時刻形式に変換
-        return datetime.datetime.strptime(nicodate,"%Y-%m-%dT%H:%M:%S+09:00")
-
-    def __s2d(self,time12): #12桁時刻方式をPython内部時刻形式に変換
-        return datetime.datetime.strptime(time12,"%Y%m%d%H%M")
-
-    def __d2s(self,dt): #Python内部時刻形式を12桁時刻方式に変換
-        return dt.strftime("%Y%m%d%H%M")
-
-    def __d2n(self,dt):
-        return dt.strftime("%Y-%m-%dT%H:%M:%S")
-
 class JSONfile:
     #self.path:ファイルパスを保存
     #self.encoding:エンコードを保存
