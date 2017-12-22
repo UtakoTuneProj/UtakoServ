@@ -10,14 +10,6 @@ import xml.etree.ElementTree as ET
 import re
 import os
 
-class MovDeletedException(Exception):
-    def __init__(self,e):
-        Exception.__init__(self,e)
-
-class NoResponseException(Exception):
-    def __init__(self,e):
-        Exception.__init__(self,e)
-
 class Time:
     def __init__(self, mode = "now", stream = None):
         if mode == "now":
