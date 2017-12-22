@@ -94,3 +94,107 @@ def fetch(isTrain = False, mvid = None):
                 )
 
     return [shapedInputs, shapedOutputs]
+
+def fetchTag(isTrain = False, tagName = None):
+    if tagName == None and not isTrain:
+        raise ValueError('Neither tagName nor isTrain was given.')
+
+    shapedInputs = []
+    shapedOutputs = []
+
+    rawCharts = []
+    if isTrain:
+
+        print("Fetching from database...")
+        for i in range(20):
+            rawCharts.append(
+                alchsql.select([
+                    tables['IDtag'].c.tagName,
+                    alchsql.func.count(),
+                    alchsql.func.avg(
+                        tables['chart'].c.View
+                    ),alchsql.func.avg(
+                        tables['chart'].c.Comment
+                    ),alchsql.func.avg(
+                        tables['chart'].c.MyList
+                    ),alchsql.func.max(
+                        tables['chart'].c.View
+                    ),alchsql.func.max(
+                        tables['chart'].c.Comment
+                    ),alchsql.func.max(
+                        tables['chart'].c.MyList
+                    )
+                ]).select_from(
+                    tables['chart'].join(
+                        tables['status'].join(
+                            tables['IDtag'],
+                            tables['IDtag'].c.ID == tables['status'].c.ID
+                        ),
+                        tables['chart'].c.ID == tables['status'].c.ID
+                )).where(
+                    tables['chart'].c.epoch == 24
+                ).group_by(
+                    tables['IDtag'].c.tagName
+                ).execute().fetchall()
+            )
+        print("Fetch completed. Got data size is "\
+            + str(sum([len(rawCharts[i]) for i in range(20)])))
+
+    else:
+        rawCharts.append(
+            alchsql.select([
+                tables['IDtag'].c.tagName,
+                alchsql.func.count(),
+                alchsql.func.avg(
+                    tables['chart'].c.View
+                ),alchsql.func.avg(
+                    tables['chart'].c.Comment
+                ),alchsql.func.avg(
+                    tables['chart'].c.MyList
+                ),alchsql.func.max(
+                    tables['chart'].c.View
+                ),alchsql.func.max(
+                    tables['chart'].c.Comment
+                ),alchsql.func.max(
+                    tables['chart'].c.MyList
+                )
+            ]).select_from(
+                tables['chart'].join(
+                    tables['status'].join(
+                        tables['IDtag'],
+                        tables['IDtag'].c.ID == tables['status'].c.ID
+                    ),
+                    tables['chart'].c.ID == tables['status'].c.ID
+            )).where(
+                tables['chart'].c.epoch == 24
+            ).group_by(
+                tables['IDtag'].c.tagName
+            ).execute().fetchall()
+        )
+
+        if len(rawCharts[0]) == 0:
+            raise ValueError(tagName + ' is not analyzable')
+
+    tagName = None
+
+    for rawGroup in rawCharts:
+        shapedInputs.append([])
+        shapedOutputs.append([])
+        for cell in rawGroup:
+            if tagName != cell[0]:
+                shapedInputs[-1].append([])
+                tagName = cell[0]
+
+            if cell[1] != 24:
+                shapedInputs[-1][-1].extend(cell[3:])
+            elif isTrain:
+                view = cell[3]
+                comment = cell[4]
+                mylist = cell[5]
+
+                cm_cor = (view + mylist) / (view + comment + mylist)
+                shapedOutputs[-1].append(
+                    [view + comment * cm_cor + mylist ** 2 / view * 2]
+                )
+
+    return [shapedInputs, shapedOutputs]

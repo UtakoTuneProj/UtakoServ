@@ -51,70 +51,10 @@ cmdf = sql.cmdf
 if __name__ == '__main__':
     print('imported modules')
 
-def fetch(isTrain = False, mvid = None):
-    if mvid == None and not isTrain:
-        raise ValueError('Neither mvid nor isTrain was given.')
-
-    db = sql.DataBase('test')
-    ctbl = sql.ChartTable(db)
-    ittbl = sql.IDTagTable(db)
-
-    shapedInputs = []
-
-    if isTrain:
-        rawCharts = []
-
-        print("Fetching from database...")
-        for i in range(20):
-            rawCharts.append(db.get(
-                'select chart.* from chart join status using(ID) ' +
-                'where status.analyzeGroup = %s and isComplete = 1 ' +
-                'order by ID, epoch',
-                [i]
-            ))
-        print("Fetch completed. Got data size is "\
-            + str(sum([len(rawCharts[i]) for i in range(20)])))
-
-        mvid = None
-        for rawGroup in rawCharts:
-            shapedInputs.append([])
-            shapedOutputs.append([])
-            for cell in rawGroup:
-                if mvid != cell[0]:
-                    shapedInputs[-1].append([])
-                    mvid = cell[0]
-
-                if cell[1] != 24:
-                    shapedInputs[-1][-1].extend(cell[3:])
-                else:
-                    view = cell[3]
-                    comment = cell[4]
-                    mylist = cell[5]
-
-                    cm_cor = (view + mylist) / (view + comment + mylist)
-                    shapedOutputs[-1].append(
-                        [view + comment * cm_cor + mylist ** 2 / view * 2]
-                    )
-
-    else:
-        rawCharts = db.get(
-            "select chart.* from chart join status using(ID) " +
-            "where ID = '" + mvid + "' order by chart.epoch"
-        )
-
-        if len(rawCharts) < 24:
-            raise ValueError(mvid + ' is not analyzable')
-
-        for i,cell in enumerate(rawCharts):
-            if i != 24:
-                shapedInputs.extend(cell[2:])
-
-    return [shapedInputs, shapedOutputs]
-
 def learn():
     startTime = time.time()
 
-    fetchData = fetch(isTrain = True)
+    fetchData = sql.fetch(isTrain = True)
     linRegAnaly = LinearRegressionAnalyzer()
 
     x_train = []
@@ -163,7 +103,7 @@ def learn():
         plt.show()
 
 def examine(modelpath):
-    f = fetch(isTrain = True)
+    f = sql.fetch(isTrain = True)
     tmp = np.array(f[0][args.testgroup], dtype = np.float32)
     x = np.log10(tmp + np.ones(tmp.shape))
     y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
@@ -203,7 +143,7 @@ def analyze(mvid, n_units = 200, layer = 20):
     linRegAnaly.coef_ = np.array(tmp['coef'])
     linRegAnaly.intercept_ = np.array(tmp['intercept'])
 
-    [x, _] = fetch(mvid = mvid)
+    [x, _] = sql.fetch(mvid = mvid)
     return linRegAnaly.predict(x)[0]
 
 def main():
