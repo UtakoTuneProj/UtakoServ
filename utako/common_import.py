@@ -23,8 +23,4 @@ import chainer.links as L
 import MySQLdb
 import numpy as np
 import scipy.cluster
-import sqlalchemy as alch
-import sqlalchemy.sql as alchsql
-import sqlalchemy.exc as alchexc
-from sqlalchemy.orm.session import sessionmaker
 import tweepy

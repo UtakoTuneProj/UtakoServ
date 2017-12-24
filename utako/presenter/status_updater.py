@@ -6,7 +6,7 @@ from utako.model.status import Status
 from utako.presenter.json_reader import JsonReader
 from utako.presenter.timedate_converter import TimedateConverter
 
-class StatusUpdater
+class StatusUpdater:
     def __call__(self): #ランキング取得・キュー生成部
         for i in range(15): #15ページ目まで取得する
             self._rankfilereq(page = i)
@@ -24,7 +24,7 @@ class StatusUpdater
                         validity    = 1,
                         epoch       = 0,
                         iscomplete  = 0,
-                        postdate    = postdate.dt,
+                        postdate    = postdate,
                         analyzegroup= None
                     )
                 else:
@@ -40,17 +40,17 @@ class StatusUpdater
 
     def _rankfilereq(self, searchtag = "VOCALOID", page = 0):
     #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
-        rankreqbase="http://api.search.nicovideo.jp/api/v2/video/contents/search" +
-                    "?q={}".format(urllib.parse.quote(searchtag)) +
-                    "&targets=tags" +
-                    "&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime" +
-                    "&_sort=-startTime" +
-                    "&_offset={}".format(page*100) +
-                    "&_limit=100" +
+        rankreqbase="http://api.search.nicovideo.jp/api/v2/video/contents/search" + \
+                    "?q={}".format(urllib.parse.quote(searchtag)) + \
+                    "&targets=tags" + \
+                    "&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime" + \
+                    "&_sort=-startTime" + \
+                    "&_offset={}".format(page*100) + \
+                    "&_limit=100" + \
                     "&_context=UtakoOrihara(VocaloidRankingBot)"
 
         try:
-            gurl(rankreqbase, "ranking/" + str(page) + ".json")
+            urllib.request.urlretrieve(rankreqbase, "ranking/" + str(page) + ".json")
         except urllib.error.URLError:
             print("Search query for",searchtag,"is failed. Maybe overloaded.")
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import utako.common_import
+from utako.common_import import *
 
 from utako.exception.no_response_exception import NoResponseException
 

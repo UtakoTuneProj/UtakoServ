@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from utako.common_import import *
 
 class JsonReader:
     def __call__(self, fp, coding = 'utf-8'):
