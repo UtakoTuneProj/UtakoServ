@@ -9,7 +9,9 @@ class XmlFetcher:
         fname = 'getthumb/' + mvid + '.xml'
         if not os.path.exists(fname):
             try:
-                gurl("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid, fname)
+                urllib.request.urlretrieve(
+                    "http://ext.nicovideo.jp/api/getthumbinfo/" + mvid, fname
+                )
             except:
                 raise NoResponseException("Cannot get thumbs for {}".format(mvid))
 
