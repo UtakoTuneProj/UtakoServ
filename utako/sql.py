@@ -1,14 +1,7 @@
-# coding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # SQL core module
-import os
-import random
-import configparser
-
-import MySQLdb
-import sqlalchemy as alch
-import sqlalchemy.sql as alchsql
-import sqlalchemy.exc as alchexc
-from sqlalchemy.orm.session import sessionmaker
+from common_import import *
 
 import commondef as cmdf
 

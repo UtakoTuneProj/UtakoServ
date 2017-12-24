@@ -1,8 +1,7 @@
 chainer
 mysqlclient
 numpy
+peewee
 progressbar2
 scipy
-sqlalchemy
 tweepy
-youtube-dl
