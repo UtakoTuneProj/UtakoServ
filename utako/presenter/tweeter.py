@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # twitter core module
 #http://statsbeginner.hatenablog.com/entry/2015/10/21/131717
-from common_import import *
+from utako.common_import import *
 
 class Tweeter:
 
-    def __init__(self, **kwargs)
+    def __init__(self, **kwargs):
         API_KEY = '***REMOVED***'
         API_SECRET = '***REMOVED***'
         ACCESS_TOKEN = '***REMOVED***'
