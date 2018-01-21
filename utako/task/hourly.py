@@ -6,7 +6,14 @@ from utako.presenter.chart_updater import ChartUpdater
 from utako.presenter.status_updater import StatusUpdater
 
 def hourly():
-    StatusUpdater()()
-    ChartUpdater()()
+    logger.info('start utako hourly job at {}'.format(datetime.datetime.now()))
+    try:
+        StatusUpdater()()
+        ChartUpdater()()
+    except Exception as e:
+        logger.error(e)
+        raise
+    else:
+        logger.info('finish utako hourly job at {}'.format(datetime.datetime.now()))
 
     return None

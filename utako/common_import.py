@@ -24,3 +24,5 @@ import MySQLdb
 import numpy as np
 import scipy.cluster
 import tweepy
+
+from utako.loginit import logger

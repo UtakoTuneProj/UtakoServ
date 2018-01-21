@@ -7,3 +7,5 @@ ranking/
 chart[0-9]*.model
 
 Chainertest/result/
+
+logs/
