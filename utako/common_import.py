@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import codecs
+import configparser
 import datetime
 import glob
 import json
@@ -24,3 +25,7 @@ import MySQLdb
 import numpy as np
 import scipy.cluster
 import tweepy
+import yaml
+
+config = configparser.ConfigParser()
+config.read('conf/auth.conf')
