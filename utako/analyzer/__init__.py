@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import utako.analyzer.chainer_chart_analyzer
+# import utako.analyzer.chainer_chart_analyzer
 import utako.analyzer.sklearn_chart_analyzer
-import utako.analyzer.tag_analyzer
+# import utako.analyzer.tag_analyzer

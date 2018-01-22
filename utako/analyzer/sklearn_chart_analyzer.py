@@ -1,49 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
-from common_import import *
 
-argparser = argparse.ArgumentParser(
-description = "U.Orihara Analyzer: analyze core module for utako with Linear Regression."
-)
-argparser.add_argument('-v', '--verbose',
-help = "Select verbose level. "\
-+ "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
-action = 'count',
-default = 3,
+# argparser = argparse.ArgumentParser(
+# description = "U.Orihara Analyzer: analyze core module for utako with Linear Regression."
+# )
+# argparser.add_argument('-v', '--verbose',
+# help = "Select verbose level. "\
+# + "1:CRITICAL | 2:ERROR | 3:WARNING(default) | 4:INFO | 5:DEBUG",
+# action = 'count',
+# default = 3,
+# # type = int,
+# # choices = range(1,6)
+# )
+# argparser.add_argument('-t', '--testgroup',
+# help = "Select which analyze group to test data. Default is 19 (the last).",
 # type = int,
-# choices = range(1,6)
-)
-argparser.add_argument('-t', '--testgroup',
-help = "Select which analyze group to test data. Default is 19 (the last).",
-type = int,
-nargs = '?',
-choices = range(20),
-default = 19
-)
-argparser.add_argument('-m', '--mode',
-help  = "Select analyzer mode. " +\
-        "l/learn : Learn from database. (Default) | " +\
-        "x/examine : Examine learned model. | " +\
-        "a/analyze : Analyze specified movie. -i param is needed. | " ,
-type = str,
-nargs = '?',
-choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
-default = 'l',
-)
-argparser.add_argument('-f', '--modelfile',
-help = "Specify which model to examine or analyze. Use with -m x or -m a.",
-type = str,
-nargs = '+',
-default = ['linRegAnaly.json',],
-)
-argparser.add_argument('-i', '--mvid',
-help = "Specify which movie to analyze. Use with -m a.",
-type = str,
-nargs = '?',
-)
-
-args = argparser.parse_args()
+# nargs = '?',
+# choices = range(20),
+# default = 19
+# )
+# argparser.add_argument('-m', '--mode',
+# help  = "Select analyzer mode. " +\
+#         "l/learn : Learn from database. (Default) | " +\
+#         "x/examine : Examine learned model. | " +\
+#         "a/analyze : Analyze specified movie. -i param is needed. | " ,
+# type = str,
+# nargs = '?',
+# choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
+# default = 'l',
+# )
+# argparser.add_argument('-f', '--modelfile',
+# help = "Specify which model to examine or analyze. Use with -m x or -m a.",
+# type = str,
+# nargs = '+',
+# default = ['linRegAnaly.json',],
+# )
+# argparser.add_argument('-i', '--mvid',
+# help = "Specify which movie to analyze. Use with -m a.",
+# type = str,
+# nargs = '?',
+# )
+# 
+# args = argparser.parse_args()
 
 if __name__ == '__main__':
     print("importing modules...")
@@ -56,8 +55,8 @@ try:
 except ImportError:
     GUI = False
 
-import sql
-cmdf = sql.cmdf
+from utako.common_import import *
+from utako.presenter.chart_fetcher import ChartFetcher
 
 if __name__ == '__main__':
     print('imported modules')
@@ -67,16 +66,16 @@ class LinearRegressionAnalyzer(sklearn.linear_model.LinearRegression):
         l = np.array([self.predict(x)]).T
         return ((l - y) ** 2).mean(axis = None), l
 
-def learn():
+def learn(testgroup = 19):
     startTime = time.time()
 
-    fetchData = sql.fetch(isTrain = True)
+    fetchData = ChartFetcher()(isTrain = True)
     linRegAnaly = LinearRegressionAnalyzer()
 
     x_train = []
     y_train = []
     for i in range(20):
-        if i == args.testgroup:
+        if i == testgroup:
             x_test = fetchData[0][i]
             y_test = fetchData[1][i]
         else:
@@ -118,11 +117,11 @@ def learn():
         plt.legend()
         plt.show()
 
-def examine(modelpath):
-    f = sql.fetch(isTrain = True)
-    tmp = np.array(f[0][args.testgroup], dtype = np.float32)
+def examine(modelpath, testgroup = 19):
+    f = ChartFetcher()(isTrain = True)
+    tmp = np.array(f[0][testgroup], dtype = np.float32)
     x = np.log10(tmp + np.ones(tmp.shape))
-    y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
+    y = 100 * np.log10(np.array(f[1][testgroup], dtype = np.float32))
 
     N_test = len(y)
 
@@ -150,8 +149,8 @@ def examine(modelpath):
 
     return e, np.mean(l-y), np.std(l-y)
 
-def analyze(mvid):
-    with open(args.modelfile[0]) as f:
+def analyze(mvid, modelfile):
+    with open(modelfile) as f:
         tmp = json.load(f)
 
     linRegAnaly = LinearRegressionAnalyzer()
@@ -159,19 +158,7 @@ def analyze(mvid):
     linRegAnaly.coef_ = np.array(tmp['coef'])
     linRegAnaly.intercept_ = np.array(tmp['intercept'])
 
-    [x, _] = sql.fetch(mvid = mvid)
+    [x, _] = ChartFetcher()(mvid = mvid)
     tmp = np.array(x[0], dtype = np.float32)
     x = np.log10(tmp + np.ones(tmp.shape))
     return linRegAnaly.predict(x)[0]
-
-def main():
-    if args.mode in ['l', 'learn']:
-        learn()
-    elif args.mode in ['x', 'examine']:
-        for mp in args.modelfile:
-            print(examine(modelpath = mp))
-    else:
-        print(analyze(args.mvid))
-
-if __name__ == '__main__':
-    main()
