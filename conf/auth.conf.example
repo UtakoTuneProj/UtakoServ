@@ -10,3 +10,7 @@
     API_SECRET      = Twitter-API-secret-key
     ACCESS_TOKEN    = Twitter-Access-token
     ACCESS_SECRET   = Twitter-Access-secret
+
+[niconico]
+    user        = usermail
+    password    = password

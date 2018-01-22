@@ -4,6 +4,7 @@
 import utako.presenter.chart_updater
 import utako.presenter.json_reader
 import utako.presenter.json_writer
+import utako.presenter.nico_downloader
 import utako.presenter.status_updater
 import utako.presenter.timedate_converter
 import utako.presenter.tweeter
