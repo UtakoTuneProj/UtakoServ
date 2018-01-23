@@ -1,11 +1,8 @@
-# -*- coding:utf-8 -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # from http://aidiary.hatenablog.com/entry/20121014/1350211413
-import os
-import struct
-import sys
-import numpy as np
-import scipy.cluster
+from common_import import *
 
 # mfcc_to_signature.py
 # usage: python mfcc_to_signature.py [mfccdir] [sigdir]

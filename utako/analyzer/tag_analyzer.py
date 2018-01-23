@@ -1,12 +1,10 @@
-# coding: utf-8
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
-import sys
-import time
-import argparse
-import json
+from common_import import *
 
 argparser = argparse.ArgumentParser(
-description = "U.Orihara Analyzer: analyze core module for utako with Linear Regression."
+description = "U.Orihara Tag Clasifier: tag clasifier for utako with k-means."
 )
 argparser.add_argument('-v', '--verbose',
 help = "Select verbose level. "\
@@ -16,31 +14,18 @@ default = 3,
 # type = int,
 # choices = range(1,6)
 )
-argparser.add_argument('-t', '--testgroup',
-help = "Select which analyze group to test data. Default is 19 (the last).",
-type = int,
-nargs = '?',
-choices = range(20),
-default = 19
-)
 argparser.add_argument('-m', '--mode',
-help  = "Select analyzer mode. " +\
-        "l/learn : Learn from database. (Default) | " +\
+help  = "Select clasifier mode. " +\
+        "l/learn : Clasify tags from database. (Default) | " +\
         "x/examine : Examine learned model. | " +\
-        "a/analyze : Analyze specified movie. -i param is needed. | " ,
+        "a/analyze : Analyze specified Tag. -t param is needed. | " ,
 type = str,
 nargs = '?',
 choices = ['l', 'x', 'a', 'learn', 'examine', 'analyze'],
 default = 'l',
 )
-argparser.add_argument('-f', '--modelfile',
-help = "Specify which model to examine or analyze. Use with -m x or -m a.",
-type = str,
-nargs = '+',
-default = ['linRegAnaly.json',],
-)
-argparser.add_argument('-i', '--mvid',
-help = "Specify which movie to analyze. Use with -m a.",
+argparser.add_argument('-t', '--tag',
+help = "Specify which tag to analyze. Use with -m a.",
 type = str,
 nargs = '?',
 )
@@ -51,7 +36,7 @@ if __name__ == '__main__':
     print("importing modules...")
 
 import numpy as np
-import sklearn.linear_model
+import scipy as scp
 try:
     import matplotlib.pyplot as plt
     GUI = True
@@ -64,15 +49,70 @@ cmdf = sql.cmdf
 if __name__ == '__main__':
     print('imported modules')
 
-class LinearRegressionAnalyzer(sklearn.linear_model.LinearRegression):
-    def error(self, x, y):
-        l = np.array([self.predict(x)]).T
-        return ((l - y) ** 2).mean(axis = None), l
+def fetch(isTrain = False, mvid = None):
+    if mvid == None and not isTrain:
+        raise ValueError('Neither mvid nor isTrain was given.')
+
+    db = sql.DataBase('test')
+    ctbl = sql.ChartTable(db)
+    ittbl = sql.IDTagTable(db)
+
+    shapedInputs = []
+
+    if isTrain:
+        rawCharts = []
+
+        print("Fetching from database...")
+        for i in range(20):
+            rawCharts.append(db.get(
+                'select chart.* from chart join status using(ID) ' +
+                'where status.analyzeGroup = %s and isComplete = 1 ' +
+                'order by ID, epoch',
+                [i]
+            ))
+        print("Fetch completed. Got data size is "\
+            + str(sum([len(rawCharts[i]) for i in range(20)])))
+
+        mvid = None
+        for rawGroup in rawCharts:
+            shapedInputs.append([])
+            shapedOutputs.append([])
+            for cell in rawGroup:
+                if mvid != cell[0]:
+                    shapedInputs[-1].append([])
+                    mvid = cell[0]
+
+                if cell[1] != 24:
+                    shapedInputs[-1][-1].extend(cell[3:])
+                else:
+                    view = cell[3]
+                    comment = cell[4]
+                    mylist = cell[5]
+
+                    cm_cor = (view + mylist) / (view + comment + mylist)
+                    shapedOutputs[-1].append(
+                        [view + comment * cm_cor + mylist ** 2 / view * 2]
+                    )
+
+    else:
+        rawCharts = db.get(
+            "select chart.* from chart join status using(ID) " +
+            "where ID = '" + mvid + "' order by chart.epoch"
+        )
+
+        if len(rawCharts) < 24:
+            raise ValueError(mvid + ' is not analyzable')
+
+        for i,cell in enumerate(rawCharts):
+            if i != 24:
+                shapedInputs.extend(cell[2:])
+
+    return [shapedInputs, shapedOutputs]
 
 def learn():
     startTime = time.time()
 
-    fetchData = sql.fetch(isTrain = True)
+    fetchData = fetch(isTrain = True)
     linRegAnaly = LinearRegressionAnalyzer()
 
     x_train = []
@@ -121,7 +161,7 @@ def learn():
         plt.show()
 
 def examine(modelpath):
-    f = sql.fetch(isTrain = True)
+    f = fetch(isTrain = True)
     tmp = np.array(f[0][args.testgroup], dtype = np.float32)
     x = np.log10(tmp + np.ones(tmp.shape))
     y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
@@ -152,7 +192,7 @@ def examine(modelpath):
 
     return e, np.mean(l-y), np.std(l-y)
 
-def analyze(mvid):
+def analyze(mvid, n_units = 200, layer = 20):
     with open(args.modelfile[0]) as f:
         tmp = json.load(f)
 
@@ -161,9 +201,7 @@ def analyze(mvid):
     linRegAnaly.coef_ = np.array(tmp['coef'])
     linRegAnaly.intercept_ = np.array(tmp['intercept'])
 
-    [x, _] = sql.fetch(mvid = mvid)
-    tmp = np.array(x[0], dtype = np.float32)
-    x = np.log10(tmp + np.ones(tmp.shape))
+    [x, _] = fetch(mvid = mvid)
     return linRegAnaly.predict(x)[0]
 
 def main():
