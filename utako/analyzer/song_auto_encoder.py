@@ -137,7 +137,7 @@ class SongAutoEncoder:
                 # 誤差逆伝播で勾配を計算
                 loss.backward()
                 optimizer.update()
-                sum_loss += loss.data * batchsize
+                sum_loss += loss.data * batchsize * in_size
 
             # # 訓練データの誤差と、正解精度を表示
             print('train mean loss={}'.format(sum_loss / N))
@@ -161,9 +161,8 @@ class SongAutoEncoder:
                     loss += tmp
                     if epoch == n_epoch - 1:
                         op = cuda.to_cpu(op)
-                        print(test_data.shape, op.shape)
                         test_data = np.append(test_data, op, axis=1)
-                sum_loss += loss.data * batchsize
+                sum_loss += loss.data * batchsize * in_size
 
             # テストデータでの誤差と、正解精度を表示
             print('test mean loss={}'.format(sum_loss / N_test))
