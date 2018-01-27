@@ -5,6 +5,7 @@ from utako.common_import import *
 import librosa
 from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
+import scipy.fftpack as fft
 
 class SongAEModel(ChainList):
     def __init__(self, n_units):
@@ -86,10 +87,10 @@ class SongAutoEncoder:
         test_loss = []
 
         perm = np.random.permutation(N_train)
-        tmp = [[
+        tmp = [[ fft.fft(
                 x_train[perm[i:i+batchsize],
                 j : j + in_size
-            ] for j in np.arange(0, len(x_train[0]), in_size)
+            ]) for j in np.arange(0, len(x_train[0]), in_size)
             ] for i in np.arange(0, N_train, batchsize) ]
         if self.gpu:
             x_train_batch = []
@@ -101,10 +102,10 @@ class SongAutoEncoder:
             x_train_batch = tmp
 
         perm = np.random.permutation(N_test)
-        tmp = [[
+        tmp = [[ fft.fft(
                 x_test[perm[i:i+batchsize],
                 j : j + in_size
-            ] for j in np.arange(0, len(x_test[0]), in_size)
+            ]) for j in np.arange(0, len(x_test[0]), in_size)
             ] for i in np.arange(0, N_test, batchsize) ]
         if self.gpu:
             x_test_batch = []
@@ -151,7 +152,7 @@ class SongAutoEncoder:
                 # 勾配を初期化
                 loss = 0
                 if epoch == n_epoch - 1:
-                    test_data = np.zeros((batchsize, 0))
+                    test_data = []
                 model.cleargrads()
                 # initialize State
                 model.reset_state()
@@ -161,7 +162,7 @@ class SongAutoEncoder:
                     loss += tmp
                     if epoch == n_epoch - 1:
                         op = cuda.to_cpu(op)
-                        test_data = np.append(test_data, op, axis=1)
+                        test_data.append(op)
                 sum_loss += loss.data * batchsize * in_size
 
             # テストデータでの誤差と、正解精度を表示
@@ -185,6 +186,9 @@ class SongAutoEncoder:
 
             if self.gpu:
                 y_test = cuda.to_cpu(y_test)
+            y_got = np.zeros((batchsize, 0))
+            for cell in test_data:
+                y_got = np.append(y_got, fft.ifft(cell), axis = 1)
 
             plt.plot(range(len(y_test[0])), y_test[0], label = 'Ans.')
             plt.plot(range(len(y_test[0])), test_data[0], label = 'Auto Encode')
