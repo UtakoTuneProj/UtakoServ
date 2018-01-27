@@ -74,16 +74,26 @@ class SongAutoEncoder:
         perm = np.arange(len(x_train) + len(x_test))
         # perm = np.random.permutation(N + N_test)
 
-        # train_loss = [[] for i in range(5)]
-        # train_acc  = [[] for i in range(5)]
+        train_loss = []
         test_loss = []
-        test_acc  = []
 
+        perm = np.random.permutation(N)
+        tmp = [x_train[perm[i:i+batchsize]] for i in range(0, N, batchsize)]
         if self.gpu:
-            x_train = cuda.to_gpu(x_train)
-            x_test  = cuda.to_gpu(x_test)
-            y_train = cuda.to_gpu(y_train)
-            y_test  = cuda.to_gpu(y_test)
+            x_train_batch = []
+            for cell in tmp:
+                x_train_batch.append(cuda.to_gpu(cell))
+        else:
+            x_train_batch = tmp
+
+        perm = np.random.permutation(N_test)
+        tmp = [x_test[perm[i:i+batchsize]] for i in range(0, N_test, batchsize)]
+        if self.gpu:
+            x_test_batch = []
+            for cell in tmp:
+                x_test_batch.append(cuda.to_gpu(cell))
+        else:
+            x_test_batch = tmp
 
         # Learning loop
         for epoch in range(n_epoch):
@@ -91,39 +101,33 @@ class SongAutoEncoder:
 
             # training
             # N個の順番をランダムに並び替える
-            perm = np.random.permutation(N)
             # sum_accuracy = [0 for i in range(N_model)]
             sum_loss     = 0
             # 0〜Nまでのデータをバッチサイズごとに使って学習
-            for i in range(0, N, batchsize):
-                x_batch = x_train[perm[i:i+batchsize]]
-                y_batch = y_train[perm[i:i+batchsize]]
-
+            for batch_cell in x_train_batch:
                 # 勾配を初期化
                 model.cleargrads()
                 # 順伝播させて誤差と精度を算出
-                loss, _ = model.error(x_batch, y_batch)
+                loss, _ = model.error(batch_cell, batch_cell)
                 # 誤差逆伝播で勾配を計算
                 loss.backward()
                 optimizer.update()
-                # sum_loss += loss.data * batchsize
+                sum_loss += loss.data * batchsize
 
             # # 訓練データの誤差と、正解精度を表示
-            # print('train mean loss={}'.format(sum_loss / N))
-            # train_loss.append(sum_loss / N)
+            print('train mean loss={}'.format(sum_loss / N))
+            train_loss.append(sum_loss / N)
 
             # evaluation
             # テストデータで誤差と、正解精度を算出し汎化性能を確認
             sum_loss  = 0
 
-            for i in range(0, N_test, batchsize):
-                x_batch = x_test[i:i+batchsize]
-                y_batch = y_test[i:i+batchsize]
-                size = len(y_batch)
+            for batch_cell in x_test_batch:
+                size = len(batch_cell)
 
                 # 順伝播させて誤差と精度を算出
                 loss, op = model.error(
-                    x_batch, y_batch, train = False
+                    batch_cell, batch_cell, train = False
                 )
                 sum_loss += loss.data * size
                 if epoch == n_epoch - 1:
@@ -131,7 +135,7 @@ class SongAutoEncoder:
                     test_data = op
 
             # テストデータでの誤差と、正解精度を表示
-            print('mean loss={}'.format(sum_loss / N_test))
+            print('test mean loss={}'.format(sum_loss / N_test))
             test_loss.append(sum_loss / N_test)
 
         elapsedTime = time.time() - startTime
@@ -152,8 +156,8 @@ class SongAutoEncoder:
             if self.gpu:
                 y_test = cuda.to_cpu(y_test)
 
-            plt.plot(range(N_test), y_test, label = 'Ans.')
-            plt.plot(range(N_test), test_data, label = 'Auto Encode')
+            plt.plot(range(len(y_test[0])), y_test[0], label = 'Ans.')
+            plt.plot(range(len(y_test[0])), test_data[0], label = 'Auto Encode')
             plt.legend()
             plt.show()
 

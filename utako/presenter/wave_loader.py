@@ -18,11 +18,11 @@ class WaveLoader:
             )
 
         proc = mp.Pool()
-        train = np.array(proc.map(self.fetchone, p.glob('train/*.wav')))
+        train = np.array(proc.map(self.fetchone, p.glob('train/*.wav')), dtype = np.float32)
         proc.close()
 
         proc = mp.Pool()
-        test = np.array(proc.map(self.fetchone, p.glob('test/*.wav')))
+        test = np.array(proc.map(self.fetchone, p.glob('test/*.wav')), dtype = np.float32)
         proc.close()
 
         return train, test
