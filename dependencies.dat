@@ -1,4 +1,5 @@
 chainer
+librosa
 mysqlclient
 numpy
 peewee

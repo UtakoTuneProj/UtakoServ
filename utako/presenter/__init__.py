@@ -8,5 +8,6 @@ import utako.presenter.nico_downloader
 import utako.presenter.status_updater
 import utako.presenter.timedate_converter
 import utako.presenter.tweeter
+import utako.presenter.wave_loader
 import utako.presenter.xml_fetcher
 import utako.presenter.xml_reader

@@ -18,7 +18,7 @@ import urllib.parse
 import urllib.error
 import xml.etree.ElementTree as ET
 
-from chainer import cuda, Variable, optimizers, Chain, ChainList
+from chainer import cuda, Variable, optimizers, serializers, Chain, ChainList
 import chainer.functions  as F
 import chainer.links as L
 import MySQLdb
