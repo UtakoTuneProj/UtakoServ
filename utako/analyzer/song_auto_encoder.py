@@ -191,6 +191,9 @@ class SongAutoEncoder:
             plt.legend()
             plt.show()
 
+        librosa.output.write_wav('original.wav', y_test[0], 22050)
+        librosa.output.write_wav('coded.wav', test_data[0], 22050)
+
 #    def examine(modelpath, n_units = 200, layer = 20):
 #        f = sql.fetch(isTrain = True)
 #        x = np.array(f[0][args.testgroup], dtype = np.float32)
