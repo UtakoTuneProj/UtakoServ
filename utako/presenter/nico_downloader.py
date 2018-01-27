@@ -13,8 +13,14 @@ class NicoDownloader:
             '-p',
             config['niconico']['password'],
             '-x',
+            '-ar',  #sampling rate
+            '44100',
+            '-ac',  #channels
+            '1',    #monoral
+            '-ab',  #bitrate
+            '128k'
             '--audio-format',
-            'mp3',
+            'wav',
             '-o',
-            '%(id)s.mp3',
+            '%(id)s.mp4',
         ])
