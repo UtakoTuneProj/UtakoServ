@@ -8,11 +8,13 @@ import matplotlib.pyplot as plt
 
 class SongAEModel(ChainList):
     def __init__(self, n_units):
-        l = [
+        self.l = [
             L.Linear(*n_units[i:i+2])
             for i in range(len(n_units) - 1)
         ]
-        super().__init__(*l)
+        self.l[1] = L.LSTM(*n_units[1:3])
+        self.l[-2] = L.LSTM(*n_units[-3:-1])
+        super().__init__(*self.l)
 
     def __call__(self, x):
         h = -x
@@ -21,6 +23,10 @@ class SongAEModel(ChainList):
             h = F.relu(layer(h))
         o_layer = self.__getitem__(i+1)
         return o_layer(h)
+
+    def reset_state(self):
+        self.l[1].reset_state()
+        self.l[-2].reset_state()
 
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
@@ -41,13 +47,13 @@ class SongAutoEncoder:
     def learn(
         self,
         n_units = [
-            220500,
-        #   17000,
-        #   1300,
-            100,
-        #   1300,
-        #   17000,
-            220500
+            8192,
+            1024,
+            128,
+            16,
+            128,
+            1024,
+            8192,
         ],
         n_epoch = 15,
         batchsize = 50,
@@ -56,6 +62,7 @@ class SongAutoEncoder:
         x_test = None,
     ):
         startTime = time.time()
+        in_size = n_units[0]
 
         model = SongAEModel(n_units = n_units)
         if self.gpu:
@@ -70,6 +77,7 @@ class SongAutoEncoder:
         y_test = x_test
 
         N = len(x_train)
+        N_train = N
         N_test = len(x_test)
         perm = np.arange(len(x_train) + len(x_test))
         # perm = np.random.permutation(N + N_test)
@@ -77,21 +85,33 @@ class SongAutoEncoder:
         train_loss = []
         test_loss = []
 
-        perm = np.random.permutation(N)
-        tmp = [x_train[perm[i:i+batchsize]] for i in range(0, N, batchsize)]
+        perm = np.random.permutation(N_train)
+        tmp = [[
+                x_train[perm[i:i+batchsize],
+                j : j + in_size
+            ] for j in np.arange(0, len(x_train[0]), in_size)
+            ] for i in np.arange(0, N_train, batchsize) ]
         if self.gpu:
             x_train_batch = []
-            for cell in tmp:
-                x_train_batch.append(cuda.to_gpu(cell))
+            for c1 in tmp:
+                x_train_batch.append([])
+                for c0 in c1: #時間方向
+                    x_train_batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
         else:
             x_train_batch = tmp
 
         perm = np.random.permutation(N_test)
-        tmp = [x_test[perm[i:i+batchsize]] for i in range(0, N_test, batchsize)]
+        tmp = [[
+                x_test[perm[i:i+batchsize],
+                j : j + in_size
+            ] for j in np.arange(0, len(x_test[0]), in_size)
+            ] for i in np.arange(0, N_test, batchsize) ]
         if self.gpu:
             x_test_batch = []
-            for cell in tmp:
-                x_test_batch.append(cuda.to_gpu(cell))
+            for c1 in tmp:
+                x_test_batch.append([])
+                for c0 in c1: #時間方向
+                    x_test_batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
         else:
             x_test_batch = tmp
 
@@ -106,9 +126,14 @@ class SongAutoEncoder:
             # 0〜Nまでのデータをバッチサイズごとに使って学習
             for batch_cell in x_train_batch:
                 # 勾配を初期化
+                loss = 0
                 model.cleargrads()
-                # 順伝播させて誤差と精度を算出
-                loss, _ = model.error(batch_cell, batch_cell)
+                # initialize State
+                model.reset_state()
+                for time_cell in batch_cell:
+                    # 順伝播させて誤差と精度を算出
+                    tmp, _ = model.error(time_cell, time_cell)
+                    loss += tmp
                 # 誤差逆伝播で勾配を計算
                 loss.backward()
                 optimizer.update()
@@ -123,16 +148,22 @@ class SongAutoEncoder:
             sum_loss  = 0
 
             for batch_cell in x_test_batch:
-                size = len(batch_cell)
-
-                # 順伝播させて誤差と精度を算出
-                loss, op = model.error(
-                    batch_cell, batch_cell, train = False
-                )
-                sum_loss += loss.data * size
+                # 勾配を初期化
+                loss = 0
                 if epoch == n_epoch - 1:
-                    op = cuda.to_cpu(op)
-                    test_data = op
+                    test_data = np.zeros((batchsize, 0))
+                model.cleargrads()
+                # initialize State
+                model.reset_state()
+                for time_cell in batch_cell:
+                    # 順伝播させて誤差と精度を算出
+                    tmp, op = model.error(time_cell, time_cell)
+                    loss += tmp
+                    if epoch == n_epoch - 1:
+                        op = cuda.to_cpu(op)
+                        print(test_data.shape, op.shape)
+                        test_data = np.append(test_data, op, axis=1)
+                sum_loss += loss.data * batchsize
 
             # テストデータでの誤差と、正解精度を表示
             print('test mean loss={}'.format(sum_loss / N_test))
