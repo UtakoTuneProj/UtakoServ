@@ -8,7 +8,7 @@ from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
-class SongAEModel(ChainList):
+class SongAutoEncoderSigmoidModel(ChainList):
     def __init__(self, n_units):
         self.l = [
             L.Linear(*n_units[i:i+2])
@@ -22,7 +22,7 @@ class SongAEModel(ChainList):
         h = -x
         for i in range(self.__len__() - 1):
             layer = self.__getitem__(i)
-            h = F.relu(layer(h))
+            h = F.sigmoid(layer(h))
         o_layer = self.__getitem__(i+1)
         return o_layer(h)
 
@@ -37,6 +37,15 @@ class SongAEModel(ChainList):
 
         return F.mean_squared_error(y,t), ret
 
+class SongAutoEncoderReluModel(SongAutoEncoderSigmoidModel):
+    def __call__(self, x):
+        h = -x
+        for i in range(self.__len__() - 1):
+            layer = self.__getitem__(i)
+            h = F.relu(layer(h))
+        o_layer = self.__getitem__(i+1)
+        return o_layer(h)
+
 class SongAutoEncoder:
     def __init__(
         self,
@@ -48,28 +57,27 @@ class SongAutoEncoder:
         x_test = None,
         isgpu = True,
         isgui = True,
+        preprocess = lambda x: x,
+        postprocess = lambda x: x,
+        modelclass = SongAutoEncoderSigmoidModel
     ):
-        self.n_epoch   = n_epoch
-        self.name      = name
-        self.batchsize = batchsize
-        self.isgpu     = isgpu 
-        self.isgui     = isgui 
+        self.n_epoch    = n_epoch
+        self.name       = name
+        self.batchsize  = batchsize
+        self.isgpu      = isgpu 
+        self.isgui      = isgui 
+        self.preprocess = preprocess
+        self.postprocess= postprocess
 
         if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(n_units)
+        self.set_model(n_units, modelclass)
         self.set_data(x_train, x_test)
 
-    def preprocess(self, x):
-        return x
-
-    def postprocess(self, x):
-        return x
-
-    def set_model(self, n_units):
+    def set_model(self, n_units, modelclass):
         self.n_units = n_units
         self.in_size = n_units[0]
-        self.model = SongAEModel(n_units = self.n_units)
+        self.model = modelclass(n_units = self.n_units)
         if self.isgpu:
             self.model.to_gpu()  # Copy the model to the GPU
 
@@ -128,10 +136,11 @@ class SongAutoEncoder:
             batch_size, length = batch_cell[0].shape
             cell = np.zeros((batch_size, 0))
             for time_cell in batch_cell:
-                tmp = self.postprocess(time_cell)
                 if self.isgpu:
-                    tmp = cuda.to_cpu(tmp)
-                cell = np.append(cell, tmp, axis = 1)
+                    tmp = cuda.to_cpu(time_cell)
+                else:
+                    tmp = time_cell
+                cell = np.append(cell, self.postprocess(tmp), axis = 1)
             if i == 0:
                 unified = cell
             else:
@@ -160,7 +169,7 @@ class SongAutoEncoder:
             self.optimizer.update()
             sum_loss += loss
 
-        return sum_loss, prediction
+        return float(sum_loss), prediction
 
     def visualize_loss(self, *args, **kwargs):
         kernel = np.ones(5)/5
@@ -225,7 +234,7 @@ class SongAutoEncoder:
             test_loss.append(res)
 
             if epoch % 50 == 0:
-                serializers.save_npz('Network/{0}_{1:04d}.model'.format(self.name, epoch), self.model)
+                serializers.save_npz('result/{0}_{1:04d}.model'.format(self.name, epoch), self.model)
 
         elapsedTime = time.time() - startTime
         print('Total Time: {0}[min.]'.format(elapsedTime / 60))
@@ -253,6 +262,9 @@ class SongAutoEncoder:
             teacher = self.x_test[3],
             predict = test_predict[3]
         )
+
+        with open('result/{}.json'.format(self.name), 'w') as f:
+            json.dump([train_loss, test_loss], f)
 
         return train_loss, test_loss
 
