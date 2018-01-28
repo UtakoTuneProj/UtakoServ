@@ -3,6 +3,7 @@
 # Analyzer: UtakoChainer core module
 from utako.common_import import *
 import librosa
+import librosa.display
 from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
@@ -37,167 +38,210 @@ class SongAEModel(ChainList):
         return F.mean_squared_error(y,t), ret
 
 class SongAutoEncoder:
-    def __init__(self, isgpu = True):
-        self.gpu = isgpu
-        if isgpu:
+    def __init__(
+        self,
+        n_units,
+        n_epoch = 300,
+        batchsize = 50,
+        x_train = None,
+        x_test = None,
+        isgpu = True
+        isgui = True,
+    ):
+        self.n_epoch   = n_epoch
+        self.batchsize = batchsize
+        self.isgpu     = isgpu 
+        self.isgui     = isgui 
+
+        if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
+        self.set_model(n_units)
+        self.set_data(x_train, x_test)
+
+    def preprocess(self, x):
+        return x
+
+    def postprocess(self, x):
+        return x
+
+    def set_model(self, n_units):
+        self.n_units = n_units
+        self.in_size = n_units[0]
+        self.model = SongAEModel(n_units = self.n_units)
+        if self.isgpu:
+            self.model.to_gpu()  # Copy the model to the GPU
+
+        self.optimizer = optimizers.Adam()
+        self.optimizer.setup(self.model)
+
+    def set_data(self, train, test)
+        if type(train) != np.ndarray or type(test) != np.ndarray :
+            if os.path.isfile('train.npy') and os.path.isfile('test.npy'):
+                self.x_train = np.load('train.npy')
+                self.x_train = np.load('test.npy')
+            else:
+                self.x_train, self.x_test = WaveLoader().fetch(isTrain = True)
+        else:
+            self.x_train = train
+            self.x_test  = test
+
+        self.N_train = len(self.x_train)
+        self.N_test  = len(self.x_test)
+
+    def get_batch(
+        self,
+        data,
+        random = False
+        batchsize = self.batchsize
+    ):
+        if random:
+            perm = np.random.permutation(len(data))
+        else:
+            perm = np.arange(len(data))
+
+        data_size, length = data.shape
+        tmp = [[ self.preprocess(
+                data[perm[i:i+batchsize],
+                j : j + in_size
+            ]) for j in range(0, length, in_size)
+            ] for i in range(0, data_size, batchsize)
+        ]
+        if self.gpu:
+            batch = []
+            for c1 in tmp:
+                batch.append([])
+                for c0 in c1: #時間方向
+                    batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
+        else:
+            batch = tmp
+
+        return batch
+    
+    def unify_batch(self, batch):
+        batch_count = len(batch)
+        for i, batch_cell in enumerate(batch):
+            batch_size, length = batch_cell[0].shape
+            cell = np.zeros(0, batch_size)
+            for time_cell in batch_cell:
+                tmp = self.postprocess(time_cell)
+                cell = np.append(cell, tmp, axis = 0)
+            if i == 0:
+                unified = cell
+            else:
+                unified = append(unified, cell, axis = 1)
+        return unified
+
+    def challenge(self, batch, isTrain = False):
+        batch_count  = len(batch)
+        sum_loss     = 0
+        prediction   = [[] for i in range(batch_count))]
+        for i in np.random.permutation(batch_count):
+            batch_cell = batch[i]
+            loss = 0
+            # 勾配を初期化
+            self.model.cleargrads()
+            # initialize State
+            self.model.reset_state()
+            for time_cell in batch_cell:
+                # 順伝播させて誤差と精度を算出
+                moment_error, moment_prediction = self.model.error(time_cell, time_cell)
+                if isTrain:
+                    # 誤差逆伝播で勾配を計算
+                    moment_error.backward()
+                loss = moment_error.data
+                prediction[i].append(moment_prediction)
+            self.optimizer.update()
+            sum_loss += loss
+
+        return sum_loss, prediction
+
+    def visualize_loss(self, *args, **kwargs):
+        kernel = np.ones(5)/5
+
+        for i, s in enumerate(args):
+            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
+            plt.plot(range(len(tmp)), tmp, label = str(i))
+        for key in kwargs:
+            s = kwargs[key]
+            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
+            plt.plot(range(len(tmp)), tmp, label = key)
+        plt.legend()
+        plt.yscale('log')
+        plt.show()
+
+    def visualize_wave(self, data):
+        if data.ndim == 1:
+            teacher = data.reshape((1, len(data)))
+        else:
+            raise ValueError('data must be 1-dim')
+        _, prediction_batch = self.challenge(self.get_batch(teacher))
+        prediction = self.unify_batch(prediction_batch)
+        librosa.display.waveplot(teacher, label = 'teacher', alpha = 0.4)
+        librosa.display.waveplot(prediction, label = 'prediction', alpha = 0.4)
+        plt.legend()
+        plt.show()
+
+    def write_wave(self, data, prefix = 'autoencode'):
+        if data.ndim == 1:
+            teacher = data.reshape((1, len(data)))
+        else:
+            raise ValueError('data must be 1-dim')
+        _, prediction_batch = self.challenge(self.get_batch(teacher))
+        prediction = self.unify_batch(prediction_batch)
+        librosa.output.write_wav(prefix + '.orig.wav', teacher, 22050)
+        librosa.output.write_wav(prefix + '.pred.wav', prediction, 22050)
 
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
 
-    def learn(
-        self,
-        n_units = [
-            8192,
-            1024,
-            128,
-            16,
-            128,
-            1024,
-            8192,
-        ],
-        n_epoch = 15,
-        batchsize = 50,
-        GUI = True,
-        x_train = None,
-        x_test = None,
-    ):
+    def learn(self):
         startTime = time.time()
-        in_size = n_units[0]
 
-        model = SongAEModel(n_units = n_units)
-        if self.gpu:
-            model.to_gpu()  # Copy the model to the GPU
-
-        optimizer = optimizers.Adam()
-        optimizer.setup(model)
-
-        if type(x_train) != np.ndarray or type(x_test) != np.ndarray :
-            x_train, x_test = WaveLoader().fetch(isTrain = True)
-        y_train = x_train
-        y_test = x_test
-
-        N = len(x_train)
-        N_train = N
-        N_test = len(x_test)
-        perm = np.arange(len(x_train) + len(x_test))
-        # perm = np.random.permutation(N + N_test)
-
-        train_loss = []
-        test_loss = []
-
-        perm = np.random.permutation(N_train)
-        tmp = [[ fft.fft(
-                x_train[perm[i:i+batchsize],
-                j : j + in_size
-            ]) for j in np.arange(0, len(x_train[0]), in_size)
-            ] for i in np.arange(0, N_train, batchsize) ]
-        if self.gpu:
-            x_train_batch = []
-            for c1 in tmp:
-                x_train_batch.append([])
-                for c0 in c1: #時間方向
-                    x_train_batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
-        else:
-            x_train_batch = tmp
-
-        perm = np.random.permutation(N_test)
-        tmp = [[ fft.fft(
-                x_test[perm[i:i+batchsize],
-                j : j + in_size
-            ]) for j in np.arange(0, len(x_test[0]), in_size)
-            ] for i in np.arange(0, N_test, batchsize) ]
-        if self.gpu:
-            x_test_batch = []
-            for c1 in tmp:
-                x_test_batch.append([])
-                for c0 in c1: #時間方向
-                    x_test_batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
-        else:
-            x_test_batch = tmp
+        train_batch = self.get_batch(self.x_train)
+        test_batch  = self.get_batch(self.x_test)
+        train_loss  = []
+        test_loss   = []
 
         # Learning loop
         for epoch in range(n_epoch):
             print('epoch', epoch + 1, flush = True)
 
-            # training
-            # N個の順番をランダムに並び替える
-            # sum_accuracy = [0 for i in range(N_model)]
-            sum_loss     = 0
-            # 0〜Nまでのデータをバッチサイズごとに使って学習
-            for batch_cell in x_train_batch:
-                # 勾配を初期化
-                loss = 0
-                model.cleargrads()
-                # initialize State
-                model.reset_state()
-                for time_cell in batch_cell:
-                    # 順伝播させて誤差と精度を算出
-                    tmp, _ = model.error(time_cell, time_cell)
-                    loss += tmp
-                # 誤差逆伝播で勾配を計算
-                loss.backward()
-                optimizer.update()
-                sum_loss += loss.data * batchsize * in_size
-
+            res, _ = self.challenge(train_batch, isTrain = True)
             # # 訓練データの誤差と、正解精度を表示
-            print('train mean loss={}'.format(sum_loss / N))
-            train_loss.append(sum_loss / N)
+            print('train mean loss={}'.format(res))
+            train_loss.append(res)
 
             # evaluation
             # テストデータで誤差と、正解精度を算出し汎化性能を確認
-            sum_loss  = 0
 
-            for batch_cell in x_test_batch:
-                # 勾配を初期化
-                loss = 0
-                if epoch == n_epoch - 1:
-                    test_data = []
-                model.cleargrads()
-                # initialize State
-                model.reset_state()
-                for time_cell in batch_cell:
-                    # 順伝播させて誤差と精度を算出
-                    tmp, op = model.error(time_cell, time_cell)
-                    loss += tmp
-                    if epoch == n_epoch - 1:
-                        if self.gpu:
-                            op = cuda.to_cpu(op)
-                        test_data.append(op)
-                sum_loss += loss.data * batchsize * in_size
+            res, _ = self.challenge(test_batch, isTrain = True)
+            # # 訓練データの誤差と、正解精度を表示
+            print('test mean loss={}'.format(res))
+            test_loss.append(res)
 
-            # テストデータでの誤差と、正解精度を表示
-            print('test mean loss={}'.format(sum_loss / N_test))
-            test_loss.append(sum_loss / N_test)
+            if epoch % 50 == 0:
+                serializers.save_npz('Network/song_AE_{0:04d}.model'.format(epoch), model)
 
         elapsedTime = time.time() - startTime
         print('Total Time: {0}[min.]'.format(elapsedTime / 60))
 
-        serializers.save_npz('Network/song_AE.model', model)
+        serializers.save_npz('Network/song_AE_final.model', model)
 
         if GUI:
             # 精度と誤差をグラフ描画
             # plt.plot(range(len(train_loss)), train_loss)
-            kernel = np.ones(5)/5
-            test_loss = np.convolve(np.array(test_loss), kernel, mode = 'valid')
-            plt.plot(range(len(test_loss)), test_loss, label = 'MSE')
-            plt.legend()
-            plt.yscale('log')
-            plt.show()
+            self.visualize_loss({
+                'train': train_loss,
+                'test' : test_loss,
+            })
 
-            if self.gpu:
-                y_test = cuda.to_cpu(y_test)
-            y_got = np.zeros((batchsize, 0))
-            for cell in test_data:
-                y_got = np.append(y_got, fft.ifft(cell), axis = 1)
+            self.visualize_wave(
+                self.x_test[3]
+            )
 
-            plt.plot(range(len(y_test[0])), y_test[0], label = 'Ans.')
-            plt.plot(range(len(y_test[0])), test_data[0], label = 'Auto Encode')
-            plt.legend()
-            plt.show()
-
-        librosa.output.write_wav('original.wav', y_test[0], 22050)
-        librosa.output.write_wav('coded.wav', test_data[0], 22050)
+        self.write_wave(
+            self.x_test[3]
+        )
 
 #    def examine(modelpath, n_units = 200, layer = 20):
 #        f = sql.fetch(isTrain = True)
