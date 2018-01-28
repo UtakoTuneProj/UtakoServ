@@ -161,7 +161,8 @@ class SongAutoEncoder:
                     tmp, op = model.error(time_cell, time_cell)
                     loss += tmp
                     if epoch == n_epoch - 1:
-                        op = cuda.to_cpu(op)
+                        if self.gpu:
+                            op = cuda.to_cpu(op)
                         test_data.append(op)
                 sum_loss += loss.data * batchsize * in_size
 
