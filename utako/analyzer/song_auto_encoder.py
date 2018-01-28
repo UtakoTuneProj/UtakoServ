@@ -41,14 +41,16 @@ class SongAutoEncoder:
     def __init__(
         self,
         n_units,
+        name = 'song_AE',
         n_epoch = 300,
         batchsize = 50,
         x_train = None,
         x_test = None,
-        isgpu = True
+        isgpu = True,
         isgui = True,
     ):
         self.n_epoch   = n_epoch
+        self.name      = name
         self.batchsize = batchsize
         self.isgpu     = isgpu 
         self.isgui     = isgui 
@@ -74,11 +76,11 @@ class SongAutoEncoder:
         self.optimizer = optimizers.Adam()
         self.optimizer.setup(self.model)
 
-    def set_data(self, train, test)
+    def set_data(self, train, test):
         if type(train) != np.ndarray or type(test) != np.ndarray :
             if os.path.isfile('train.npy') and os.path.isfile('test.npy'):
                 self.x_train = np.load('train.npy')
-                self.x_train = np.load('test.npy')
+                self.x_test = np.load('test.npy')
             else:
                 self.x_train, self.x_test = WaveLoader().fetch(isTrain = True)
         else:
@@ -91,9 +93,12 @@ class SongAutoEncoder:
     def get_batch(
         self,
         data,
-        random = False
-        batchsize = self.batchsize
+        random = False,
+        batchsize = None,
     ):
+        if batchsize is None:
+            batchsize = self.batchsize
+
         if random:
             perm = np.random.permutation(len(data))
         else:
@@ -102,11 +107,11 @@ class SongAutoEncoder:
         data_size, length = data.shape
         tmp = [[ self.preprocess(
                 data[perm[i:i+batchsize],
-                j : j + in_size
-            ]) for j in range(0, length, in_size)
+                j : j + self.in_size
+            ]) for j in range(0, length, self.in_size)
             ] for i in range(0, data_size, batchsize)
         ]
-        if self.gpu:
+        if self.isgpu:
             batch = []
             for c1 in tmp:
                 batch.append([])
@@ -121,20 +126,22 @@ class SongAutoEncoder:
         batch_count = len(batch)
         for i, batch_cell in enumerate(batch):
             batch_size, length = batch_cell[0].shape
-            cell = np.zeros(0, batch_size)
+            cell = np.zeros((batch_size, 0))
             for time_cell in batch_cell:
                 tmp = self.postprocess(time_cell)
-                cell = np.append(cell, tmp, axis = 0)
+                if self.isgpu:
+                    tmp = cuda.to_cpu(tmp)
+                cell = np.append(cell, tmp, axis = 1)
             if i == 0:
                 unified = cell
             else:
-                unified = append(unified, cell, axis = 1)
+                unified = np.append(unified, cell, axis = 0)
         return unified
 
     def challenge(self, batch, isTrain = False):
         batch_count  = len(batch)
         sum_loss     = 0
-        prediction   = [[] for i in range(batch_count))]
+        prediction   = [[] for i in range(batch_count)]
         for i in np.random.permutation(batch_count):
             batch_cell = batch[i]
             loss = 0
@@ -180,7 +187,9 @@ class SongAutoEncoder:
         plt.legend()
         plt.show()
 
-    def write_wave(self, prefix = 'autoencode', *args, **kwargs):
+    def write_wave(self, prefix = None, *args, **kwargs):
+        if prefix is None:
+            prefix = self.name
         for i, s in enumerate(args):
             librosa.output.write_wav('{}.{}.wav'.format(prefix, i), s, 22050)
         for key in kwargs:
@@ -199,7 +208,7 @@ class SongAutoEncoder:
         test_loss   = []
 
         # Learning loop
-        for epoch in range(n_epoch):
+        for epoch in range(self.n_epoch):
             print('epoch', epoch + 1, flush = True)
 
             res, _ = self.challenge(train_batch, isTrain = True)
@@ -210,20 +219,24 @@ class SongAutoEncoder:
             # evaluation
             # テストデータで誤差と、正解精度を算出し汎化性能を確認
 
-            res, _ = self.challenge(test_batch, isTrain = True)
+            res, _ = self.challenge(test_batch, isTrain = False)
             # # 訓練データの誤差と、正解精度を表示
             print('test mean loss={}'.format(res))
             test_loss.append(res)
 
             if epoch % 50 == 0:
-                serializers.save_npz('Network/song_AE_{0:04d}.model'.format(epoch), model)
+                serializers.save_npz('Network/{0}_{1:04d}.model'.format(self.name, epoch), self.model)
 
         elapsedTime = time.time() - startTime
         print('Total Time: {0}[min.]'.format(elapsedTime / 60))
 
-        serializers.save_npz('Network/song_AE_final.model', model)
+        _, train_predict_batch = self.challenge(train_batch, isTrain = False)
+        _, test_predict_batch = self.challenge(test_batch, isTrain = False)
+        train_predict = self.unify_batch(train_predict_batch)
+        test_predict = self.unify_batch(test_predict_batch)
 
-        if GUI:
+
+        if self.isgui: 
             # 精度と誤差をグラフ描画
             # plt.plot(range(len(train_loss)), train_loss)
             self.visualize_loss(
@@ -233,12 +246,12 @@ class SongAutoEncoder:
 
             self.visualize_wave(
                 teacher = self.x_test[3],
-                predict = self.test_predict[3]
+                predict = test_predict[3]
             )
 
         self.write_wave(
             teacher = self.x_test[3],
-            predict = self.test_predict[3]
+            predict = test_predict[3]
         )
 
         return train_loss, test_loss
@@ -247,7 +260,7 @@ class SongAutoEncoder:
         train_batch = self.get_batch(self.x_train)
         test_batch  = self.get_batch(self.x_test)
 
-        res, train_predict_batch = self.challenge(train_batch, isTrain = True)
+        res, train_predict_batch = self.challenge(train_batch, isTrain = False)
         # # 訓練データの誤差と、正解精度を表示
         print('train mean loss={}'.format(res))
         train_loss = res
@@ -255,7 +268,7 @@ class SongAutoEncoder:
         # evaluation
         # テストデータで誤差と、正解精度を算出し汎化性能を確認
 
-        res, test_predict_batch = self.challenge(test_batch, isTrain = True)
+        res, test_predict_batch = self.challenge(test_batch, isTrain = False)
         # # 訓練データの誤差と、正解精度を表示
         print('test mean loss={}'.format(res))
         test_loss = res
@@ -263,22 +276,17 @@ class SongAutoEncoder:
         train_predict = self.unify_batch(train_predict_batch)
         test_predict = self.unify_batch(test_predict_batch)
 
-        if GUI:
+        if self.isgui:
             # 精度と誤差をグラフ描画
             # plt.plot(range(len(train_loss)), train_loss)
-            self.visualize_loss(
-                train = train_loss,
-                test  = test_loss,
-            )
-
             self.visualize_wave(
                 teacher = self.x_test[3],
-                predict = self.test_predict[3]
+                predict = test_predict[3]
             )
 
         self.write_wave(
             teacher = self.x_test[3],
-            predict = self.test_predict[3]
+            predict = test_predict[3]
         )
 
         return train_loss, test_loss
