@@ -241,31 +241,48 @@ class SongAutoEncoder:
             predict = self.test_predict[3]
         )
 
-#    def examine(modelpath, n_units = 200, layer = 20):
-#        f = sql.fetch(isTrain = True)
-#        x = np.array(f[0][args.testgroup], dtype = np.float32)
-#        y = 100 * np.log10(np.array(f[1][args.testgroup], dtype = np.float32))
-#
-#        N_test = len(y)
-#
-#        model = ChartModel(n_units = n_units, layer = layer)
-#        serializers.load_npz(modelpath, model)
-#        e, l = model.error(x, y.reshape((len(y), 1)), train = False)
-#
-#        if GUI:
-#            index = np.argsort(y, axis = 0)
-#            y = y[index[:,0],:]
-#            l = l[index[:,0],:]
-#            plt.plot(y, range(N_test), label = 'Ans.')
-#            plt.plot(l, range(N_test), label = 'Exam.')
-#            plt.legend()
-#            plt.show()
-#
-#            plt.hist(l-y, bins = 50)
-#            plt.show()
-#
-#        return e.data, np.mean(l-y), np.std(l-y)
-#
+        return train_loss, test_loss
+
+    def examine(self):
+        train_batch = self.get_batch(self.x_train)
+        test_batch  = self.get_batch(self.x_test)
+
+        res, train_predict_batch = self.challenge(train_batch, isTrain = True)
+        # # 訓練データの誤差と、正解精度を表示
+        print('train mean loss={}'.format(res))
+        train_loss = res
+
+        # evaluation
+        # テストデータで誤差と、正解精度を算出し汎化性能を確認
+
+        res, test_predict_batch = self.challenge(test_batch, isTrain = True)
+        # # 訓練データの誤差と、正解精度を表示
+        print('test mean loss={}'.format(res))
+        test_loss = res
+
+        train_predict = self.unify_batch(train_predict_batch)
+        test_predict = self.unify_batch(test_predict_batch)
+
+        if GUI:
+            # 精度と誤差をグラフ描画
+            # plt.plot(range(len(train_loss)), train_loss)
+            self.visualize_loss(
+                train = train_loss,
+                test  = test_loss,
+            )
+
+            self.visualize_wave(
+                teacher = self.x_test[3],
+                predict = self.test_predict[3]
+            )
+
+        self.write_wave(
+            teacher = self.x_test[3],
+            predict = self.test_predict[3]
+        )
+
+        return train_loss, test_loss
+
 #    def analyze(mvid, n_units = 200, layer = 20):
 #        model = ChartModel(n_units = n_units, layer = layer)
 #        serializers.load_npz(args.modelfile[0], model)
