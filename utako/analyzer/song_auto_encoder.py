@@ -226,10 +226,10 @@ class SongAutoEncoder:
         if GUI:
             # 精度と誤差をグラフ描画
             # plt.plot(range(len(train_loss)), train_loss)
-            self.visualize_loss({
-                'train': train_loss,
-                'test' : test_loss,
-            })
+            self.visualize_loss(
+                train = train_loss,
+                test  = test_loss,
+            )
 
             self.visualize_wave(
                 teacher = self.x_test[3],
