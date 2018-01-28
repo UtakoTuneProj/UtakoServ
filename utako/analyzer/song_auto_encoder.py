@@ -180,15 +180,12 @@ class SongAutoEncoder:
         plt.legend()
         plt.show()
 
-    def write_wave(self, data, prefix = 'autoencode'):
-        if data.ndim == 1:
-            teacher = data.reshape((1, len(data)))
-        else:
-            raise ValueError('data must be 1-dim')
-        _, prediction_batch = self.challenge(self.get_batch(teacher))
-        prediction = self.unify_batch(prediction_batch)
-        librosa.output.write_wav(prefix + '.orig.wav', teacher, 22050)
-        librosa.output.write_wav(prefix + '.pred.wav', prediction, 22050)
+    def write_wave(self, prefix = 'autoencode', *args, **kwargs):
+        for i, s in enumerate(args):
+            librosa.output.write_wav('{}.{}.wav'.format(prefix, i), s, 22050)
+        for key in kwargs:
+            s = kwargs[key]
+            librosa.output.write_wav('{}.{}.wav'.format(prefix, key), s, 22050)
 
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
@@ -240,7 +237,8 @@ class SongAutoEncoder:
             )
 
         self.write_wave(
-            self.x_test[3]
+            teacher = self.x_test[3],
+            predict = self.test_predict[3]
         )
 
 #    def examine(modelpath, n_units = 200, layer = 20):
