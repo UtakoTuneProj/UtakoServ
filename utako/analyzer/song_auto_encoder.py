@@ -169,15 +169,14 @@ class SongAutoEncoder:
         plt.yscale('log')
         plt.show()
 
-    def visualize_wave(self, data):
-        if data.ndim == 1:
-            teacher = data.reshape((1, len(data)))
-        else:
-            raise ValueError('data must be 1-dim')
-        _, prediction_batch = self.challenge(self.get_batch(teacher))
-        prediction = self.unify_batch(prediction_batch)
-        librosa.display.waveplot(teacher, label = 'teacher', alpha = 0.4)
-        librosa.display.waveplot(prediction, label = 'prediction', alpha = 0.4)
+    def visualize_wave(self, *args, **kwargs):
+        for i, s in enumerate(args):
+            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
+            librosa.display.waveplot(s, label = str(i), alpha = 0.4)
+
+        for key in kwargs:
+            s = kwargs[key]
+            librosa.display.waveplot(s, label = key, alpha = 0.4)
         plt.legend()
         plt.show()
 
@@ -236,7 +235,8 @@ class SongAutoEncoder:
             })
 
             self.visualize_wave(
-                self.x_test[3]
+                teacher = self.x_test[3],
+                predict = self.test_predict[3]
             )
 
         self.write_wave(
