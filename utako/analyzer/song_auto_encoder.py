@@ -149,21 +149,20 @@ class SongAutoEncoder:
         if isTrain:
             cupy.random.shuffle(perm)
         for i in perm:
-            batch_cell = batch[i]
             loss = 0
-            # 勾配を初期化
-            self.model.cleargrads()
             # initialize State
             self.model.reset_state()
-            for j, time_cell in enumerate(batch_cell):
+            for j in cupy.arange(time_count):
+                # 勾配を初期化
+                self.model.cleargrads()
                 # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(time_cell, time_cell)
+                moment_error, moment_prediction = self.model.error(batch[i,j,:,:], batch[i,j,:,:])
                 if isTrain:
                     # 誤差逆伝播で勾配を計算
                     moment_error.backward()
-                loss = moment_error.data
-                prediction[i][j] = moment_prediction
-            self.optimizer.update()
+                    self.optimizer.update()
+                loss += moment_error.data
+                prediction[i, j, :, :] = moment_prediction
             sum_loss += loss
 
         return float(sum_loss), prediction
