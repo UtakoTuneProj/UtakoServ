@@ -235,6 +235,8 @@ class SongAutoEncoder:
         elapsedTime = time.time() - startTime
         print('Total Time: {0}[min.]'.format(elapsedTime / 60))
 
+        serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
+
         _, train_predict_batch = self.challenge(train_batch, isTrain = False)
         _, test_predict_batch = self.challenge(test_batch, isTrain = False)
         train_predict = self.unify_batch(train_predict_batch)
