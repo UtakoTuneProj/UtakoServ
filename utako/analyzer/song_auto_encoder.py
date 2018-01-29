@@ -67,16 +67,21 @@ class SongAutoEncoder:
         self.isgui      = isgui 
         self.preprocess = preprocess
         self.postprocess= postprocess
+        self.basename  = 'result/{}'.format(name)
 
         if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(n_units, modelclass)
+        self.set_model(n_units, modelclass, self.basename+'.model')
         self.set_data(x_train, x_test)
 
-    def set_model(self, n_units, modelclass):
+    def set_model(self, n_units, modelclass, modelfile = None):
         self.n_units = n_units
         self.in_size = n_units[0]
         self.model = modelclass(n_units = self.n_units)
+
+        if (modelfile is not None) and (os.path.isfile(modelfile)):
+            serializers.load_npz(modelfile, self.model)
+
         if self.isgpu:
             self.model.to_gpu()  # Copy the model to the GPU
 
@@ -190,7 +195,7 @@ class SongAutoEncoder:
 
     def write_wave(self, prefix = None, *args, **kwargs):
         if prefix is None:
-            prefix = self.name
+            prefix = self.basename
         for i, s in enumerate(args):
             librosa.output.write_wav('{}.{}.wav'.format(prefix, i), s, 22050)
         for key in kwargs:
@@ -226,7 +231,7 @@ class SongAutoEncoder:
             test_loss.append(res)
 
             if epoch % 50 == 0:
-                serializers.save_npz('result/{0}_{1:04d}.model'.format(self.name, epoch), self.model)
+                serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
 
         elapsedTime = time.time() - startTime
         print('Total Time: {0}[min.]'.format(elapsedTime / 60))
@@ -255,7 +260,7 @@ class SongAutoEncoder:
             predict = test_predict[3]
         )
 
-        with open('result/{}.json'.format(self.name), 'w') as f:
+        with open('{}.json'.format(self.basename), 'w') as f:
             json.dump([train_loss, test_loss], f)
 
         return train_loss, test_loss
