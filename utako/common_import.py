@@ -26,6 +26,7 @@ import numpy as np
 import scipy.cluster
 import tweepy
 import yaml
+cupy = cuda.cupy
 
 config = configparser.ConfigParser()
 config.read('conf/auth.conf')

@@ -33,9 +33,8 @@ class SongAutoEncoderSigmoidModel(ChainList):
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
         t = Variable(y_data)
-        ret = y.data
 
-        return F.mean_squared_error(y,t), ret
+        return F.mean_squared_error(y,t), y.data
 
 class SongAutoEncoderReluModel(SongAutoEncoderSigmoidModel):
     def __call__(self, x):
@@ -104,68 +103,61 @@ class SongAutoEncoder:
         random = False,
         batchsize = None,
     ):
+        data_size, length = data.shape
         if batchsize is None:
             batchsize = self.batchsize
 
-        if random:
-            perm = np.random.permutation(len(data))
-        else:
-            perm = np.arange(len(data))
+        if data_size % batchsize != 0:
+            data = np.append(
+                data,
+                data[np.random.permutation(
+                    batchsize - data_size % batchsize
+            ) % data_size], axis = 0)
+
+        if self.isgpu:
+            data = cuda.to_gpu(data)
 
         data_size, length = data.shape
-        tmp = [[ self.preprocess(
-                data[perm[i:i+batchsize],
-                j : j + self.in_size
-            ]) for j in range(0, length, self.in_size)
-            ] for i in range(0, data_size, batchsize)
-        ]
-        if self.isgpu:
-            batch = []
-            for c1 in tmp:
-                batch.append([])
-                for c0 in c1: #時間方向
-                    batch[-1].append(cuda.to_gpu(np.array(c0, dtype = np.float32)))
-        else:
-            batch = tmp
+        if random:
+            cupy.random.shuffle(data)
+        batch = data.reshape(
+            data_size // batchsize,
+            batchsize,
+            length // self.in_size,
+            self.in_size
+        ).transpose(0,2,1,3)
 
-        return batch
+        return batch 
     
     def unify_batch(self, batch):
-        batch_count = len(batch)
-        for i, batch_cell in enumerate(batch):
-            batch_size, length = batch_cell[0].shape
-            cell = np.zeros((batch_size, 0))
-            for time_cell in batch_cell:
-                if self.isgpu:
-                    tmp = cuda.to_cpu(time_cell)
-                else:
-                    tmp = time_cell
-                cell = np.append(cell, self.postprocess(tmp), axis = 1)
-            if i == 0:
-                unified = cell
-            else:
-                unified = np.append(unified, cell, axis = 0)
-        return unified
+        batch_count, time_count, batchsize, timesize = batch.shape
+        res = batch.transpose(0,2,1,3).reshape(batch_count * batchsize, time_count * timesize)
+        if self.isgpu:
+            res = cuda.to_cpu(res)
+        return res
 
     def challenge(self, batch, isTrain = False):
-        batch_count  = len(batch)
+        batch_count, time_count, batchsize, timesize = batch.shape
+        prediction   = cupy.zeros(batch.shape)
         sum_loss     = 0
-        prediction   = [[] for i in range(batch_count)]
-        for i in np.random.permutation(batch_count):
+        perm = cupy.arange(batch_count)
+        if isTrain:
+            cupy.random.shuffle(perm)
+        for i in perm:
             batch_cell = batch[i]
             loss = 0
             # 勾配を初期化
             self.model.cleargrads()
             # initialize State
             self.model.reset_state()
-            for time_cell in batch_cell:
+            for j, time_cell in enumerate(batch_cell):
                 # 順伝播させて誤差と精度を算出
                 moment_error, moment_prediction = self.model.error(time_cell, time_cell)
                 if isTrain:
                     # 誤差逆伝播で勾配を計算
                     moment_error.backward()
                 loss = moment_error.data
-                prediction[i].append(moment_prediction)
+                prediction[i][j] = moment_prediction
             self.optimizer.update()
             sum_loss += loss
 
