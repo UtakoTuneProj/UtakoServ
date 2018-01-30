@@ -195,14 +195,10 @@ class SongAutoEncoder:
         plt.legend()
         plt.show()
 
-    def write_wave(self, prefix = None, *args, **kwargs):
-        if prefix is None:
-            prefix = self.basename
-        for i, s in enumerate(args):
-            librosa.output.write_wav('{}.{}.wav'.format(prefix, i), s, 22050)
-        for key in kwargs:
-            s = kwargs[key]
-            librosa.output.write_wav('{}.{}.wav'.format(prefix, key), s, 22050)
+    def write_wave(self, wave, fname = None):
+        if fname is None:
+            fname = self.basename + '.wav'
+        librosa.output.write_wav(fname, wave, sr=22050)
 
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
@@ -262,10 +258,8 @@ class SongAutoEncoder:
             )
 
 
-        self.write_wave(
-            teacher = self.x_test[3],
-            predict = test_predict[3]
-        )
+        self.write_wave(self.x_test[3], fname = self.basename + '_teacher.wav')
+        self.write_wave(self.test_predict[3], fname = self.basename + '_predict.wav')
 
         with open('{}.json'.format(self.basename), 'w') as f:
             json.dump([train_loss, test_loss], f)
@@ -300,10 +294,8 @@ class SongAutoEncoder:
                 )
             )
 
-        self.write_wave(
-            teacher = self.x_test[3],
-            predict = test_predict[3]
-        )
+        self.write_wave(self.x_test[3], fname = self.basename + '_teacher.wav')
+        self.write_wave(test_predict[3], fname = self.basename + '_predict.wav')
 
         return train_loss, test_loss
 
