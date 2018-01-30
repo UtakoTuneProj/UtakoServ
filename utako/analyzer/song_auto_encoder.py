@@ -236,12 +236,6 @@ class SongAutoEncoder:
 
         serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
 
-        _, train_predict_batch = self.challenge(train_batch, isTrain = False)
-        _, test_predict_batch = self.challenge(test_batch, isTrain = False)
-        train_predict = self.unify_batch(train_predict_batch)
-        test_predict = self.unify_batch(test_predict_batch)
-
-
         if self.isgui: 
             # 精度と誤差をグラフ描画
             # plt.plot(range(len(train_loss)), train_loss)
@@ -250,16 +244,7 @@ class SongAutoEncoder:
                 test  = test_loss,
             )
 
-            self.visualize_wave(
-                waves = dict(
-                    teacher = self.x_test[3],
-                    predict = test_predict[3]
-                )
-            )
-
-
-        self.write_wave(self.x_test[3], fname = self.basename + '_teacher.wav')
-        self.write_wave(self.test_predict[3], fname = self.basename + '_predict.wav')
+        self.examine()
 
         with open('{}.json'.format(self.basename), 'w') as f:
             json.dump([train_loss, test_loss], f)
