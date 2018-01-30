@@ -206,7 +206,7 @@ class SongAutoEncoder:
     def learn(self):
         startTime = time.time()
 
-        train_batch = self.get_batch(self.x_train)
+        train_batch = self.get_batch(self.x_train, random = True)
         test_batch  = self.get_batch(self.x_test)
         train_loss  = []
         test_loss   = []
