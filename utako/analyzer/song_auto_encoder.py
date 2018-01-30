@@ -181,14 +181,17 @@ class SongAutoEncoder:
         plt.yscale('log')
         plt.show()
 
-    def visualize_wave(self, *args, **kwargs):
-        for i, s in enumerate(args):
-            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
-            librosa.display.waveplot(s, label = str(i), alpha = 0.4)
+    def visualize_wave(self, waves, **kwargs):
+        if type(waves) is dict:
+            for key in waves:
+                s = waves[key]
+                librosa.display.waveplot(s, label = key, alpha = 0.4, **kwargs)
+        elif type(waves) in (list, np.ndarray)
+            for i, s in enumerate(args):
+                librosa.display.waveplot(s, label = str(i), alpha = 0.4, **kwargs)
+        else:
+            raise TypeError('SAE.visualize_wave only accepts dict, list or np.ndarray as waves. Not {}'.format(type(waves)))
 
-        for key in kwargs:
-            s = kwargs[key]
-            librosa.display.waveplot(s, label = key, alpha = 0.4)
         plt.legend()
         plt.show()
 
@@ -252,9 +255,12 @@ class SongAutoEncoder:
             )
 
             self.visualize_wave(
-                teacher = self.x_test[3],
-                predict = test_predict[3]
+                waves = dict(
+                    teacher = self.x_test[3],
+                    predict = test_predict[3]
+                )
             )
+
 
         self.write_wave(
             teacher = self.x_test[3],
@@ -287,11 +293,11 @@ class SongAutoEncoder:
         test_predict = self.unify_batch(test_predict_batch)
 
         if self.isgui:
-            # 精度と誤差をグラフ描画
-            # plt.plot(range(len(train_loss)), train_loss)
             self.visualize_wave(
-                teacher = self.x_test[3],
-                predict = test_predict[3]
+                waves = dict(
+                    teacher = self.x_trial[i],
+                    predict = trial_predict[i],
+                )
             )
 
         self.write_wave(
