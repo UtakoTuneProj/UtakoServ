@@ -266,36 +266,50 @@ class SongAutoEncoder:
 
         return train_loss, test_loss
 
-    def examine(self):
+    def examine(self, trial = None):
+        # trial: list/dict: list/dict for plot waveform and/or save wave
+        if trial is None:
+            trial = {
+                'train': self.x_trial[3]
+                'test' : self.x_test[3]
+            }
+        if type(trial) == dict:
+            trial_keys, trial_values = zip(*trial.items())
+            x_trial = np.array(trial_values)
+        else type(trial) in (list, np.ndarray):
+            trial_keys = range(len(trial))
+            x_trial = trial
+        else:
+            raise TypeError('SAE.examine only accepts dict, list or np.ndarray as trial. Not {}'.format(type(trial)))
+
         train_batch = self.get_batch(self.x_train)
         test_batch  = self.get_batch(self.x_test)
+        trial_batch = self.get_batch(x_trial)
 
-        res, train_predict_batch = self.challenge(train_batch, isTrain = False)
-        # # 訓練データの誤差と、正解精度を表示
-        print('train mean loss={}'.format(res))
-        train_loss = res
+        train_loss, _ = self.challenge(train_batch, isTrain = False)
+        test_loss, _ = self.challenge(test_batch, isTrain = False)
+        _, trial_predict_batch = self.challenge(trial_batch, isTrain = False)
+        print('train mean loss={}'.format(train_loss))
+        print('test mean loss={}'.format(test_loss))
 
-        # evaluation
-        # テストデータで誤差と、正解精度を算出し汎化性能を確認
+        trial_predict = self.unify_batch(trial_predict_batch)
 
-        res, test_predict_batch = self.challenge(test_batch, isTrain = False)
-        # # 訓練データの誤差と、正解精度を表示
-        print('test mean loss={}'.format(res))
-        test_loss = res
-
-        train_predict = self.unify_batch(train_predict_batch)
-        test_predict = self.unify_batch(test_predict_batch)
-
-        if self.isgui:
-            self.visualize_wave(
-                waves = dict(
-                    teacher = self.x_trial[i],
-                    predict = trial_predict[i],
-                )
+        for i, key in enumerate(trial_keys):
+            waves = dict(
+                teacher = self.x_trial[i],
+                predict = trial_predict[i],
             )
+            if self.isgui:
+                self.visualize_wave(
+                    waves = waves
+                    title = key,
+                )
 
-        self.write_wave(self.x_test[3], fname = self.basename + '_teacher.wav')
-        self.write_wave(test_predict[3], fname = self.basename + '_predict.wav')
+            for keyw in waves:
+                self.write_wave(
+                    self.x_test[waves],
+                    fname = '{}_{}.wav'.format(self.basename, keyw)
+                )
 
         return train_loss, test_loss
 
