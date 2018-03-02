@@ -184,7 +184,7 @@ class SongAutoEncoder:
         plt.yscale('log')
         plt.show()
 
-    def visualize_wave(self, waves, **kwargs):
+    def visualize_wave(self, waves, title = None, **kwargs):
         if type(waves) is dict:
             for key in waves:
                 s = waves[key]
@@ -195,6 +195,7 @@ class SongAutoEncoder:
         else:
             raise TypeError('SAE.visualize_wave only accepts dict, list or np.ndarray as waves. Not {}'.format(type(waves)))
 
+        plt.title(title)
         plt.legend()
         plt.show()
 
