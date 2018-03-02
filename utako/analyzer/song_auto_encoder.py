@@ -224,43 +224,48 @@ class SongAutoEncoder:
         train_loss  = []
         test_loss   = []
 
-        # Learning loop
-        for epoch in range(self.n_epoch):
-            print('epoch', epoch + 1, flush = True)
+        try:
+            # Learning loop
+            for epoch in range(self.n_epoch):
+                print('epoch', epoch + 1, flush = True)
 
-            res, _ = self.challenge(train_batch, isTrain = True)
-            # # 訓練データの誤差と、正解精度を表示
-            print('train mean loss={}'.format(res))
-            train_loss.append(res)
+                res, _ = self.challenge(train_batch, isTrain = True)
+                # # 訓練データの誤差と、正解精度を表示
+                print('train mean loss={}'.format(res))
+                train_loss.append(res)
 
-            # evaluation
-            # テストデータで誤差と、正解精度を算出し汎化性能を確認
+                # evaluation
+                # テストデータで誤差と、正解精度を算出し汎化性能を確認
 
-            res, _ = self.challenge(test_batch, isTrain = False)
-            # # 訓練データの誤差と、正解精度を表示
-            print('test mean loss={}'.format(res))
-            test_loss.append(res)
+                res, _ = self.challenge(test_batch, isTrain = False)
+                # # 訓練データの誤差と、正解精度を表示
+                print('test mean loss={}'.format(res))
+                test_loss.append(res)
 
-            if epoch % 50 == 0:
-                serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
+                if epoch % 50 == 0:
+                    serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
 
-        elapsedTime = time.time() - startTime
-        print('Total Time: {0}[min.]'.format(elapsedTime / 60))
+        except KeyboardInterrupt:
+            print('Interrupted')
 
-        serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
+        finally:
+            elapsedTime = time.time() - startTime
+            print('Total Time: {0}[min.]'.format(elapsedTime / 60))
 
-        if self.isgui: 
-            # 精度と誤差をグラフ描画
-            # plt.plot(range(len(train_loss)), train_loss)
-            self.visualize_loss(
-                train = train_loss,
-                test  = test_loss,
-            )
+            serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
 
-        self.examine()
+            if self.isgui: 
+                # 精度と誤差をグラフ描画
+                # plt.plot(range(len(train_loss)), train_loss)
+                self.visualize_loss(
+                    train = train_loss,
+                    test  = test_loss,
+                )
 
-        with open('{}.json'.format(self.basename), 'w') as f:
-            json.dump([train_loss, test_loss], f)
+            self.examine()
+
+            with open('{}.json'.format(self.basename), 'w') as f:
+                json.dump([train_loss, test_loss], f)
 
         return train_loss, test_loss
 
