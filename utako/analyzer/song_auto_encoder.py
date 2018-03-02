@@ -9,13 +9,22 @@ import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
 class SongAutoEncoderSigmoidModel(ChainList):
-    def __init__(self, n_units):
-        self.l = [
-            L.Linear(*n_units[i:i+2])
-            for i in range(len(n_units) - 1)
-        ]
-        self.l[1] = L.LSTM(*n_units[1:3])
-        self.l[-2] = L.LSTM(*n_units[-3:-1])
+    def __init__(self, layers = None):
+        # n_units: 
+        # model architecture
+        self.l = []
+
+        if isinstance(layers[0], L.Link):
+            self.l = layers
+
+        elif type(layer) == int:
+            self.l = [
+                L.Linear(*n_units[i:i+2])
+                for i in range(len(n_units) - 1)
+            ]
+            self.l[1] = L.LSTM(*n_units[1:3])
+            self.l[-2] = L.LSTM(*n_units[-3:-1])
+
         super().__init__(*self.l)
 
     def __call__(self, x):
