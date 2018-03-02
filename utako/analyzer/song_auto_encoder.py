@@ -189,7 +189,7 @@ class SongAutoEncoder:
             for key in waves:
                 s = waves[key]
                 librosa.display.waveplot(s, label = key, alpha = 0.4, **kwargs)
-        elif type(waves) in (list, np.ndarray)
+        elif type(waves) in (list, np.ndarray):
             for i, s in enumerate(args):
                 librosa.display.waveplot(s, label = str(i), alpha = 0.4, **kwargs)
         else:
@@ -258,13 +258,13 @@ class SongAutoEncoder:
         # trial: list/dict: list/dict for plot waveform and/or save wave
         if trial is None:
             trial = {
-                'train': self.x_trial[3]
-                'test' : self.x_test[3]
+                'train': self.x_train[3],
+                'test' : self.x_test[3],
             }
         if type(trial) == dict:
             trial_keys, trial_values = zip(*trial.items())
             x_trial = np.array(trial_values)
-        else type(trial) in (list, np.ndarray):
+        elif type(trial) in (list, np.ndarray):
             trial_keys = range(len(trial))
             x_trial = trial
         else:
@@ -284,19 +284,19 @@ class SongAutoEncoder:
 
         for i, key in enumerate(trial_keys):
             waves = dict(
-                teacher = self.x_trial[i],
+                teacher = x_trial[i],
                 predict = trial_predict[i],
             )
             if self.isgui:
                 self.visualize_wave(
-                    waves = waves
+                    waves = waves,
                     title = key,
                 )
 
             for keyw in waves:
                 self.write_wave(
-                    self.x_test[waves],
-                    fname = '{}_{}.wav'.format(self.basename, keyw)
+                    waves[keyw],
+                    fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
                 )
 
         return train_loss, test_loss
