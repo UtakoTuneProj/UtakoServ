@@ -4,7 +4,13 @@ __pycache__/
 ranking/
 *.conf
 *.swp
+*.wav
+test.npy
+train.npy
 chart[0-9]*.model
 Chainertest/result/
 logs/
 songset/
+Network/180128a/
+Network/180128b/
+result/
