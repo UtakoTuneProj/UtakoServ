@@ -119,26 +119,29 @@ class SongAutoEncoder:
                     batchsize - data_size % batchsize
             ) % data_size], axis = 0)
 
-        if self.isgpu:
-            data = cuda.to_gpu(data)
-
         data_size, length = data.shape
         if random:
-            cupy.random.shuffle(data)
+            np.random.shuffle(data)
         batch = data.reshape(
             data_size // batchsize,
             batchsize,
             length // self.in_size,
             self.in_size
         ).transpose(0,2,1,3)
+            
+        batch = self.preprocess(batch)
+
+        if self.isgpu:
+            batch = cuda.to_gpu(batch)
 
         return batch 
     
     def unify_batch(self, batch):
         batch_count, time_count, batchsize, timesize = batch.shape
-        res = batch.transpose(0,2,1,3).reshape(batch_count * batchsize, time_count * timesize)
         if self.isgpu:
-            res = cuda.to_cpu(res)
+            batch = cuda.to_cpu(batch)
+        batch = self.postprocess(batch)
+        res = batch.transpose(0,2,1,3).reshape(batch_count * batchsize, time_count * timesize)
         return res
 
     def challenge(self, batch, isTrain = False):
