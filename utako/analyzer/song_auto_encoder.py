@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
 from utako.common_import import *
+import chainer
 import functools
 import librosa
 import librosa.display
@@ -50,6 +51,8 @@ class SongAutoEncoderChain(ChainList):
                     func = F.reshape
                 elif functype == 'pass':
                     func = F.broadcast
+                elif functype == 'drop':
+                    func = F.dropout
                 else:
                     raise TypeError('func type {} cannot be recognized'.format(functype))
                 funcs_sub.append(functools.partial(func, **func_def['args']))
@@ -177,6 +180,9 @@ class SongAutoEncoder:
         return res
 
     def challenge(self, batch, isTrain = False):
+        train_status = chainer.config.train
+        chainer.config.train = isTrain
+        
         batch_count, batchsize, channels, timesize = batch.shape
         prediction   = cupy.zeros(batch.shape)
         sum_loss     = 0
@@ -200,6 +206,7 @@ class SongAutoEncoder:
                 prediction[i, :, :, :] = moment_prediction
             sum_loss += loss
 
+        chainer.config.train = train_status
         return float(sum_loss), prediction
 
     def visualize_loss(self, *args, **kwargs):
@@ -260,10 +267,11 @@ class SongAutoEncoder:
                 # evaluation
                 # テストデータで誤差と、正解精度を算出し汎化性能を確認
 
-                res, _ = self.challenge(test_batch, isTrain = False)
-                # # 訓練データの誤差と、正解精度を表示
-                print('test mean loss={}'.format(res))
-                test_loss.append(res)
+                with chainer.using_config('train', False):
+                    res, _ = self.challenge(test_batch, isTrain = False)
+                    # # 訓練データの誤差と、正解精度を表示
+                    print('test mean loss={}'.format(res))
+                    test_loss.append(res)
 
                 if epoch % 50 == 0:
                     serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
@@ -293,6 +301,9 @@ class SongAutoEncoder:
         return train_loss, test_loss
 
     def examine(self, trial = None):
+        train_status = chainer.config.train
+        chainer.config.train = False
+
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
         trial = {
             'train': self.x_train[3],
@@ -336,6 +347,7 @@ class SongAutoEncoder:
                     fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
                 )
 
+        chainer.config.train = train_status
         return train_loss, test_loss
 
 #    def analyze(mvid, n_units = 200, layer = 20):
