@@ -1,0 +1,110 @@
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 1
+      out_channels: 4
+      ksize: 513
+  func:
+    type: 'pool'
+    args:
+      ksize: 8
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 4
+      out_channels: 16
+      ksize: 257
+  func:
+    type: 'pool'
+    args:
+      ksize: 4
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 16
+      out_channels: 64
+      ksize: 129
+  func:
+    type: 'pool'
+    args:
+      ksize: 2
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 1536
+      out_size: 1024
+  func:
+    type: 'relu'
+    args: {}
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 1024
+      out_size: 512
+  func:
+    - 
+      type: 'relu'
+      args: {}
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 512
+      out_size: 1024
+  func:
+    - 
+      type: 'relu'
+      args: {}
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 1024
+      out_size: 15360
+  func:
+    - 
+      type: 'relu'
+      args: {}
+    - 
+      type: 'reshape'
+      args:
+        shape:
+          - 50
+          - 8
+          - 1920
+- 
+  link:
+    type: 'deconv'
+    args:
+      ndim: 1
+      in_channels: 8
+      out_channels: 4
+      ksize: 65
+  func:
+    type: 'unpool'
+    args:
+      ksize: 2
+      outsize:
+        !!python/tuple [3968]
+- 
+  link:
+    type: 'deconv'
+    args:
+      ndim: 1
+      in_channels: 4
+      out_channels: 1
+      ksize: 129
+  func:
+    type: 'unpool'
+    args:
+      ksize: 2
+      outsize:
+        !!python/tuple [8192]

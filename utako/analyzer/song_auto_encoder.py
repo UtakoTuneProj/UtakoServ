@@ -2,42 +2,74 @@
 # -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
 from utako.common_import import *
+import functools
 import librosa
 import librosa.display
 from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
-class SongAutoEncoderSigmoidModel(ChainList):
-    def __init__(self, layers = None):
-        # n_units: 
-        # model architecture
-        self.l = []
+class SongAutoEncoderChain(ChainList):
+    def __init__(self, structure):
+        # structure:
+        # list of Chain
+        # example is shown in conf/sae.yaml
+        self.links = []
+        self.funcs = []
 
-        if isinstance(layers[0], L.Link):
-            self.l = layers
+        for layer in structure:
+            linktype = layer['link']['type']
+            if linktype == 'conv':
+                cls = L.ConvolutionND
+            elif linktype == 'deconv':
+                cls = L.DeconvolutionND
+            elif linktype == 'linear':
+                cls = L.Linear
+            elif linktype == 'lstm':
+                cls = L.LSTM
+            elif linktype == 'pass':
+                cls = L.Parameter
+            else:
+                raise TypeError('link type {} cannot be recognized'.format(linktype))
 
-        elif type(layer) == int:
-            self.l = [
-                L.Linear(*n_units[i:i+2])
-                for i in range(len(n_units) - 1)
-            ]
-            self.l[1] = L.LSTM(*n_units[1:3])
-            self.l[-2] = L.LSTM(*n_units[-3:-1])
+            self.links.append(cls(**layer['link']['args']))
 
-        super().__init__(*self.l)
+            funcs_sub = []
+            func_defs = layer['func']
+            if type(func_defs) not in ( list, tuple ):
+                func_defs = ( func_defs, )
+            for func_def in func_defs:
+                functype = func_def['type']
+                if functype == 'pool':
+                    func = F.max_pooling_nd
+                elif functype == 'unpool':
+                    func = F.unpooling_nd 
+                elif functype == 'relu':
+                    func = F.relu
+                elif functype == 'reshape':
+                    func = F.reshape
+                elif functype == 'pass':
+                    func = F.broadcast
+                else:
+                    raise TypeError('func type {} cannot be recognized'.format(functype))
+                funcs_sub.append(functools.partial(func, **func_def['args']))
+
+            self.funcs.append(funcs_sub)
+            
+        super().__init__(*self.links)
 
     def __call__(self, x):
-        h = -x
-        for i in range(self.__len__() - 1):
-            layer = self.__getitem__(i)
-            h = F.sigmoid(layer(h))
-        o_layer = self.__getitem__(i+1)
-        return o_layer(h)
+        h = x
+        for link, funcs in zip(self.links, self.funcs):
+            h = link(h)
+            for func in funcs:
+                h = func(h)
+        return h
 
     def reset_state(self):
-        self.l[1].reset_state()
-        self.l[-2].reset_state()
+        for layer in self.links:
+            if type(layer) == L.LSTM:
+                layer.reset_state()
 
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
@@ -45,19 +77,10 @@ class SongAutoEncoderSigmoidModel(ChainList):
 
         return F.mean_squared_error(y,t), y.data
 
-class SongAutoEncoderReluModel(SongAutoEncoderSigmoidModel):
-    def __call__(self, x):
-        h = -x
-        for i in range(self.__len__() - 1):
-            layer = self.__getitem__(i)
-            h = F.relu(layer(h))
-        o_layer = self.__getitem__(i+1)
-        return o_layer(h)
-
 class SongAutoEncoder:
     def __init__(
         self,
-        n_units,
+        structure,
         name = 'song_AE',
         n_epoch = 300,
         batchsize = 50,
@@ -67,7 +90,7 @@ class SongAutoEncoder:
         isgui = True,
         preprocess = lambda x: x,
         postprocess = lambda x: x,
-        modelclass = SongAutoEncoderSigmoidModel
+        modelclass = SongAutoEncoderChain
     ):
         self.n_epoch    = n_epoch
         self.name       = name
@@ -80,13 +103,13 @@ class SongAutoEncoder:
 
         if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(n_units, modelclass, self.basename+'.model')
+        self.set_model(structure, modelclass, self.basename+'.model')
         self.set_data(x_train, x_test)
 
-    def set_model(self, n_units, modelclass, modelfile = None):
-        self.n_units = n_units
-        self.in_size = n_units[0]
-        self.model = modelclass(n_units = self.n_units)
+    def set_model(self, structure, modelclass, modelfile = None):
+        self.structure = structure
+        self.in_size = structure[0]
+        self.model = modelclass(structure = self.structure)
 
         if (modelfile is not None) and (os.path.isfile(modelfile)):
             serializers.load_npz(modelfile, self.model)
@@ -134,9 +157,9 @@ class SongAutoEncoder:
         batch = data.reshape(
             data_size // batchsize,
             batchsize,
-            length // self.in_size,
-            self.in_size
-        ).transpose(0,2,1,3)
+            1,
+            length
+        )
             
         batch = self.preprocess(batch)
 
@@ -146,35 +169,35 @@ class SongAutoEncoder:
         return batch 
     
     def unify_batch(self, batch):
-        batch_count, time_count, batchsize, timesize = batch.shape
+        batch_count, batchsize, channels, timesize = batch.shape
         if self.isgpu:
             batch = cuda.to_cpu(batch)
         batch = self.postprocess(batch)
-        res = batch.transpose(0,2,1,3).reshape(batch_count * batchsize, time_count * timesize)
+        res = batch.reshape(batch_count * batchsize, channels * timesize)
         return res
 
     def challenge(self, batch, isTrain = False):
-        batch_count, time_count, batchsize, timesize = batch.shape
+        batch_count, batchsize, channels, timesize = batch.shape
         prediction   = cupy.zeros(batch.shape)
         sum_loss     = 0
-        perm = cupy.arange(batch_count)
+        perm = np.arange(batch_count)
         if isTrain:
-            cupy.random.shuffle(perm)
+            np.random.shuffle(perm)
         for i in perm:
             loss = 0
             # initialize State
             self.model.reset_state()
-            for j in cupy.arange(time_count):
+            for j in cupy.arange(1):
                 # 勾配を初期化
                 self.model.cleargrads()
                 # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(batch[i,j,:,:], batch[i,j,:,:])
+                moment_error, moment_prediction = self.model.error(batch[i,:,:,:], batch[i,:,:,:])
                 if isTrain:
                     # 誤差逆伝播で勾配を計算
                     moment_error.backward()
                     self.optimizer.update()
                 loss += moment_error.data
-                prediction[i, j, :, :] = moment_prediction
+                prediction[i, :, :, :] = moment_prediction
             sum_loss += loss
 
         return float(sum_loss), prediction
@@ -211,7 +234,7 @@ class SongAutoEncoder:
     def write_wave(self, wave, fname = None):
         if fname is None:
             fname = self.basename + '.wav'
-        librosa.output.write_wav(fname, wave, sr=22050)
+        librosa.output.write_wav(fname, wave, sr=5513)
 
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
@@ -270,12 +293,11 @@ class SongAutoEncoder:
         return train_loss, test_loss
 
     def examine(self, trial = None):
-        # trial: list/dict: list/dict for plot waveform and/or save wave
-        if trial is None:
-            trial = {
-                'train': self.x_train[3],
-                'test' : self.x_test[3],
-            }
+        # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
+        trial = {
+            'train': self.x_train[3],
+            'test' : self.x_test[3],
+        }
         if type(trial) == dict:
             trial_keys, trial_values = zip(*trial.items())
             x_trial = np.array(trial_values)
