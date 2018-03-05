@@ -179,7 +179,7 @@ class SongAutoEncoder:
         res = batch.reshape(batch_count * batchsize, channels * timesize)
         return res
 
-    def challenge(self, batch, isTrain = False):
+    def challenge(self, batch, isTrain = False, noise_scale = 0.10):
         train_status = chainer.config.train
         chainer.config.train = isTrain
         
@@ -196,8 +196,17 @@ class SongAutoEncoder:
             for j in cupy.arange(1):
                 # 勾配を初期化
                 self.model.cleargrads()
+                # ノイズを付加
+                if False:
+                    noise = np.random.normal(scale = noise_scale, size = (batchsize, channels, timesize))
+                else:
+                    noise = np.zeros((batchsize, channels, timesize))
+                noise = np.array(noise, dtype = np.float32)
+                if self.isgpu:
+                    noise = cuda.to_gpu(noise)
+                    
                 # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(batch[i,:,:,:], batch[i,:,:,:])
+                moment_error, moment_prediction = self.model.error(batch[i,:,:,:] + noise, batch[i,:,:,:])
                 if isTrain:
                     # 誤差逆伝播で勾配を計算
                     moment_error.backward()
@@ -259,7 +268,7 @@ class SongAutoEncoder:
             for epoch in range(self.n_epoch):
                 print('epoch', epoch + 1, flush = True)
 
-                res, _ = self.challenge(train_batch, isTrain = True)
+                res, _ = self.challenge(train_batch, isTrain = True, noise_scale = 0.04 * np.log(epoch+100) - 0.08)
                 # # 訓練データの誤差と、正解精度を表示
                 print('train mean loss={}'.format(res))
                 train_loss.append(res)
