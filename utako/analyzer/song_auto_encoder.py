@@ -287,10 +287,11 @@ class SongAutoEncoder:
             for epoch in range(self.n_epoch):
                 print('epoch', epoch + 1, flush = True)
 
-                res, _ = self.challenge(train_batch, isTrain = True, noise_scale = 0.04 * np.log(epoch+100) - 0.08)
-                # # 訓練データの誤差と、正解精度を表示
-                print('train mean loss={}'.format(res))
-                train_loss.append(res)
+                with chainer.using_config('train', True):
+                    res, _ = self.challenge(train_batch, isTrain = True, noise_scale = 0.07 * np.log(epoch+10) - 0.07)
+                    # # 訓練データの誤差と、正解精度を表示
+                    print('train mean loss={}'.format(res))
+                    train_loss.append(res)
 
                 # evaluation
                 # テストデータで誤差と、正解精度を算出し汎化性能を確認
@@ -329,9 +330,6 @@ class SongAutoEncoder:
         return train_loss, test_loss
 
     def examine(self, trial = None):
-        train_status = chainer.config.train
-        chainer.config.train = False
-
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
         trial = {
             'train': self.x_train[3],
@@ -350,11 +348,12 @@ class SongAutoEncoder:
         test_batch  = self.get_batch(self.x_test)
         trial_batch = self.get_batch(x_trial)
 
-        train_loss, _ = self.challenge(train_batch, isTrain = False)
-        test_loss, _ = self.challenge(test_batch, isTrain = False)
-        _, trial_predict_batch = self.challenge(trial_batch, isTrain = False)
-        print('train mean loss={}'.format(train_loss))
-        print('test mean loss={}'.format(test_loss))
+        with chainer.using_config('train', False):
+            train_loss, _ = self.challenge(train_batch, isTrain = False)
+            test_loss, _ = self.challenge(test_batch, isTrain = False)
+            _, trial_predict_batch = self.challenge(trial_batch, isTrain = False)
+            print('train mean loss={}'.format(train_loss))
+            print('test mean loss={}'.format(test_loss))
 
         trial_predict = self.unify_batch(trial_predict_batch)
 
@@ -375,7 +374,6 @@ class SongAutoEncoder:
                     fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
                 )
 
-        chainer.config.train = train_status
         return train_loss, test_loss
 
 #    def analyze(mvid, n_units = 200, layer = 20):
