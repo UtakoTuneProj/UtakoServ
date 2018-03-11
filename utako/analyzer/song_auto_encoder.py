@@ -32,8 +32,18 @@ class SongAutoEncoderChain(ChainList):
                 cls = L.Parameter
             else:
                 raise TypeError('link type {} cannot be recognized'.format(linktype))
+            
+            args = {}
 
-            self.links.append(cls(**layer['link']['args']))
+            if 'init' in layer['link']:
+                X = np.load(layer['link']['init']['fname'])
+                args[ 'initialW' ] = X['{}/W'.format(layer['link']['init']['number'])]
+                args[ 'initial_bias' ] = X['{}/b'.format(layer['link']['init']['number'])]
+
+            self.links.append(cls(
+                **args,
+                **layer['link']['args']
+            ))
 
             funcs_sub = []
             func_defs = layer['func']
