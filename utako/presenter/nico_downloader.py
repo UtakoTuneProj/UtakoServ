@@ -7,20 +7,19 @@ class NicoDownloader:
     def __call__(self, mvid): #ランキング取得・キュー生成部
         sbproc.run([
             'youtube-dl',
-            'https://www.nicovideo.jp/watch/{}'.format(mvid),
-            '-u',
-            config['niconico']['user'],
-            '-p',
-            config['niconico']['password'],
-            '-x',
-            '-ar',  #sampling rate
-            '44100',
-            '-ac',  #channels
-            '1',    #monoral
-            '-ab',  #bitrate
-            '128k'
-            '--audio-format',
-            'wav',
+            'http://www.nicovideo.jp/watch/{}'.format(mvid),
             '-o',
-            '%(id)s.mp4',
+            'songset/mp4/{}.mp4'.format(mvid),
+        ])
+        sbproc.run([
+            'ffmpeg',
+            '-i',
+            'songset/mp4/{}.mp4'.format(mvid),
+            '-aq',
+            '128k',
+            '-ac',
+            '1',
+            '-ar',
+            '44100',
+            'songset/wav/{}.wav'.format(mvid),
         ])
