@@ -52,7 +52,7 @@ class SongAutoEncoderChain(ChainList):
             for func_def in func_defs:
                 functype = func_def['type']
                 if functype == 'pool':
-                    func = F.max_pooling_nd
+                    func = F.average_pooling_nd
                 elif functype == 'unpool':
                     func = F.unpooling_nd 
                 elif functype == 'relu':
