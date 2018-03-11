@@ -57,12 +57,20 @@ class SongAutoEncoderChain(ChainList):
                     func = F.unpooling_nd 
                 elif functype == 'relu':
                     func = F.relu
+                elif functype == 'lrelu':
+                    func = F.leaky_relu
+                elif functype == 'sigmoid':
+                    func = F.sigmoid
+                elif functype == 'tanh':
+                    func = F.tanh
                 elif functype == 'reshape':
                     func = F.reshape
                 elif functype == 'pass':
                     func = F.broadcast
                 elif functype == 'drop':
                     func = F.dropout
+                elif functype == 'norm':
+                    func = F.normalize
                 else:
                     raise TypeError('func type {} cannot be recognized'.format(functype))
                 funcs_sub.append(functools.partial(func, **func_def['args']))
