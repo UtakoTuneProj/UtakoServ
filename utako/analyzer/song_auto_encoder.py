@@ -171,8 +171,9 @@ class SongAutoEncoder:
             data_size // batchsize,
             batchsize,
             1,
+            1,
             length
-        )
+        ).transpose(0,2,1,3,4)
             
         batch = self.preprocess(batch)
 
@@ -182,18 +183,18 @@ class SongAutoEncoder:
         return batch 
     
     def unify_batch(self, batch):
-        batch_count, batchsize, channels, timesize = batch.shape
+        batch_count, time_count, batchsize, channels, timesize = batch.shape
         if self.isgpu:
             batch = cuda.to_cpu(batch)
         batch = self.postprocess(batch)
-        res = batch.reshape(batch_count * batchsize, channels * timesize)
+        res = batch.reshape(batch_count * batchsize, time_count * channels * timesize)
         return res
 
     def challenge(self, batch, isTrain = False, noise_scale = 0.10):
         train_status = chainer.config.train
         chainer.config.train = isTrain
         
-        batch_count, batchsize, channels, timesize = batch.shape
+        batch_count, time_count, batchsize, channels, timesize = batch.shape
         prediction   = cupy.zeros(batch.shape)
         sum_loss     = 0
         perm = np.arange(batch_count)
@@ -203,7 +204,7 @@ class SongAutoEncoder:
             loss = 0
             # initialize State
             self.model.reset_state()
-            for j in cupy.arange(1):
+            for j in np.arange(time_count):
                 # 勾配を初期化
                 self.model.cleargrads()
                 # ノイズを付加
@@ -216,17 +217,17 @@ class SongAutoEncoder:
                     noise = cuda.to_gpu(noise)
                     
                 # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(batch[i,:,:,:] + noise, batch[i,:,:,:])
+                moment_error, moment_prediction = self.model.error(batch[i,j,:,:,:] + noise, batch[i,j,:,:,:])
                 if isTrain:
                     # 誤差逆伝播で勾配を計算
                     moment_error.backward()
                     self.optimizer.update()
                 loss += moment_error.data
-                prediction[i, :, :, :] = moment_prediction
+                prediction[i, j, :, :, :] = moment_prediction
             sum_loss += loss
 
         chainer.config.train = train_status
-        return float(sum_loss), prediction
+        return float(sum_loss / batch_count / batchsize), prediction
 
     def visualize_loss(self, *args, **kwargs):
         kernel = np.ones(5)/5
