@@ -3,24 +3,20 @@
 from utako.common_import import *
 
 from utako.model.chart import Chart
+from utako.model.status import Status
 from utako.presenter.nico_downloader import NicoDownloader
 
 def dl_songset(limit = 5000):
-    movies = Chart.select().where(
+    movies = Chart.select(
+        Status.id
+    ).join(
+        Status, on = (Chart.id = Status.id)
+    )where(
         Chart.epoch == 24,
-        Chart.view > limit
+        Chart.view > limit,
+        Status.validity == True,
     ).execute()
 
     ndl = NicoDownloader()
     for mvid in movies:
-        try_count = 0
-        while try_count < 5:
-            try:
-                ndl(mvid.id)
-            except:
-                try_count += 1
-                raise
-            else:
-                break
-        else:
-            print(mvid)
+        ndl(mvid.id)
