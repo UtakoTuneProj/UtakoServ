@@ -26,7 +26,11 @@ import numpy as np
 import scipy.cluster
 import tweepy
 import yaml
-cupy = cuda.cupy
+
+try:
+    cupy = cuda.cupy
+except AttributeError:
+    cupy = np
 
 config = configparser.ConfigParser()
 config.read('conf/auth.conf')
