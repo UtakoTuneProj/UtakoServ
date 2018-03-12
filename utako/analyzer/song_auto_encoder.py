@@ -329,12 +329,14 @@ class SongAutoEncoder:
 
         return train_loss, test_loss
 
-    def examine(self, trial = None):
+    def examine(self, trial = None, write_wav = True):
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
-        trial = {
-            'train': self.x_train[3],
-            'test' : self.x_test[3],
-        }
+        if trial is None:
+            trial = {
+                'train': self.x_train[334],
+                'test' : self.x_test[893],
+            }
+
         if type(trial) == dict:
             trial_keys, trial_values = zip(*trial.items())
             x_trial = np.array(trial_values)
@@ -368,11 +370,12 @@ class SongAutoEncoder:
                     title = key,
                 )
 
-            for keyw in waves:
-                self.write_wave(
-                    waves[keyw],
-                    fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
-                )
+            if write_wav:
+                for keyw in waves:
+                    self.write_wave(
+                        waves[keyw],
+                        fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
+                    )
 
         return train_loss, test_loss
 
