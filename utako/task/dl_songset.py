@@ -10,8 +10,8 @@ def dl_songset(limit = 5000):
     movies = Chart.select(
         Status.id
     ).join(
-        Status, on = (Chart.id = Status.id)
-    )where(
+        Status, on=(Chart.id == Status.id)
+    ).where(
         Chart.epoch == 24,
         Chart.view > limit,
         Status.validity == True,
