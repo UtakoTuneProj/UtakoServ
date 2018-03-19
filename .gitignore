@@ -5,8 +5,8 @@ ranking/
 *.conf
 *.swp
 *.wav
-test.npy
-train.npy
+*.npy
+*.json
 chart[0-9]*.model
 Chainertest/result/
 logs/
