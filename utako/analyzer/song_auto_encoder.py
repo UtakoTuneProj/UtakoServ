@@ -149,16 +149,12 @@ class SongAutoEncoder:
 
         if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(structure, modelclass, self.basename+'.model')
+        self.set_model(structure, modelclass)
         self.set_data(x_train, x_test)
 
-    def set_model(self, structure, modelclass, modelfile = None):
+    def set_model(self, structure, modelclass):
         self.structure = structure
-        self.in_size = structure[0]
         self.model = modelclass(structure = self.structure)
-
-        if (modelfile is not None) and (os.path.isfile(modelfile)):
-            serializers.load_npz(modelfile, self.model)
 
         if self.isgpu:
             self.model.to_gpu()  # Copy the model to the GPU
