@@ -15,10 +15,15 @@ class SongAutoEncoderChain(ChainList):
         # structure:
         # list of Chain
         # example is shown in conf/sae.yaml
-        self.links = []
-        self.funcs = []
+        self.encode_links = []
+        self.encode_funcs = []
+        self.decode_links = []
+        self.decode_funcs = []
+         
+        links = self.encode_links
+        funcs = self.encode_funcs
 
-        for layer in structure:
+        for i, layer in enumerate(structure):
             linktype = layer['link']['type']
             if linktype == 'conv':
                 cls = L.ConvolutionND
@@ -40,7 +45,7 @@ class SongAutoEncoderChain(ChainList):
                 args[ 'initialW' ] = X['{}/W'.format(layer['link']['init']['number'])]
                 args[ 'initial_bias' ] = X['{}/b'.format(layer['link']['init']['number'])]
 
-            self.links.append(cls(
+            links.append(cls(
                 **args,
                 **layer['link']['args']
             ))
@@ -75,20 +80,40 @@ class SongAutoEncoderChain(ChainList):
                     raise TypeError('func type {} cannot be recognized'.format(functype))
                 funcs_sub.append(functools.partial(func, **func_def['args']))
 
-            self.funcs.append(funcs_sub)
+            funcs.append(funcs_sub)
+
+            if 'end_encode' in layer:
+                if layer['end_encode']:
+                    links = self.decode_links
+                    funcs = self.decode_funcs
             
-        super().__init__(*self.links)
+        super().__init__(*self.encode_links, *self.decode_links)
 
     def __call__(self, x):
+        return self.decode(self.encode(x))
+
+    def _calculate_layer(self, link, funcs, x):
+#       print(x.shape)
+        h = link(x)
+        for func in funcs:
+#           print(h.shape)
+            h = func(h)
+        return h 
+
+    def encode(self, x):
         h = x
-        for link, funcs in zip(self.links, self.funcs):
-            h = link(h)
-            for func in funcs:
-                h = func(h)
+        for link, funcs in zip(self.encode_links, self.encode_funcs):
+            h = self._calculate_layer(link, funcs, h)
+        return h
+
+    def decode(self, x):
+        h = x
+        for link, funcs in zip(self.decode_links, self.decode_funcs):
+            h = self._calculate_layer(link, funcs, h)
         return h
 
     def reset_state(self):
-        for layer in self.links:
+        for layer in self.encode_links, self.decode_links:
             if type(layer) == L.LSTM:
                 layer.reset_state()
 
