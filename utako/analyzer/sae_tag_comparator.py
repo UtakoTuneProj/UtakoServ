@@ -6,6 +6,7 @@ from utako.analyzer.song_auto_encoder import SongAutoEncoder
 from utako.model.idtag import Idtag 
 from scipy import stats
 import peewee
+import gc
 
 class SaeTagComparator:
     def __init__(self, conf_file = None, **kwargs):
@@ -87,3 +88,22 @@ class SaeTagComparator:
                 result.append(( tag, tagged.shape[0], untagged.shape[0], tmp ))
 
         return result
+
+    def extract(self, result):
+        out = {}
+        for res in result:
+            for i in range(len(res[3].pvalue)):
+                if result[0][3].pvalue[i] > 0.05:
+                    continue
+                
+                cell = {
+                    'tagname': res[0],
+                    'pvalue': res[3].pvalue[i],
+                    'statistic': res[3].statistic[i],
+                }
+                if i not in out:
+                    out[i] = [tmp]
+                else:
+                    out[i].append(tmp)
+
+        return out
