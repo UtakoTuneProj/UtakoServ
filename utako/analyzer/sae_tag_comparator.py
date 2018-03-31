@@ -20,8 +20,8 @@ class SaeTagComparator:
         with open(song_partition_file) as f:
             song_partition = json.load(f)
 
-        encoded = self.get_encoded(trial)
-        song_data = self.avg_per_song(encoded, song_partition)
+        song_data = self.get_encoded(trial)
+#       song_data = self.avg_per_song(encoded, song_partition)
         valid_tags = self.get_tags()
 
         return self.compare(song_data, song_partition, valid_tags)
@@ -50,13 +50,13 @@ class SaeTagComparator:
         
         return ret
 
-    def get_tags(self, min_limit = 20):
+    def get_tags(self, min_limit = 5):
         query = Idtag.select(
                     Idtag.tagname,
                 ).group_by(
                     Idtag.tagname
                 ).having(
-                    peewee.fn.COUNT(1) > 20
+                    peewee.fn.COUNT(1) > min_limit
                 )
         return [t.tagname for t in query]
 
@@ -68,18 +68,33 @@ class SaeTagComparator:
                 )
         return [t.id for t in query]
 
+    def split_tagged(self, song_data, song_partition, tag):
+        tagged = np.zeros(( 0, song_data.shape[-1] ))
+        untagged = np.zeros(( 0, song_data.shape[-1] ))
+        tagged_mvs = self.get_tagged_ids(tag)
+
+        for i, song in enumerate(song_partition):
+            if song[0].split('.')[0] in tagged_mvs:
+                tagged = np.append(tagged, song_data[song[1]:song[2],:], axis = 0)
+            else:
+                untagged = np.append(untagged, song_data[song[1]:song[2],:], axis = 0)
+
+        return tagged, untagged
+
     def compare(self, song_data, song_partition, valid_tags):
         result = []
-        for tag in valid_tags:
-            tagged = np.zeros(( 0, song_data.shape[-1] ))
-            untagged = np.zeros(( 0, song_data.shape[-1] ))
+        pb = ProgressBar()
+        print('comparing...')
+        for tag in pb( valid_tags ):
 
             tagged_mvs = self.get_tagged_ids(tag)
-            for i, song in enumerate(song_partition):
-                if song[0].split('.')[0] in tagged_mvs:
-                    tagged = np.append(tagged, song_data[i:i+1,:], axis = 0)
-                else:
-                    untagged = np.append(untagged, song_data[i:i+1,:], axis = 0)
+            tagged_set = set(tagged_mvs)
+            song_ids = list(zip(*song_partition))[0]
+            fetched_set = set(map(lambda x: x.split('.')[0], song_ids ))
+            if len(tagged_set & fetched_set) == 0:
+                continue
+            else:
+                tagged, untagged = self.split_tagged(song_data, song_partition, tag)
 
             if tagged.shape[0] < 2 or untagged.shape[0] < 2:
                 continue
@@ -89,11 +104,11 @@ class SaeTagComparator:
 
         return result
 
-    def extract(self, result):
+    def extract(self, result, pvalue_limit = 0.05):
         out = {}
         for res in result:
             for i in range(len(res[3].pvalue)):
-                if result[0][3].pvalue[i] > 0.05:
+                if res[3].pvalue[i] > pvalue_limit:
                     continue
                 
                 cell = {
@@ -102,8 +117,8 @@ class SaeTagComparator:
                     'statistic': res[3].statistic[i],
                 }
                 if i not in out:
-                    out[i] = [tmp]
+                    out[i] = [cell]
                 else:
-                    out[i].append(tmp)
+                    out[i].append(cell)
 
         return out
