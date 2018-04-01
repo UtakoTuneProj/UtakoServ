@@ -6,116 +6,13 @@ import chainer
 import functools
 import librosa
 import librosa.display
-from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
-class SongAutoEncoderChain(ChainList):
-    def __init__(self, structure):
-        # structure:
-        # list of Chain
-        # example is shown in conf/sae.yaml
-        self.encode_links = []
-        self.encode_funcs = []
-        self.decode_links = []
-        self.decode_funcs = []
-         
-        links = self.encode_links
-        funcs = self.encode_funcs
+from utako.presenter.wave_loader import WaveLoader
+from . import song_classifier as sc
 
-        for i, layer in enumerate(structure):
-            linktype = layer['link']['type']
-            if linktype == 'conv':
-                cls = L.ConvolutionND
-            elif linktype == 'deconv':
-                cls = L.DeconvolutionND
-            elif linktype == 'linear':
-                cls = L.Linear
-            elif linktype == 'lstm':
-                cls = L.LSTM
-            elif linktype == 'pass':
-                cls = L.Parameter
-            else:
-                raise TypeError('link type {} cannot be recognized'.format(linktype))
-            
-            args = {}
-
-            if 'init' in layer['link']:
-                X = np.load(layer['link']['init']['fname'])
-                args[ 'initialW' ] = X['{}/W'.format(layer['link']['init']['number'])]
-                args[ 'initial_bias' ] = X['{}/b'.format(layer['link']['init']['number'])]
-
-            links.append(cls(
-                **args,
-                **layer['link']['args']
-            ))
-
-            funcs_sub = []
-            func_defs = layer['func']
-            if type(func_defs) not in ( list, tuple ):
-                func_defs = ( func_defs, )
-            for func_def in func_defs:
-                functype = func_def['type']
-                if functype == 'pool':
-                    func = F.average_pooling_nd
-                elif functype == 'unpool':
-                    func = F.unpooling_nd 
-                elif functype == 'relu':
-                    func = F.relu
-                elif functype == 'lrelu':
-                    func = F.leaky_relu
-                elif functype == 'sigmoid':
-                    func = F.sigmoid
-                elif functype == 'tanh':
-                    func = F.tanh
-                elif functype == 'reshape':
-                    func = F.reshape
-                elif functype == 'pass':
-                    func = F.broadcast
-                elif functype == 'drop':
-                    func = F.dropout
-                elif functype == 'norm':
-                    func = F.normalize
-                else:
-                    raise TypeError('func type {} cannot be recognized'.format(functype))
-                funcs_sub.append(functools.partial(func, **func_def['args']))
-
-            funcs.append(funcs_sub)
-
-            if 'end_encode' in layer:
-                if layer['end_encode']:
-                    links = self.decode_links
-                    funcs = self.decode_funcs
-            
-        super().__init__(*self.encode_links, *self.decode_links)
-
-    def __call__(self, x):
-        return self.decode(self.encode(x))
-
-    def _calculate_layer(self, link, funcs, x):
-#       print(x.shape)
-        h = link(x)
-        for func in funcs:
-#           print(h.shape)
-            h = func(h)
-        return h 
-
-    def encode(self, x):
-        h = x
-        for link, funcs in zip(self.encode_links, self.encode_funcs):
-            h = self._calculate_layer(link, funcs, h)
-        return h
-
-    def decode(self, x):
-        h = x
-        for link, funcs in zip(self.decode_links, self.decode_funcs):
-            h = self._calculate_layer(link, funcs, h)
-        return h
-
-    def reset_state(self):
-        for layer in self.encode_links, self.decode_links:
-            if type(layer) == L.LSTM:
-                layer.reset_state()
+class SongAutoEncoderChain(sc.SongClassifierChain):
 
     def error(self, x_data, y_data, train = True):
         y = self(Variable(x_data))
@@ -123,7 +20,7 @@ class SongAutoEncoderChain(ChainList):
 
         return F.mean_squared_error(y,t), y.data
 
-class SongAutoEncoder:
+class SongAutoEncoder(sc.SongClassifier):
     def __init__(
         self,
         structure,
@@ -138,139 +35,30 @@ class SongAutoEncoder:
         postprocess = lambda x: x,
         modelclass = SongAutoEncoderChain
     ):
-        self.n_epoch    = n_epoch
-        self.name       = name
-        self.batchsize  = batchsize
-        self.isgpu      = isgpu 
-        self.isgui      = isgui 
-        self.preprocess = preprocess
-        self.postprocess= postprocess
-        self.basename  = 'result/{}'.format(name)
-
-        if self.isgpu:
-            cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(structure, modelclass)
-        self.set_data(x_train, x_test)
-
-    def set_model(self, structure, modelclass):
-        self.structure = structure
-        self.model = modelclass(structure = self.structure)
-
-        if self.isgpu:
-            self.model.to_gpu()  # Copy the model to the GPU
-
-        self.optimizer = optimizers.Adam()
-        self.optimizer.setup(self.model)
-
-    def set_data(self, train, test):
+        super().__init__(
+            structure,
+            name = name,
+            n_epoch = n_epoch,
+            batchsize = batchsize,
+            x_train = x_train,
+            y_train = x_train,
+            x_test = x_test,
+            y_test = x_test,
+            isgpu = isgpu,
+            isgui = isgui,
+            preprocess = preprocess,
+            postprocess = postprocess,
+            modelclass = modelclass,
+        )
+    def set_data(self, train, y_train, test, y_test):
         if type(train) != np.ndarray or type(test) != np.ndarray :
             if os.path.isfile('train.npy') and os.path.isfile('test.npy'):
-                self.x_train = np.load('train.npy')
-                self.x_test = np.load('test.npy')
+                train = np.load('train.npy')
+                test = np.load('test.npy')
             else:
                 self.x_train, self.x_test = WaveLoader().fetch(isTrain = True)
-        else:
-            self.x_train = train
-            self.x_test  = test
 
-        self.N_train = len(self.x_train)
-        self.N_test  = len(self.x_test)
-
-    def get_batch(
-        self,
-        data,
-        random = False,
-        batchsize = None,
-    ):
-        data_size, length = data.shape
-        if batchsize is None:
-            batchsize = self.batchsize
-
-        if data_size % batchsize != 0:
-            data = np.append(
-                data,
-                data[np.random.permutation(
-                    batchsize - data_size % batchsize
-            ) % data_size], axis = 0)
-
-        data_size, length = data.shape
-        if random:
-            np.random.shuffle(data)
-        batch = data.reshape(
-            data_size // batchsize,
-            batchsize,
-            1,
-            1,
-            length
-        ).transpose(0,2,1,3,4)
-            
-        batch = self.preprocess(batch)
-
-        if self.isgpu:
-            batch = cuda.to_gpu(batch)
-
-        return batch 
-    
-    def unify_batch(self, batch):
-        batch_count, time_count, batchsize, channels, timesize = batch.shape
-        if self.isgpu:
-            batch = cuda.to_cpu(batch)
-        batch = self.postprocess(batch)
-        res = batch.reshape(batch_count * batchsize, time_count * channels * timesize)
-        return res
-
-    def challenge(self, batch, isTrain = False, noise_scale = 0.10):
-        train_status = chainer.config.train
-        chainer.config.train = isTrain
-        
-        batch_count, time_count, batchsize, channels, timesize = batch.shape
-        prediction   = cupy.zeros(batch.shape)
-        sum_loss     = 0
-        perm = np.arange(batch_count)
-        if isTrain:
-            np.random.shuffle(perm)
-        for i in perm:
-            loss = 0
-            # initialize State
-            self.model.reset_state()
-            for j in np.arange(time_count):
-                # 勾配を初期化
-                self.model.cleargrads()
-                # ノイズを付加
-                if False:
-                    noise = np.random.normal(scale = noise_scale, size = (batchsize, channels, timesize))
-                else:
-                    noise = np.zeros((batchsize, channels, timesize))
-                noise = np.array(noise, dtype = np.float32)
-                if self.isgpu:
-                    noise = cuda.to_gpu(noise)
-                    
-                # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(batch[i,j,:,:,:] + noise, batch[i,j,:,:,:])
-                if isTrain:
-                    # 誤差逆伝播で勾配を計算
-                    moment_error.backward()
-                    self.optimizer.update()
-                loss += moment_error.data
-                prediction[i, j, :, :, :] = moment_prediction
-            sum_loss += loss
-
-        chainer.config.train = train_status
-        return float(sum_loss / batch_count / batchsize), prediction
-
-    def visualize_loss(self, *args, **kwargs):
-        kernel = np.ones(5)/5
-
-        for i, s in enumerate(args):
-            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
-            plt.plot(range(len(tmp)), tmp, label = str(i))
-        for key in kwargs:
-            s = kwargs[key]
-            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
-            plt.plot(range(len(tmp)), tmp, label = key)
-        plt.legend()
-        plt.yscale('log')
-        plt.show()
+        super().set_data(train, train, test, test)
 
     def visualize_wave(self, waves, title = None, **kwargs):
         if type(waves) is dict:
@@ -295,63 +83,10 @@ class SongAutoEncoder:
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
 
-    def learn(self):
-        startTime = time.time()
-
-        train_batch = self.get_batch(self.x_train, random = True)
-        test_batch  = self.get_batch(self.x_test)
-        train_loss  = []
-        test_loss   = []
-
-        try:
-            # Learning loop
-            for epoch in range(self.n_epoch):
-                print('epoch', epoch + 1, flush = True)
-
-                with chainer.using_config('train', True):
-                    res, _ = self.challenge(train_batch, isTrain = True, noise_scale = 0.07 * np.log(epoch+10) - 0.07)
-                    # # 訓練データの誤差と、正解精度を表示
-                    print('train mean loss={}'.format(res))
-                    train_loss.append(res)
-
-                # evaluation
-                # テストデータで誤差と、正解精度を算出し汎化性能を確認
-
-                with chainer.using_config('train', False):
-                    res, _ = self.challenge(test_batch, isTrain = False)
-                    # # 訓練データの誤差と、正解精度を表示
-                    print('test mean loss={}'.format(res))
-                    test_loss.append(res)
-
-                if epoch % 50 == 0:
-                    serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
-
-        except KeyboardInterrupt:
-            print('Interrupted')
-
-        finally:
-            elapsedTime = time.time() - startTime
-            print('Total Time: {0}[min.]'.format(elapsedTime / 60))
-
-            serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
-
-            if self.isgui: 
-                # 精度と誤差をグラフ描画
-                # plt.plot(range(len(train_loss)), train_loss)
-                self.visualize_loss(
-                    train = train_loss,
-                    test  = test_loss,
-                )
-
-            self.examine()
-
-            with open('{}.json'.format(self.basename), 'w') as f:
-                json.dump([train_loss, test_loss], f)
-
-        return train_loss, test_loss
-
     def examine(self, trial = None, write_wav = True):
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
+        train_loss, test_loss = super().examine()
+
         if trial is None:
             trial = {
                 'train': self.x_train[334],
@@ -367,17 +102,8 @@ class SongAutoEncoder:
         else:
             raise TypeError('SAE.examine only accepts dict, list or np.ndarray as trial. Not {}'.format(type(trial)))
 
-        train_batch = self.get_batch(self.x_train)
-        test_batch  = self.get_batch(self.x_test)
-        trial_batch = self.get_batch(x_trial)
-
-        with chainer.using_config('train', False):
-            train_loss, _ = self.challenge(train_batch, isTrain = False)
-            test_loss, _ = self.challenge(test_batch, isTrain = False)
-            _, trial_predict_batch = self.challenge(trial_batch, isTrain = False)
-            print('train mean loss={}'.format(train_loss))
-            print('test mean loss={}'.format(test_loss))
-
+        trial_batch, _ = self.get_batch(x_trial, x_trial)
+        _, trial_predict_batch = self.challenge(trial_batch, trial_batch, isTrain = False)
         trial_predict = self.unify_batch(trial_predict_batch)
 
         for i, key in enumerate(trial_keys):
@@ -400,7 +126,7 @@ class SongAutoEncoder:
 
         return train_loss, test_loss
 
-#    def analyze(mvid, n_units = 200, layer = 20):
+#    def analyze():
 #        model = ChartModel(n_units = n_units, layer = layer)
 #        serializers.load_npz(args.modelfile[0], model)
 #
