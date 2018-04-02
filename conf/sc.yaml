@@ -1,0 +1,83 @@
+- 
+  link:
+    type: 'conv'
+    #    init:
+    #      fname: 'result/09.layer6.model'
+    #      number: 0
+    args:
+      ndim: 1
+      in_channels: 1
+      out_channels: 2
+      ksize: 257
+      stride: 16
+  func:
+    - 
+      type: 'pass'
+      args: {}
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 2
+      out_channels: 4
+      ksize: 65
+      stride: 8
+  func:
+    - 
+      type: 'pass'
+      args: {}
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 4
+      out_channels: 8
+      ksize: 6
+      stride: 4
+  func:
+    - 
+      type: 'pass'
+      args: {}
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 8
+      out_channels: 256
+      ksize: 13
+      stride: 2
+  func:
+    - 
+      type: 'drop'
+      args:
+        ratio: 0.5
+        #- 
+        #  link:
+        #    type: 'linear'
+        #    args:
+        #      in_size: 256
+        #      out_size: 256
+        #  func:
+        #    - 
+        #      type: 'relu'
+        #      args: {}
+        #    - 
+        #      type: 'drop'
+        #      args:
+        #        ratio: 0.5
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 256
+      out_size: 1241
+  func:
+    - 
+      type: 'reshape'
+      args:
+        shape:
+          - 1
+          - 1241
