@@ -123,7 +123,7 @@ class SongClassifierChain(ChainList):
         y = self(Variable(x_data))
         t = Variable(y_data)
 
-        return F.softmax_cross_entropy(y,t), y.data
+        return F.sigmoid_cross_entropy(y,t), y.data
 #       return F.huber_loss(x = y, t = t, delta = 0.5), y.data
 
 class SongClassifier:
