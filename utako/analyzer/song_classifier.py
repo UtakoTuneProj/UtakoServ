@@ -58,7 +58,9 @@ class SongClassifierChain(ChainList):
                 functype = func_def['type']
                 args = func_def['args']
                 if functype == 'pool':
-                    func = F.average_pooling_nd
+                    func = F.max_pooling_nd
+                elif functype == 'avgpool':
+                    func = F.average_pooling_nd 
                 elif functype == 'unpool':
                     func = F.unpooling_nd 
                 elif functype == 'relu':
