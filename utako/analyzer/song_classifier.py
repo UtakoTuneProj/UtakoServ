@@ -339,18 +339,31 @@ class SongClassifier:
                 print('epoch', epoch + 1, flush = True)
 
                 with chainer.using_config('train', True):
-                    res, _ = self.challenge(x_train_batch, y_train_batch, isTrain = True, noise_scale = 0.07 * np.log(epoch+10) - 0.07)
+                    res, pred = self.challenge(
+                        x_train_batch,
+                        y_train_batch,
+                        isTrain = True,
+                        noise_scale = 0.07 * np.log(epoch+10) - 0.07
+                    )
                     # # 訓練データの誤差と、正解精度を表示
                     print('train mean loss={}'.format(res))
+                    if issubclass(y_train_batch.dtype.type, np.integer):
+                        print('train accuracy={}'.format(
+                            F.accuracy(pred, y_train_batch.argmax(axis=1)).data
+                        ))
                     train_loss.append(res)
 
                 # evaluation
                 # テストデータで誤差と、正解精度を算出し汎化性能を確認
 
                 with chainer.using_config('train', False):
-                    res, _ = self.challenge(x_test_batch, y_test_batch, isTrain = False)
+                    res, pred = self.challenge(x_test_batch, y_test_batch, isTrain = False)
                     # # 訓練データの誤差と、正解精度を表示
                     print('test mean loss={}'.format(res))
+                    if issubclass(y_test_batch.dtype.type, np.integer):
+                        print('test accuracy={}'.format(
+                            F.accuracy(pred, y_test_batch.argmax(axis=1)).data
+                        ))
                     test_loss.append(res)
 
                 if epoch % self.save_epoch == 0:
