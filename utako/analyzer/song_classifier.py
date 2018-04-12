@@ -134,6 +134,7 @@ class SongClassifier:
         structure,
         name = 'song_classifier',
         n_epoch = 300,
+        save_epoch = 20,
         batchsize = 50,
         x_train = None,
         y_train = None,
@@ -146,6 +147,7 @@ class SongClassifier:
         modelclass = SongClassifierChain
     ):
         self.n_epoch    = n_epoch
+        self.save_epoch = save_epoch
         self.name       = name
         self.batchsize  = batchsize
         self.isgpu      = isgpu 
@@ -349,7 +351,7 @@ class SongClassifier:
                     print('test mean loss={}'.format(res))
                     test_loss.append(res)
 
-                if epoch % 50 == 0:
+                if epoch % self.save_epoch == 0:
                     serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
 
         except KeyboardInterrupt:
