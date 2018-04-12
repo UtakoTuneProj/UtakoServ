@@ -386,18 +386,29 @@ class SongClassifier:
                     test  = test_loss,
                 )
 
-            self.examine()
+            self.examine({
+                'x_train_batch': x_train_batch,
+                'y_train_batch': y_train_batch,
+                'x_test_batch':  x_test_batch,
+                'y_test_batch':  y_test_batch,
+            })
 
             with open('{}.json'.format(self.basename), 'w') as f:
                 json.dump([train_loss, test_loss], f)
 
         return train_loss, test_loss
 
-    def examine(self):
+    def examine(self, batches = None):
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
 
-        x_train_batch, y_train_batch = self.get_batch(self.x_train, self.y_train)
-        x_test_batch, y_test_batch  = self.get_batch(self.x_test, self.y_test)
+        if batches is None:
+            x_train_batch, y_train_batch = self.get_batch(self.x_train, self.y_train)
+            x_test_batch, y_test_batch  = self.get_batch(self.x_test, self.y_test)
+        else:
+            x_train_batch = batches['x_train_batch']
+            y_train_batch = batches['y_train_batch']
+            x_test_batch  = batches['x_test_batch']
+            y_test_batch  = batches['y_test_batch']
 
         with chainer.using_config('train', False):
             train_loss, _ = self.challenge(x_train_batch, y_train_batch, isTrain = False)
