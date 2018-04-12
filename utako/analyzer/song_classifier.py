@@ -265,7 +265,9 @@ class SongClassifier:
 
         batch = in_batch
         batch_count, time_count, batchsize, channels, timesize = batch.shape
-        prediction   = cupy.zeros(out_batch.shape)
+        prediction   = np.zeros(out_batch.shape)
+        if self.isgpu:
+            prediction = cuda.to_gpu(prediction)
         sum_loss     = 0
         perm = np.arange(batch_count)
         if isTrain:
