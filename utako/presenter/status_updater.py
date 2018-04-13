@@ -13,7 +13,7 @@ class StatusUpdater:
             raw_rank = JsonReader()("ranking/" + str(i) + ".json")['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
-                postdate = TimedateConverter().nico2datetime(mvdata['startTime'])
+                postdate = TimedateConverter()(mvdata['startTime'])
 
                 if len(Status.select().where(
                     Status.id == mvid

@@ -25,7 +25,7 @@ class XmlReader:
             ]:#一部を数値に変換
                 ret[child.tag] = int(child.text)
             elif child.tag == 'first_retrieve':
-                ret['first_retrieve'] = TimedateConverter().nico2datetime(child.text)
+                ret['first_retrieve'] = TimedateConverter()(child.text)
             else:
                 ret[child.tag] = child.text
 
