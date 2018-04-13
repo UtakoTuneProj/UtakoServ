@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm12345678</video_id>
+    <title>XML Success test</title>
+    <description>This is a sample xml to unittest</description>
+    <thumbnail_url>http://example.com/?i=12345678</thumbnail_url>
+    <first_retrieve>2018-01-01T00:00:00+09:00</first_retrieve>
+    <length>1:23</length>
+    <movie_type>mp4</movie_type>
+    <size_high>32519153</size_high>
+    <size_low>12913756</size_low>
+    <view_counter>2345</view_counter>
+    <comment_num>334</comment_num>
+    <mylist_counter>72</mylist_counter>
+    <last_res_body>latest comment</last_res_body>
+    <watch_url>http://example.com/watch/sm12345678</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">初音ミク</tag>
+      <tag lock="1">ミクオリジナル曲</tag>
+      <tag lock="1">VOCALOID新曲リンク</tag>
+      <tag lock="1">VOCAROCK</tag>
+    </tags>
+    <user_id>16764132</user_id>
+    <user_nickname>Nanamachi</user_nickname>
+    <user_icon_url>https://example.com/image.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>

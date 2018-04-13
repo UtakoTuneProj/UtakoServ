@@ -30,7 +30,7 @@ class XmlReader:
                 ret[child.tag] = child.text
 
         # http://www.lifewithpython.com/2014/08/python-use-multiple-separators-to-split-strings.html
-        ret['title_split'] = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",ret['title']) if len(x) > 0] #指定文字でタイトルを分割
+        # ret['title_split'] = [x for x in re.split("[/\[\]【】\u3000〔〕／〈〉《》［］『』「」≪≫＜＞]",ret['title']) if len(x) > 0] #指定文字でタイトルを分割
 
         return ret
 

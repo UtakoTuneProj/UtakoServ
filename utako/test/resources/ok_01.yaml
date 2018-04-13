@@ -1,0 +1,26 @@
+video_id: sm12345678
+title: XML Success test
+description: This is a sample xml to unittest
+thumbnail_url: http://example.com/?i=12345678
+first_retrieve: 2018-01-01 00:00:00
+length: '1:23'
+movie_type: mp4
+size_high: '32519153'
+size_low: '12913756'
+view_counter: 2345
+comment_num: 334
+mylist_counter: 72
+last_res_body: latest comment
+watch_url: http://example.com/watch/sm12345678
+thumb_type: video
+embeddable: '1'
+no_live_play: '0'
+tags: 
+  - 'VOCALOID'
+  - '初音ミク'
+  - 'ミクオリジナル曲'
+  - 'VOCALOID新曲リンク'
+  - 'VOCAROCK'
+user_id: '16764132'
+user_nickname: Nanamachi
+user_icon_url: https://example.com/image.jpg
