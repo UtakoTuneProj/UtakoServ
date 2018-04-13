@@ -6,4 +6,5 @@ from utako.test import *
 import unittest
 
 if __name__ == '__main__':
+    utako.common_import.config.read('conf/auth.conf.test')
     unittest.main()

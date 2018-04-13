@@ -1,0 +1,4 @@
+[database_type]
+    dbtype      = sqlite
+[database]
+    database    = :memory:
