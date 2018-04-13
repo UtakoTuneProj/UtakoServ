@@ -1,3 +1,5 @@
+[database_type]
+    dbtype      = mysql, postgres or sqlite
 [database]
     host        = hostname
     user        = username
