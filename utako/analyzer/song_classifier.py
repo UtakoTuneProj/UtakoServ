@@ -417,10 +417,22 @@ class SongClassifier:
             y_test_batch  = batches['y_test_batch']
 
         with chainer.using_config('train', False):
-            train_loss, _ = self.challenge(x_train_batch, y_train_batch, isTrain = False)
-            test_loss, _ = self.challenge(x_test_batch, y_test_batch, isTrain = False)
+            train_loss, pred = self.challenge(x_train_batch, y_train_batch, isTrain = False)
             print('train mean loss={}'.format(train_loss))
+            print('train accuracy={}'.format(
+                F.accuracy(
+                    self.unify_batch( pred ),
+                    self.unify_batch( y_train_batch ).argmax(axis=-1)
+                ).data
+            ))
+            test_loss, pred = self.challenge(x_test_batch, y_test_batch, isTrain = False)
             print('test mean loss={}'.format(test_loss))
+            print('test accuracy={}'.format(
+                F.accuracy(
+                    self.unify_batch( pred ),
+                    self.unify_batch( y_test_batch ).argmax(axis=-1)
+                ).data
+            ))
 
         return train_loss, test_loss
 
