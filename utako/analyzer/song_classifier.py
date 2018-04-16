@@ -295,7 +295,7 @@ class SongClassifier:
                     moment_error.backward()
                     self.optimizer.update()
                 loss += moment_error.data
-                prediction[i, j, :, :, :] = moment_prediction
+                prediction[i, j, ...] = moment_prediction.reshape(y_data.shape)
             sum_loss += loss
 
         chainer.config.train = train_status
@@ -349,7 +349,10 @@ class SongClassifier:
                     print('train mean loss={}'.format(res))
                     if issubclass(y_train_batch.dtype.type, np.integer):
                         print('train accuracy={}'.format(
-                            F.accuracy(pred, y_train_batch.argmax(axis=1)).data
+                            F.accuracy(
+                                self.unify_batch( pred ),
+                                self.unify_batch( y_train_batch ).argmax(axis=-1)
+                            ).data
                         ))
                     train_loss.append(res)
 
@@ -362,7 +365,10 @@ class SongClassifier:
                     print('test mean loss={}'.format(res))
                     if issubclass(y_test_batch.dtype.type, np.integer):
                         print('test accuracy={}'.format(
-                            F.accuracy(pred, y_test_batch.argmax(axis=1)).data
+                            F.accuracy(
+                                self.unify_batch( pred ),
+                                self.unify_batch( y_test_batch ).argmax(axis=-1)
+                            ).data
                         ))
                     test_loss.append(res)
 
