@@ -5,11 +5,25 @@ import yaml
 import numpy as np
 import gc
 
-def sc_test(fname = 'conf/sc.yaml', **kwargs):
+wav = np.load('wav.npy')
+label = np.load('wav.label.npy')
+
+def sc_test(
+    fname = 'conf/sc.yaml',
+    wav = wav,
+    label = label,
+    **kwargs
+):
     with open(fname) as f:
         structure = yaml.load(f)
-    wav = np.load('wav.npy')
-    label = np.load('wav.label.npy')
+    
+    if wav is None:
+        print('loading wav.npy')
+        wav = np.load('wav.npy')
+    if label is None:
+        print('loading wav.label.npy')
+        label = np.load('wav.label.npy')
+
     index = np.random.permutation(wav.shape[0])
     train_index = index[:10000]
     test_index = index[10000:12000]
