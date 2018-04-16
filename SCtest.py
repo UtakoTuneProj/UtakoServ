@@ -12,6 +12,9 @@ def sc_test(
     fname = 'conf/sc.yaml',
     wav = wav,
     label = label,
+    n_train = 100000,
+    n_test = 10000,
+    randomize = True,
     **kwargs
 ):
     with open(fname) as f:
@@ -24,9 +27,12 @@ def sc_test(
         print('loading wav.label.npy')
         label = np.load('wav.label.npy')
 
-    index = np.random.permutation(wav.shape[0])
-    train_index = index[:10000]
-    test_index = index[10000:12000]
+    if randomize:
+        index = np.random.permutation(wav.shape[0])
+    else:
+        index = np.arange(wav.shape[0])
+    train_index = index[:n_train]
+    test_index = index[n_train:n_train + n_test]
     SC = \
         utako.analyzer.song_classifier.SongClassifier(
             structure = structure,
