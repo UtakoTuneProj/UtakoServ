@@ -399,10 +399,11 @@ class SongClassifier:
                 )
 
             self.examine({
-                'x_train_batch': x_train_batch,
-                'y_train_batch': y_train_batch,
-                'x_test_batch':  x_test_batch,
-                'y_test_batch':  y_test_batch,
+                'train': x_train_batch,
+                'test':  x_test_batch,
+            },{
+                'train': y_train_batch,
+                'test':  y_test_batch,
             })
 
             with open('{}.json'.format(self.basename), 'w') as f:
@@ -410,37 +411,27 @@ class SongClassifier:
 
         return train_loss, test_loss
 
-    def examine(self, batches = None):
+    def examine(self, x_batches, y_batches):
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
 
-        if batches is None:
-            x_train_batch, y_train_batch = self.get_batch(self.x_train, self.y_train)
-            x_test_batch, y_test_batch  = self.get_batch(self.x_test, self.y_test)
-        else:
-            x_train_batch = batches['x_train_batch']
-            y_train_batch = batches['y_train_batch']
-            x_test_batch  = batches['x_test_batch']
-            y_test_batch  = batches['y_test_batch']
+        loss = {}
+        for key in x_batches:
+            x_batch = x_batches[key]
+            y_batch = y_batches[key]
 
-        with chainer.using_config('train', False):
-            train_loss, pred = self.challenge(x_train_batch, y_train_batch, isTrain = False)
-            print('train mean loss={}'.format(train_loss))
-            print('train accuracy={}'.format(
-                F.accuracy(
-                    self.unify_batch( pred ),
-                    self.unify_batch( y_train_batch ).argmax(axis=-1)
-                ).data
-            ))
-            test_loss, pred = self.challenge(x_test_batch, y_test_batch, isTrain = False)
-            print('test mean loss={}'.format(test_loss))
-            print('test accuracy={}'.format(
-                F.accuracy(
-                    self.unify_batch( pred ),
-                    self.unify_batch( y_test_batch ).argmax(axis=-1)
-                ).data
-            ))
+            with chainer.using_config('train', False):
+                loss[key], pred = self.challenge(x_batch, y_batch, isTrain = False)
+                print('{} mean loss={}'.format(key, loss[key]))
+                if issubclass(y_batch.dtype.type, np.integer):
+                    print('{} accuracy={}'.format(
+                        key,
+                        F.accuracy(
+                            self.unify_batch( pred ),
+                            self.unify_batch( y_batch ).argmax(axis=-1)
+                        ).data
+                    ))
 
-        return train_loss, test_loss
+        return loss 
 
 #    def analyze():
 #        model = ChartModel(n_units = n_units, layer = layer)

@@ -83,48 +83,43 @@ class SongAutoEncoder(sc.SongClassifier):
     def __call__(self, mode, mvid = None, modelfile = None):
         pass
 
-    def examine(self, trial = None, write_wav = True):
+    def examine(self, trial, trial_y = None, write_wav = True):
         # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
-        train_loss, test_loss = super().examine()
-
-        if trial is None:
-            trial = {
-                'train': self.x_train[334],
-                'test' : self.x_test[893],
-            }
+        loss = super().examine(trial, trial)
 
         if type(trial) == dict:
-            trial_keys, trial_values = zip(*trial.items())
-            x_trial = np.array(trial_values)
+            trial_keys = trial.keys()
         elif type(trial) in (list, np.ndarray):
             trial_keys = range(len(trial))
-            x_trial = trial
         else:
             raise TypeError('SAE.examine only accepts dict, list or np.ndarray as trial. Not {}'.format(type(trial)))
 
-        trial_batch, _ = self.get_batch(x_trial, x_trial)
-        _, trial_predict_batch = self.challenge(trial_batch, trial_batch, isTrain = False)
-        trial_predict = self.unify_batch(trial_predict_batch)
+        for key in trial_keys:
+            _, trial_predict_batch = self.challenge(trial[key], trial[key], isTrain = False)
+            trial_teacher = self.unify_batch(trial[key])
+            trial_predict = self.unify_batch(trial_predict_batch)
 
-        for i, key in enumerate(trial_keys):
-            waves = dict(
-                teacher = x_trial[i],
-                predict = trial_predict[i],
-            )
-            if self.isgui:
-                self.visualize_wave(
-                    waves = waves,
-                    title = key,
+            for i in range(trial_teacher.shape[0]):
+                if i > 50:
+                    break
+                waves = dict(
+                    teacher = trial_teacher[i],
+                    predict = trial_predict[i],
                 )
-
-            if write_wav:
-                for keyw in waves:
-                    self.write_wave(
-                        waves[keyw],
-                        fname = '{}_{}_{}.wav'.format(self.basename, key, keyw),
+                if self.isgui:
+                    self.visualize_wave(
+                        waves = waves,
+                        title = key,
                     )
 
-        return train_loss, test_loss
+                if write_wav:
+                    for keyw in waves:
+                        self.write_wave(
+                            waves[keyw],
+                            fname = '{}_{}_{}_{}.wav'.format(self.basename, key, i, keyw),
+                        )
+
+        return loss
 
 #    def analyze():
 #        model = ChartModel(n_units = n_units, layer = layer)
