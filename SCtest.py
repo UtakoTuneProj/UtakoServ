@@ -48,7 +48,8 @@ def sc_test(
 if __name__ == '__main__':
     sc_test(
         isgui = True,
-        n_epoch = 20,
-        batchsize = 100
+#       isgpu = False,
+        n_epoch = 100,
+        batchsize = 25
     )
 
