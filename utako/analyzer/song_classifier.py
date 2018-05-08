@@ -49,6 +49,8 @@ class SongClassifierChain(ChainList):
                 **args,
                 **layer['link']['args']
             ))
+            if layer.get('freeze'):
+                links[-1].disable_update()
 
             funcs_sub = []
             func_defs = layer['func']
@@ -71,9 +73,13 @@ class SongClassifierChain(ChainList):
                     func = F.sigmoid
                 elif functype == 'tanh':
                     func = F.tanh
+                elif functype == 'abs':
+                    func = F.absolute
                 elif functype == 'reshape':
                     func = F.reshape
                     args['shape'] = [-1,] + args['shape']
+                elif functype == 'transpose':
+                    func = F.transpose
                 elif functype == 'pass':
                     func = F.broadcast
                 elif functype == 'drop':
