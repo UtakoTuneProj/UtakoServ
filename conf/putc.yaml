@@ -1,0 +1,109 @@
+#(1,8192)
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 1
+      out_channels: 64
+      ksize: 320
+      stride: 64
+  func:
+    - 
+      type: 'pass'
+      args: {}
+#(64,124)
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 64
+      out_channels: 1024
+      ksize: 12
+      stride: 16
+  func:
+    - 
+      type: 'pass'
+      args: {}
+#(1024,8)
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 1024
+      out_channels: 1024
+      ksize: 2
+      stride: 2
+  func:
+    - 
+      type: 'pass'
+      args: {}
+#(1024,4)
+- 
+  link:
+    type: 'conv'
+    args:
+      ndim: 1
+      in_channels: 1024
+      out_channels: 8192
+      ksize: 4
+      stride: 1
+  func:
+    - 
+      type: 'pass'
+      args: {}
+#(8192,1)
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 8192
+      out_size: 1024
+  func:
+    - 
+      type: 'relu'
+      args: {}
+      #    - 
+      #      type: 'drop'
+      #      args:
+      #        ratio: 0.25
+        #- 
+        #  link:
+        #    type: 'linear'
+        #    args:
+        #      in_size: 2048
+        #      out_size: 10 
+        #  func:
+        #    - 
+        #      type: 'pass'
+        #      args: {}
+        #  end_encode: True
+        #- 
+        #  link:
+        #    type: 'linear'
+        #    args:
+        #      in_size: 10
+        #      out_size: 2048
+        #  func:
+        #    - 
+        #      type: 'relu'
+        #      args: {}
+        #    - 
+        #      type: 'drop'
+        #      args:
+        #        ratio: 0.25
+- 
+  link:
+    type: 'linear'
+    args:
+      in_size: 1024
+      out_size: 1
+  func:
+    - 
+      type: 'reshape'
+      args:
+        shape:
+          - 1
+          - 1
