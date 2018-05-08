@@ -125,7 +125,7 @@ class SongClassifierChain(ChainList):
         y = self(x_data)
         t = Variable(y_data.argmax(axis=-1).reshape(-1))
 
-        return F.softmax_cross_entropy(y,t), y.data
+        return F.softmax_cross_entropy(y,t)
 #       return F.huber_loss(x = y, t = t, delta = 0.5), y.data
 
 class SongClassifier:
@@ -289,13 +289,19 @@ class SongClassifier:
                     noise = cuda.to_gpu(noise)
                     
                 # 順伝播させて誤差と精度を算出
-                moment_error, moment_prediction = self.model.error(batch[i,j,:,:,:] + noise, out_batch[i,j,:,:,:])
+                x_data = batch[i,j,...]
+                y_data = out_batch[i,j,...]
+              # y = self.model(batch[i,j, ...] + noise)
+              # t = Variable(out_batch[i,j,...].argmax(axis=-1).reshape(-1))
+                error = self.model.error(x_data + noise, y_data)
                 if isTrain:
-                    # 誤差逆伝播で勾配を計算
-                    moment_error.backward()
+                    error.backward()
                     self.optimizer.update()
-                loss += moment_error.data
-                prediction[i, j, ...] = moment_prediction.reshape(y_data.shape)
+              #     self.optimizer.update(F.softmax_cross_entropy, y, t)
+              # loss += F.softmax_cross_entropy(y,t).data
+                loss += error.data
+
+                prediction[i, j, ...] = self.model(x_data).data.reshape(y_data.shape)
             sum_loss += loss
 
         chainer.config.train = train_status

@@ -18,7 +18,7 @@ class SongAutoEncoderChain(sc.SongClassifierChain):
         y = self(Variable(x_data))
         t = Variable(y_data)
 
-        return F.mean_squared_error(y,t), y.data
+        return F.mean_squared_error(y,t)
 
 class SongAutoEncoder(sc.SongClassifier):
     def __init__(
