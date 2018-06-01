@@ -174,7 +174,7 @@ class SongClassifier:
         if self.isgpu:
             self.model.to_gpu()  # Copy the model to the GPU
 
-        self.optimizer = optimizers.Adam()
+        self.optimizer = optimizers.AdaGrad()
         self.optimizer.setup(self.model)
 
     def set_data(self, x_train, y_train, x_test, y_test):
