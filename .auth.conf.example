@@ -1,8 +1,0 @@
-[DEFAULT]
-    host=localhost
-    user=anonymous
-    passwd=hogehoge
-    db=test
-    charset=utf8
-[alch]
-    alch.url=mysql://user:pass@host/db?charset=utf8
