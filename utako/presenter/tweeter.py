@@ -7,10 +7,10 @@ from utako.common_import import *
 class Tweeter:
 
     def __init__(self, **kwargs):
-        API_KEY = '***REMOVED***'
-        API_SECRET = '***REMOVED***'
-        ACCESS_TOKEN = '***REMOVED***'
-        ACCESS_SECRET = '***REMOVED***'
+        API_KEY = 'nS4Ypx9b0Pz06bTG0PM2E3ZSy'
+        API_SECRET = 'iLZ8GteNsu54l8rPfzR5R9XuHfNW0lHS7y5jtKiqYUaqvjhgb8'
+        ACCESS_TOKEN = '784080809556783104-7mb9n1FyYhSLc0Kgywteo2SgUY7FBl0'
+        ACCESS_SECRET = 'qEzlSntx3Gy3nztI3EvlsxhHcagdQJ5rQMCJj9o8vHKGu'
         self.auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
         auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 

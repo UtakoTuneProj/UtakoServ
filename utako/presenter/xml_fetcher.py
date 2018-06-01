@@ -6,7 +6,7 @@ from utako.exception.no_response_exception import NoResponseException
 
 class XmlFetcher:
     def __call__(self, mvid, force = False): #動画情報xmlを取得
-        fname = 'getthumb/' + mvid + '.xml'
+        fname = 'tmp/thumbnail/' + mvid + '.xml'
         if not os.path.exists(fname) or force:
             try:
                 urllib.request.urlretrieve(

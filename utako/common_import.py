@@ -18,7 +18,7 @@ import urllib.parse
 import urllib.error
 import xml.etree.ElementTree as ET
 
-from chainer import cuda, Variable, optimizers, Chain, ChainList
+from chainer import cuda, Variable, optimizers, serializers, Chain, ChainList
 import chainer.functions  as F
 import chainer.links as L
 import MySQLdb
@@ -27,5 +27,13 @@ import scipy.cluster
 import tweepy
 import yaml
 
+try:
+    cupy = cuda.cupy
+except AttributeError:
+    cupy = np
+
 config = configparser.ConfigParser()
 config.read('conf/auth.conf')
+
+with open('conf/settings.yaml') as f:
+    settings = yaml.load(f)

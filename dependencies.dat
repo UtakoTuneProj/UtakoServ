@@ -1,4 +1,5 @@
 chainer
+librosa
 mysqlclient
 numpy
 peewee
@@ -6,3 +7,4 @@ progressbar2
 scipy
 sklearn
 tweepy
+youtube-dl

@@ -10,7 +10,7 @@ class StatusUpdater:
     def __call__(self): #ランキング取得・キュー生成部
         for i in range(15): #15ページ目まで取得する
             self._rankfilereq(page = i)
-            raw_rank = JsonReader()("ranking/" + str(i) + ".json")['data']
+            raw_rank = JsonReader()("tmp/ranking/" + str(i) + ".json")['data']
             for mvdata in raw_rank:
                 mvid = mvdata['contentId']
                 postdate = TimedateConverter().nico2datetime(mvdata['startTime'])
@@ -34,7 +34,7 @@ class StatusUpdater:
             break
 
         for j in range(i+1):
-            os.remove("ranking/" + str(j) + ".json")
+            os.remove("tmp/ranking/" + str(j) + ".json")
 
         return None
 
@@ -50,7 +50,7 @@ class StatusUpdater:
                     "&_context=UtakoOrihara(VocaloidRankingBot)"
 
         try:
-            urllib.request.urlretrieve(rankreqbase, "ranking/" + str(page) + ".json")
+            urllib.request.urlretrieve(rankreqbase, "tmp/ranking/" + str(page) + ".json")
         except urllib.error.URLError:
             print("Search query for",searchtag,"is failed. Maybe overloaded.")
 
