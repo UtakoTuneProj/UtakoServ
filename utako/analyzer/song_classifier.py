@@ -150,7 +150,8 @@ class SongClassifier:
         isgui = True,
         preprocess = lambda x: x,
         postprocess = lambda x: x,
-        modelclass = SongClassifierChain
+        modelclass = SongClassifierChain,
+        **kwargs
     ):
         self.n_epoch    = n_epoch
         self.save_epoch = save_epoch
@@ -164,12 +165,12 @@ class SongClassifier:
 
         if self.isgpu:
             cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(structure, modelclass)
+        self.set_model(structure, modelclass, **kwargs)
         self.set_data(x_train, y_train, x_test, y_test)
 
-    def set_model(self, structure, modelclass):
+    def set_model(self, structure, modelclass, **kwargs):
         self.structure = structure
-        self.model = modelclass(structure = self.structure)
+        self.model = modelclass(structure = self.structure, **kwargs)
 
         if self.isgpu:
             self.model.to_gpu()  # Copy the model to the GPU

@@ -11,14 +11,17 @@ from . import song_classifier as sc
 from .pu_loss import pu_loss
 
 class PUTagClassifierChain(sc.SongClassifierChain):
+    def __init__(self, prior = 0.01, *args, **kwargs):
+        self.prior = prior
+        super().__init__(*args, **kwargs)
 
     # By R. Kiryo et al. (NIPS 2017)
     # GitHub: kiryor/nnPUlearning
     def error(self, x_data, y_data, train = True):
-#        y = self(Variable(x_data))
-#        t = Variable(y_data)
-#
-#        return pu_loss(y,t, prior = 0.1)
+#       y = self(Variable(x_data))
+#       t = Variable(y_data)
+
+#       return pu_loss(y,t, prior = self.prior)
 
         y = self(Variable(x_data))
         t = Variable((y_data == 1).astype(cupy.int8))
