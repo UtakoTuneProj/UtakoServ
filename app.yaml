@@ -23,3 +23,8 @@ libraries:
     version: "3.5.0"
   - name: youtube-dl
     version: "2018.3.10"
+
+handlers:
+  - url: /task/hourly
+    script: ServCore.py
+    login: admin
