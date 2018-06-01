@@ -1,11 +1,7 @@
 *~
-getthumb
 __pycache__
-ranking
-Chainertest
 logs
-Network
-result
+tmp
 
 *.conf
 *.swp
