@@ -9,7 +9,6 @@ import librosa.display
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
-from utako.presenter.wave_loader import WaveLoader
 from . import song_classifier as sc
 
 class SongAutoEncoderChain(sc.SongClassifierChain):
@@ -54,11 +53,7 @@ class SongAutoEncoder(sc.SongClassifier):
         )
     def set_data(self, train, y_train, test, y_test):
         if type(train) != np.ndarray or type(test) != np.ndarray :
-            if os.path.isfile('train.npy') and os.path.isfile('test.npy'):
-                train = np.load('train.npy')
-                test = np.load('test.npy')
-            else:
-                self.x_train, self.x_test = WaveLoader().fetch(isTrain = True)
+            raise TypeError('train, test must be np.ndarray')
 
         super().set_data(train, train, test, test)
 

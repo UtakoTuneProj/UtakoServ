@@ -6,7 +6,6 @@ import chainer
 import functools
 import matplotlib.pyplot as plt
 
-from utako.presenter.wave_loader import WaveLoader
 from . import song_classifier as sc
 from .pu_loss import pu_loss
 

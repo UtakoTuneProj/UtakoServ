@@ -6,7 +6,6 @@ import chainer
 import functools
 import librosa
 import librosa.display
-from utako.presenter.wave_loader import WaveLoader
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
 
