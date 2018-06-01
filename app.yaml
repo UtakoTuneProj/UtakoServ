@@ -1,0 +1,25 @@
+runtime: python35
+api_version: 1
+threadsafe: true
+
+libraries:
+  - name: chainer
+    version: "4.0.0"
+  - name: librosa
+    version: "0.5.1"
+  - name: mysqlclient
+    version: "1.3.12"
+  - name: numpy
+    version: "1.13.3"
+  - name: peewee
+    version: "3.5.0"
+  - name: progressbar2
+    version: "3.34.3"
+  - name: scipy
+    version: "1.0.0"
+  - name: sklearn
+    version: "0.19.1"
+  - name: tweepy
+    version: "3.5.0"
+  - name: youtube-dl
+    version: "2018.3.10"
