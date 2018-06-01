@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import utako
-import yaml
-import numpy as np
-import gc
-
-wav = np.load('wav.npy')
+from __init__ import utako, yaml, np, gc, wav
 
 def sae_test(
     fname = 'conf/sae.yaml',

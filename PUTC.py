@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import utako
-import yaml
-import numpy as np
-import gc
-
-wav = np.load('wav.npy')
-label = np.load('wav.tags.npy')
+from __init__ import utako, yaml, np, gc, wav, tags_label
 
 def putc_test(
     fname = 'conf/putc.yaml',
     wav = wav,
-    label = label,
+    label = tags_label,
     n_train = 90000,
     n_test = 10000,
     randomize = True,

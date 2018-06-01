@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import utako
-import yaml
-import numpy as np
-import gc
-
-wav = np.load('wav.npy')
-label = np.load('wav.label.npy')
+from __init__ import utako, yaml, np, gc, wav, songs_label
 
 def sc_test(
     fname = 'conf/sc.yaml',
     wav = wav,
-    label = label,
+    label = songs_label,
     n_train = 100000,
     n_test = 10000,
     randomize = True,
@@ -20,13 +14,6 @@ def sc_test(
     with open(fname) as f:
         structure = yaml.load(f)
     
-    if wav is None:
-        print('loading wav.npy')
-        wav = np.load('wav.npy')
-    if label is None:
-        print('loading wav.label.npy')
-        label = np.load('wav.label.npy')
-
     if randomize:
         index = np.random.permutation(wav.shape[0])
     else:
@@ -44,6 +31,8 @@ def sc_test(
         )
     SC.learn()
     gc.collect()
+
+    return SC, train_index, test_index
 
 if __name__ == '__main__':
     sc_test(
