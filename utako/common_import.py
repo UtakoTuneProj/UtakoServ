@@ -34,3 +34,6 @@ except AttributeError:
 
 config = configparser.ConfigParser()
 config.read('conf/auth.conf')
+
+with open('conf/settings.yaml') as f:
+    settings = yaml.load(f)
