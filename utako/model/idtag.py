@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 from peewee import *
 
-from utako.model.abstract_model import database, BaseModel
+from .abstract_model import database, BaseModel
+from .status import Status
 
 class Idtag(BaseModel):
-    id = CharField(db_column='ID')
+    id = ForeignKeyField(Status, db_column='ID')
     count = IntegerField(null=True)
     tagname = CharField(db_column='tagName', index=True)
 

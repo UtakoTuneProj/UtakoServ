@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 from peewee import *
 
-from utako.model.abstract_model import database, BaseModel
+from .abstract_model import database, BaseModel
+from .status import Status
 
 class Chart(BaseModel):
     comment = IntegerField(db_column='Comment')
-    id = CharField(db_column='ID')
+    id = ForeignKeyField(Status, db_column='ID')
     mylist = IntegerField(db_column='Mylist')
     time = FloatField(db_column='Time')
     view = IntegerField(db_column='View')
