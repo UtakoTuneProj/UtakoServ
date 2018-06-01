@@ -1,0 +1,51 @@
+- 
+  # each elements means layer and contains one 'link' and one or more 'func'
+  link:
+    type: 'conv'
+    # conv: convolution
+    # other link type:
+    #   'deconv': deconvolution
+    #   'linear': linear(affine)
+    #   'lstm': LSTM(WIP)
+    #   'pass': pass through
+    init:
+      # load from model file initialy
+      fname: 'result/sc_09.model'
+      number: 0
+    args:
+      # see documentation of chainer
+      ndim: 1
+      in_channels: 1
+      out_channels: 64
+      ksize: 320
+      stride: 64
+  func:
+    # func can contain several activation funcs
+    - 
+      type: 'tanh'
+      # tanh: hyperbolic tangent
+      # other func type:
+      #   pooling:
+      #   'pool': max pooling
+      #   'avgpool': average pooling
+      #   'unpool': unpooling
+      #
+      #   activation:
+      #   'relu': ReLU: Rectified Linear Unit
+      #   'lrelu': Leaky ReLU
+      #   'sigmoid': sigmoid
+      #   'abs': absolute
+      #
+      #   array manipulation:
+      #   'reshape': array reshape
+      #   'transpose': rearrange axis
+      #
+      #   normalization:
+      #   'drop': dropout
+      #   'norm': L2 normalization
+      #
+      #   other:
+      #   'pass': pass through: use if you don't need any func
+      args: {}
+  end_encode: True
+  # end_encode: keyword for dimensionality reduction
