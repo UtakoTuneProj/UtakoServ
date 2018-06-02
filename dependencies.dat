@@ -5,6 +5,7 @@ numpy==1.13.3
 peewee==3.5.0
 progressbar2==3.34.3
 scipy==1.0.0
-sklearn==0.19.1
+sklearn==0.0
+scikit-learn==0.19.1
 tweepy==3.5.0
 youtube-dl==2018.3.10
