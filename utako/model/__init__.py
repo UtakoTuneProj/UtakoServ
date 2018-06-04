@@ -7,5 +7,7 @@ import utako.model.chart
 import utako.model.idtag
 import utako.model.status
 import utako.model.song_index
+import utako.model.song_relation
+import utako.model.status_song_relation
 import utako.model.tagcolor
 import utako.model.tagpair
