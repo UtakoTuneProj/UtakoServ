@@ -9,7 +9,7 @@ from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.song_indexer import SongIndexer
 
 class SongIndexUpdater:
-    def __call__(self, limit = 10): #ランキング取得・キュー生成部
+    def __call__(self, limit = 10, retries = 5): #ランキング取得・キュー生成部
         movies = AnalyzeQueue.select(
             AnalyzeQueue.movie_id,
         ).where(
