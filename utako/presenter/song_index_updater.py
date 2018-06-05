@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from utako.common_import import *
 from peewee import fn
+import youtube_dl
 
 from utako.model.abstract_model import database
 from utako.model.song_index import SongIndex
