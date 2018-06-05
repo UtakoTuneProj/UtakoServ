@@ -30,31 +30,48 @@ class SongIndexUpdater:
         si = SongIndexer(structure)
 
         success = []
-        failed = []
+        deleted = []
+        failed = movie_list[:]
         si_update = []
-        for movie in movie_list:
-            try:
-                song_index = si(movie)
-            except Exception as e:
-                failed.append(movie)
-            else:
-                success.append(movie)
-                si_update.append(
-                    [ movie ] + song_index.tolist() + [ settings['model_version'] ],
-                )
-
-        with database.atomic():
-            AnalyzeQueue.delete().where(AnalyzeQueue.movie_id << success).execute()
-            AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed).execute()
-            SongIndex.insert_many(si_update,fields=[
-                SongIndex.id,
-                SongIndex.value0,
-                SongIndex.value1,
-                SongIndex.value2,
-                SongIndex.value3,
-                SongIndex.value4,
-                SongIndex.value5,
-                SongIndex.value6,
-                SongIndex.value7,
-                SongIndex.version,
-            ]).on_conflict_replace().execute()
+        try:
+            for movie in movie_list:
+                try:
+                    song_index = si(movie, retries = retries)
+                except youtube_dl.utils.YoutubeDLError as e:
+                    if e.exc_info[0] == urllib.error.HTTPError:
+                        http_err = e.exc_info[1]
+                        if http_err.code == 404:
+                            deleted.append(movie)
+                            failed.remove(movie)
+                            continue
+                        elif http_err.code == 403:
+                            continue
+                        else:
+                            raise
+                    else:
+                        raise
+                else:
+                    success.append(movie)
+                    failed.remove(movie)
+                    si_update.append(
+                        [ movie ] + song_index.tolist() + [ settings['model_version'] ],
+                    )
+        finally:
+            with database.atomic():
+                if len(success + deleted) > 0:
+                    AnalyzeQueue.delete().where(AnalyzeQueue.movie_id << success + deleted).execute()
+                if len(failed) > 0:
+                    AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed).execute()
+                if len(si_update) > 0:
+                    SongIndex.insert_many(si_update,fields=[
+                        SongIndex.id,
+                        SongIndex.value0,
+                        SongIndex.value1,
+                        SongIndex.value2,
+                        SongIndex.value3,
+                        SongIndex.value4,
+                        SongIndex.value5,
+                        SongIndex.value6,
+                        SongIndex.value7,
+                        SongIndex.version,
+                    ]).on_conflict_replace().execute()
