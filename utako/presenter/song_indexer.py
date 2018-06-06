@@ -9,16 +9,16 @@ import librosa
 class SongIndexer:
     def __init__(self, structure):
         self.model = SongClassifierChain(structure)
-    def __call__(self, mvid, sr = 5513, length = 8192):
-        wav_formatted = self.fetch_npyarray(mvid, sr, length)
+    def __call__(self, mvid, sr = 5513, length = 8192, retries = 5):
+        wav_formatted = self.fetch_npyarray(mvid, sr, length, retries)
         encoded_raw = self.model.encode(wav_formatted)
         score = scpost.main(
             encoded_raw.data,
             [ [mvid, 0, wav_formatted.shape[0]] ]
         )
         return score.reshape(-1)
-    def fetch_npyarray(self, mvid, sr, length):
-        NDL()(mvid)
+    def fetch_npyarray(self, mvid, sr, length, retries = 5):
+        NDL()(mvid, retries = retries)
         wav_raw = librosa.core.load(
             path = 'tmp/wav/{}.wav'.format(mvid),
             sr = sr,
