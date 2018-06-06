@@ -17,7 +17,7 @@ class SongIndexer:
             [ [mvid, 0, wav_formatted.shape[0]] ]
         )
         return score.reshape(-1)
-    def fetch_npyarray(self, mvid, sr, length, retries = 5):
+    def fetch_npyarray(self, mvid, sr, length, retries = 5, cleanup = True):
         NDL()(mvid, retries = retries)
         wav_raw = librosa.core.load(
             path = 'tmp/wav/{}.wav'.format(mvid),
@@ -26,5 +26,8 @@ class SongIndexer:
         )
         sample_count = wav_raw[0].shape[-1] // length
         wav_formatted = wav_raw[0][:length*sample_count].reshape(sample_count, 1, length)
+        if cleanup:
+            os.remove('tmp/wav/{}.wav'.format(mvid))
+            os.remove('tmp/mp4/{}.mp4'.format(mvid))
         return wav_formatted
 
