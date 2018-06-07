@@ -6,7 +6,7 @@ python:
 addons:
   apt:
     packages:
-      - python3-tkinter
+      - python3-tk
       - libmysqlclient-dev
       - ffmpeg
 
