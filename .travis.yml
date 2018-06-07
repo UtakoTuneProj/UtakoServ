@@ -1,7 +1,13 @@
+dist: xenial
 language: python
 python:
   - "3.5"
   - "3.6"
+
+env:
+  global:
+    PYTHONPATH: ./
+    PYTHON_ENV: test
 
 addons:
   apt:
@@ -14,4 +20,4 @@ install:
   - pip install -r dependencies.dat
 
 script:
-  - PYTHONPATH=./ PYTHON_ENV=test pytest
+  - pytest
