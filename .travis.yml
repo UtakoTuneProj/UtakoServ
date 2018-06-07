@@ -14,7 +14,6 @@ addons:
     packages:
       - python3-tk
       - libmysqlclient-dev
-      - ffmpeg
 
 install:
   - pip install -r dependencies.dat
