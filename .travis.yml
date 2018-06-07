@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+
+addons:
+  apt:
+    packages:
+      - python3-tkinter
+      - libmysqlclient-dev
+      - ffmpeg
+
+install:
+  - pip install -r dependencies.dat
+
+script:
+  - PYTHONPATH=./ PYTHON_ENV=test pytest
