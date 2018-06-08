@@ -12,3 +12,4 @@ auth.devel.conf
 *.npy
 *.mp4
 *.model
+model_*.yaml
