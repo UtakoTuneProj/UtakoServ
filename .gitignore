@@ -2,13 +2,13 @@
 __pycache__
 logs
 tmp
+.coverage
+.pytest_cache
 
-*.conf
+auth.conf
+auth.devel.conf
 *.swp
 *.wav
 *.npy
-*.json
 *.mp4
 *.model
-*.yaml
-*.txt
