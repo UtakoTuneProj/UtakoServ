@@ -21,7 +21,7 @@ class NicoDownloader:
                 time.sleep(10)
                 self(mvid, retries = retries - 1, force = force)
         else:
-            sbproc.run([
+            process = sbproc.run([
                 'ffmpeg',
                 '-i', #infile
                 'tmp/mp4/{}.mp4'.format(mvid),
@@ -34,3 +34,7 @@ class NicoDownloader:
                 '44100',
                 'tmp/wav/{}.wav'.format(mvid),#outfile name
             ])
+            if process.returncode != 0: # if process does not stop accurately
+                os.remove('tmp/mp4/{}.mp4'.format(mvid))
+                time.sleep(10)
+                self(mvid, retries = retries, force = force)
