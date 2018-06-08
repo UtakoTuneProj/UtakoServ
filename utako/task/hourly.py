@@ -9,6 +9,5 @@ from utako.presenter.song_index_updater import SongIndexUpdater
 def hourly():
     StatusUpdater()()
     ChartUpdater()()
-    SongIndexUpdater()(limit = 10)
 
     return None
