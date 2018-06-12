@@ -5,4 +5,4 @@ import utako
 import time
 
 if __name__ == '__main__':
-      tree_constructor = utako.presenter.song_relation_constructor.SongRelationConstructor(max_relation=13)
+      tree_constructor = utako.presenter.song_relation_constructor.SongRelationConstructor()(max_relations=13)
