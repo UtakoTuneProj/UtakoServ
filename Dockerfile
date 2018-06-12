@@ -1,7 +1,7 @@
 FROM python:3.5-jessie
 MAINTAINER nanamachi
 
-RUN echo 'http://ftp.uk.debian.org/debian jessie-backports main' >> /etc/apt/source.list &&\
+RUN echo 'deb http://ftp.uk.debian.org/debian jessie-backports main' >> /etc/apt/sources.list &&\
     apt-get update &&\
     apt-get install -y --no-install-recommends ffmpeg python3-tk &&\
     apt-get install -y --no-install-recommends gcc musl g++ gfortran libpng-dev
