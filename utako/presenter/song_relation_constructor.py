@@ -41,41 +41,45 @@ class SongRelationConstructor:
         return relations[mask]
 
     def store_relations(self, movies, relations):
-        Origin = StatusSongRelation.alias()
-        Destination = StatusSongRelation.alias()
-        with database.atomic():
-            for rel in relations:
-                origin_id = movies[rel[0]]
-                destination_id = movies[rel[1]]
-                query = Origin.select(
-                    Origin.status, Destination.status, SongRelation
-                ).join(
-                    Destination, on=(
-                        Origin.song_relation == Destination.song_relation
-                    )
-                ).join(
-                    SongRelation
-                ).where(
-                    ( Origin.status != Destination.status, )
-                    & ( Origin.status == origin_id )
-                    & ( Destination.status == destination_id )
-                )
-                if not query.exists():
-                    self.create(movies, rel)
-                elif query.get().version < settings['model_version']:
-                    self.create(movies, rel)
-                elif query.get().distance != rel[2]:
-                    raise
-
+        ssr_target = []
         def create(movies, rel):
             r = SongRelation.create(
                 distance = rel[2],
                 version = settings['model_version']
             )
-            StatusSongRelation.insert_many([{
+            ssr_target += [{
                 'status': movies[rel[0]],
                 'song_relation': r.id
             },{
                 'status': movies[rel[1]],
                 'song_relation': r.id
-            }]).execute()
+            }]
+
+        Origin = StatusSongRelation.alias()
+        Destination = StatusSongRelation.alias()
+        pb = ProgressBar()
+        with database.atomic():
+            for rel in pb( relations ):
+                origin_id = movies[rel[0]]
+                destination_id = movies[rel[1]]
+                query = Origin.select(
+                    Origin.status, Destination.status, SongRelation
+                ).join(
+                    SongRelation
+                ).join(
+                    Destination, on=(
+                        Origin.song_relation == Destination.song_relation
+                    )
+                ).where(
+                    ( Origin.status != Destination.status )
+                    & ( Origin.status == origin_id )
+                    & ( Destination.status == destination_id )
+                )
+                if not query.exists():
+                    create(movies, rel)
+                else:
+                    for obj in query:
+                        if obj.song_relation.version != settings['model_version']:
+                            create(movies, rel)
+
+            StatusSongRelation.insert_many(ssr_target).execute()
