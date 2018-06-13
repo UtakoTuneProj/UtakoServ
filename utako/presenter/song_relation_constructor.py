@@ -47,7 +47,7 @@ class SongRelationConstructor:
                 distance = rel[2],
                 version = settings['model_version']
             )
-            ssr_target += [{
+            return [{
                 'status': movies[rel[0]],
                 'song_relation': r.id
             },{
@@ -76,10 +76,10 @@ class SongRelationConstructor:
                     & ( Destination.status == destination_id )
                 )
                 if not query.exists():
-                    create(movies, rel)
+                    ssr_target += create(movies, rel)
                 else:
                     for obj in query:
                         if obj.song_relation.version != settings['model_version']:
-                            create(movies, rel)
+                            ssr_target += create(movies, rel)
 
             StatusSongRelation.insert_many(ssr_target).execute()
