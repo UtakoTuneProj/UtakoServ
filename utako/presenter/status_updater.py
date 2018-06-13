@@ -7,8 +7,11 @@ from utako.presenter.json_reader import JsonReader
 from utako.presenter.timedate_converter import TimedateConverter
 
 class StatusUpdater:
-    def __call__(self): #ランキング取得・キュー生成部
-        for i in range(15): #15ページ目まで取得する
+    def __call__(self, limit = 15): #ランキング取得・キュー生成部
+
+        newcomer = []
+
+        for i in range(limit): #15ページ目まで取得する
             self._rankfilereq(page = i)
             raw_rank = JsonReader()("tmp/ranking/" + str(i) + ".json")['data']
             for mvdata in raw_rank:
@@ -19,22 +22,21 @@ class StatusUpdater:
                     Status.id == mvid
                 )) == 0:
                     #取得済みリストの中に含まれていないならば
-                    Status.create(
+                    newcomer.append(dict(
                         id          = mvid,
                         validity    = 1,
                         epoch       = 0,
                         iscomplete  = 0,
                         postdate    = postdate,
                         analyzegroup= None
-                    )
+                    ))
                 else:
-                    break
-            else:
-                continue
-            break
+                    continue
 
         for j in range(i+1):
             os.remove("tmp/ranking/" + str(j) + ".json")
+            
+        Status.insert_many(newcomer).execute()
 
         return None
 
