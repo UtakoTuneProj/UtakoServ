@@ -82,4 +82,5 @@ class SongRelationConstructor:
                         if obj.song_relation.version != settings['model_version']:
                             ssr_target += create(movies, rel)
 
-            StatusSongRelation.insert_many(ssr_target).execute()
+            if len(ssr_target) != 0:
+                StatusSongRelation.insert_many(ssr_target).execute()
