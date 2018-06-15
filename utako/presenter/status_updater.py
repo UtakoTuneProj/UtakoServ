@@ -36,7 +36,8 @@ class StatusUpdater:
         for j in range(i+1):
             os.remove("tmp/ranking/" + str(j) + ".json")
             
-        Status.insert_many(newcomer).execute()
+        if len(newcomer) > 0:
+            Status.insert_many(newcomer).execute()
 
         return None
 
