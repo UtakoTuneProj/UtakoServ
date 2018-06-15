@@ -5,6 +5,7 @@ from utako.common_import import *
 from utako.model.chart import Chart
 from utako.model.status import Status
 from utako.model.idtag import Idtag
+from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.xml_fetcher import XmlFetcher
 from utako.presenter.xml_reader import XmlReader
 from utako.exception.no_response_exception import NoResponseException
@@ -74,6 +75,13 @@ class ChartUpdater:
             comment = movf['comment_num'],
             mylist  = movf['mylist_counter'],
         )
+
+        if movf['view_counter'] > 2000:
+            AnalyzeQueue.create(
+                movie_id = mvid,
+                version = settings['model_version'],
+                status = 0,
+            )
 
         isComplete = False
         status = True
