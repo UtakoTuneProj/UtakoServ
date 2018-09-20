@@ -6,8 +6,9 @@ from .abstract_model import database, BaseModel
 from .status import Status
 
 class Chart(BaseModel):
+    id = AutoField()
     comment = IntegerField(db_column='Comment')
-    id = ForeignKeyField(Status, db_column='ID')
+    status_id = ForeignKeyField(Status, db_column='status_id')
     mylist = IntegerField(db_column='Mylist')
     time = FloatField(db_column='Time')
     view = IntegerField(db_column='View')
@@ -16,7 +17,6 @@ class Chart(BaseModel):
     class Meta:
         db_table = 'chart'
         indexes = (
-            (('id', 'epoch'), True),
+            (('status_id', 'epoch'), True),
         )
-        primary_key = CompositeKey('epoch', 'id')
 

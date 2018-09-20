@@ -62,7 +62,7 @@ class SaeTagComparator:
 
     def get_tagged_ids(self, tagname):
         query = Idtag.select(
-                    Idtag.id
+                    Idtag.status_id
                 ).where(
                     Idtag.tagname == tagname
                 )

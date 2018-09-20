@@ -6,14 +6,15 @@ from .abstract_model import database, BaseModel
 from .status import Status
 
 class Idtag(BaseModel):
-    id = ForeignKeyField(Status, db_column='ID')
+    id = AutoField()
+    status_id = ForeignKeyField(Status, db_column='status_id')
     count = IntegerField(null=True)
     tagname = CharField(db_column='tagName', index=True)
 
     class Meta:
         db_table = 'IDtag'
         indexes = (
-            (('id', 'tagname'), True),
+            (('status_id', 'tagname'), True),
         )
-        primary_key = CompositeKey('id', 'tagname')
+        primary_key = id
 

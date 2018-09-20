@@ -6,7 +6,8 @@ from .abstract_model import database, BaseModel
 from .status import Status
 
 class SongIndex(BaseModel):
-    id = ForeignKeyField(Status, db_column='ID')
+    id = AutoField()
+    status_id = ForeignKeyField(Status, db_column='status_id')
     value0 = FloatField()
     value1 = FloatField()
     value2 = FloatField()
