@@ -16,5 +16,4 @@ class Idtag(BaseModel):
         indexes = (
             (('status_id', 'tagname'), True),
         )
-        primary_key = id
 
