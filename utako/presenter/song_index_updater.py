@@ -65,7 +65,7 @@ class SongIndexUpdater:
                     AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed).execute()
                 if len(si_update) > 0:
                     SongIndex.insert_many(si_update,fields=[
-                        SongIndex.id,
+                        SongIndex.status_id,
                         SongIndex.value0,
                         SongIndex.value1,
                         SongIndex.value2,

@@ -68,12 +68,12 @@ class ChartUpdater:
         ).total_seconds() / 60
 
         Chart.create(
-            id      = mvid,
-            epoch   = epoch,
-            time    = passedmin,
-            view    = movf['view_counter'],
-            comment = movf['comment_num'],
-            mylist  = movf['mylist_counter'],
+            status_id = mvid,
+            epoch     = epoch,
+            time      = passedmin,
+            view      = movf['view_counter'],
+            comment   = movf['comment_num'],
+            mylist    = movf['mylist_counter'],
         )
 
         if movf['view_counter'] > 2000:
@@ -98,9 +98,9 @@ class ChartUpdater:
             source = []
             for tag in movf['tags']:
                 source.append({
-                    'id'      : mvid,
-                    'tagname' : tag,
-                    'count'   : 1
+                    'status_id' : mvid,
+                    'tagname'   : tag,
+                    'count'     : 1
                 })
 
             Idtag.insert_many(

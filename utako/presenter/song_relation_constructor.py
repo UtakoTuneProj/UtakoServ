@@ -20,8 +20,9 @@ class SongRelationConstructor:
         movies = []
         positions = []
         for q in query:
-            movies.append(q[0])
-            positions.append(q[1:9])
+            print(q)
+            movies.append(q[1])
+            positions.append(q[2:10])
         movies = np.array(movies, dtype = str)
         positions = np.array(positions, dtype = np.float64)
         return movies, positions

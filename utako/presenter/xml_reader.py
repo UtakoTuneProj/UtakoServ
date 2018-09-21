@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from utako.common_import import *
 
-from utako.model.chart import Chart
 from utako.exception.mov_deleted_exception import MovDeletedException
 from utako.presenter.timedate_converter import TimedateConverter
 

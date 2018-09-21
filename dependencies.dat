@@ -12,4 +12,4 @@ scipy==1.0.0
 sklearn==0.0
 scikit-learn==0.19.1
 tweepy==3.5.0
-youtube-dl==2018.3.10
+youtube-dl==2018.9.18
