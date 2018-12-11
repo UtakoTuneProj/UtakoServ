@@ -11,3 +11,4 @@ import utako.presenter.status_updater
 import utako.presenter.timedate_converter
 import utako.presenter.tweeter
 import utako.presenter.xml_reader
+import utako.presenter.song_score_updater
