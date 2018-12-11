@@ -3,16 +3,23 @@
 from utako.common_import import *
 
 from utako.exception.mov_deleted_exception import MovDeletedException
+from utako.exception.no_response_exception import NoResponseException
 from utako.presenter.timedate_converter import TimedateConverter
 
 class XmlReader:
-    def __call__(self, fp, coding = 'utf-8'):
+    def __call__(self, mvid, coding = 'utf-8'):
         ret = {}
 
-        with codecs.open(fp, 'r', coding) as f:
-            root = ET.parse(f).getroot()
+        req = urllib.request.Request("http://ext.nicovideo.jp/api/getthumbinfo/" + mvid)
+
+        try:
+            with urllib.request.urlopen(req) as f:
+                root = ET.parse(f).getroot()
+        except urllib.error.HTTPError:
+            raise NoResponseException("Cannot get thumbs for {}".format(mvid))
+
         if root.attrib['status'] == 'fail':
-            raise MovDeletedException('{} is deleted data.'.format(fp))
+            raise MovDeletedException('{} has been deleted.'.format(mvid))
 
         for child in root[0]:#xmlの辞書化
             if child.tag == 'tags':
