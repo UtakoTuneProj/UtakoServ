@@ -10,6 +10,10 @@ from utako.presenter.xml_reader import XmlReader
 from utako.exception.mov_deleted_exception import MovDeletedException
 from utako.exception.no_response_exception import NoResponseException
 
+VIEW_WEIGHT = np.array((0.68, 0.16, 0.017, -0.15, 0.69))
+COMMENT_WEIGHT = np.array((-0.066, 0.86, 0.064, -0.041, 0.19))
+MYLIST_WEIGHT = np.array((-0.04, 0.14, 0.8, -0.03, 0.14))
+
 class SongScoreUpdater:
     def __call__(self, mvid): #ランキング取得・キュー生成部
         chart = Chart.select(
@@ -30,11 +34,17 @@ class SongScoreUpdater:
                 return
                 
             days = (datetime.datetime.now() - ret["first_retrieve"]).days
+            predict_args = np.array((
+                ret['view_counter'],
+                ret['comment_num'],
+                ret['mylist_counter'],
+                days,
+                10
+            ))
             if days >= 7:
-                predict = lambda x, a, b: x * ( a * np.log10(days) + b)
-                view = predict(ret['view_counter'], 0.11, 0.93)
-                comment = predict(ret['comment_num'], 0.05, 0.97)
-                mylist = predict(ret['mylist_counter'], 0.03, 0.98)
+                view = ( predict_args ** VIEW_WEIGHT ).prod()
+                comment = ( predict_args ** COMMENT_WEIGHT ).prod()
+                mylist = ( predict_args ** MYLIST_WEIGHT ).prod()
                 score_status = -1
 
             else:
