@@ -71,7 +71,7 @@ class SongScoreUpdater:
             mylist = chart.mylist
             score_status = 0
 
-        score = np.sqrt(view) * (1-10**(-50 * comment / view)) * (1-10**(-50 * mylist / view))
+        score = np.sqrt(view) * (1 - 0.5 * 10**(-20 * comment / view)) * (1 - 0.5 * 10**(-20 * mylist / view))
         return Status.update({
             Status.score: score,
             Status.score_status: score_status
