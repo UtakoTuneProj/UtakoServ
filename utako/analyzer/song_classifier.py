@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # Analyzer: UtakoChainer core module
 from utako.common_import import *
+import gc
 import chainer
+import cupy.cuda.runtime as rt
 import functools
 import librosa
 import librosa.display
@@ -299,10 +301,14 @@ class SongClassifier:
                 y_data = out_batch[i,j,...]
               # y = self.model(batch[i,j, ...] + noise)
               # t = Variable(out_batch[i,j,...].argmax(axis=-1).reshape(-1))
-                error = self.model.error(x_data + noise, y_data)
                 if isTrain:
+                    error = self.model.error(x_data + noise, y_data)
                     error.backward()
                     self.optimizer.update()
+                    error.unchain_backward()
+                else:
+                    with chainer.no_backprop_mode():
+                        error = self.model.error(x_data + noise, y_data)
               #     self.optimizer.update(F.softmax_cross_entropy, y, t)
               # loss += F.softmax_cross_entropy(y,t).data
                 loss += error.data
@@ -311,6 +317,7 @@ class SongClassifier:
             sum_loss += loss
 
         chainer.config.train = train_status
+        gc.collect()
         return float(sum_loss / batch_count / time_count), prediction
 
     def visualize_loss(self, *args, **kwargs):
@@ -389,6 +396,7 @@ class SongClassifier:
 
         except KeyboardInterrupt:
             print('Interrupted')
+            gc.collect()
 
         finally:
             elapsedTime = time.time() - startTime
