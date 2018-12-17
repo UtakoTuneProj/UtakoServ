@@ -5,9 +5,9 @@ from __init__ import utako, yaml, np, gc, wav
 def sae_test(
     fname = 'conf/sae.yaml',
     wav = wav,
-    n_train = 90000,
+    n_train = 100000,
     n_test = 10000,
-    randomize = True,
+    randomize = False,
     **kwargs
 ):
     with open(fname) as f:
@@ -38,6 +38,6 @@ if __name__ == '__main__':
         isgui = False,
 #       isgpu = False,
         n_epoch = 100,
-        batchsize = 20
+        batchsize = 200
     )
 

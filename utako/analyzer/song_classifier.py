@@ -163,18 +163,23 @@ class SongClassifier:
         self.preprocess = preprocess
         self.postprocess= postprocess
         self.basename  = 'result/{}'.format(name)
-
-        if self.isgpu:
-            cuda.get_device(0).use()  # Make a specified GPU current
-        self.set_model(structure, modelclass, **kwargs)
-        self.set_data(x_train, y_train, x_test, y_test)
-
-    def set_model(self, structure, modelclass, **kwargs):
         self.structure = structure
-        self.model = modelclass(structure = self.structure, **kwargs)
+        self.modelclass = modelclass
+        self.model_kwargs = kwargs
+
+        self.device = 0 if self.isgpu else -1  # Make a specified GPU current
+
+        self.set_model(modelclass, **kwargs)
+        self.set_data(x_train, y_train, x_test, y_test)
+        self.set_trainer()
+
+    def set_model(self, modelclass, **kwargs):
+        self.model = L.Classifier(
+            modelclass(structure = self.structure, **kwargs),
+        )
 
         if self.isgpu:
-            self.model.to_gpu()  # Copy the model to the GPU
+            self.model.to_gpu(self.device)  # Copy the model to the GPU
 
         self.optimizer = optimizers.AdaGrad()
         self.optimizer.setup(self.model)
@@ -187,265 +192,40 @@ class SongClassifier:
             raise TypeError('x, y data must be np.ndarray')
 
         else:
-            self.x_train = x_train
-            self.x_test  = x_test
-            self.y_train = y_train
-            self.y_test  = y_test
-
-        self.N_train = len(self.x_train)
-        self.N_test  = len(self.x_test)
-
-    def get_batch(
-        self,
-        in_data,
-        out_data,
-        random = False,
-        batchsize = None,
-    ):
-
-        in_data_size, in_length = in_data.shape
-        out_data_size, out_length = out_data.shape
-        if batchsize is None:
-            batchsize = self.batchsize
-        
-        if in_data_size != out_data_size:
-            raise TypeError(
-                'in_data_size {} must be equal to out_data_size {}'.format(
-                    in_data_size,
-                    out_data_size
-            ))
-        else:
-            data_size = in_data_size
-
-        if data_size % batchsize != 0:
-            add_index = np.random.permutation(
-                batchsize - data_size % batchsize
-            ) % data_size
-            in_data = np.append(
-                in_data,
-                in_data[add_index], axis = 0
-            )
-            out_data = np.append(
-                out_data,
-                out_data[add_index], axis = 0
-            )
-
-        data_size, _ = in_data.shape
-        if random:
-            order = np.random.permutation(data_size)
-            in_data = in_data[order]
-            out_data = out_data[order]
-
-        in_batch = in_data.reshape(
-            data_size // batchsize,
-            batchsize,
-            1,
-            1,
-            in_length
-        ).transpose(0,2,1,3,4)
-        out_batch = out_data.reshape(
-            data_size // batchsize,
-            batchsize,
-            1,
-            1,
-            out_length
-        ).transpose(0,2,1,3,4)
-            
-        #batch = self.preprocess(batch)
-
-        if self.isgpu:
-            in_batch = cuda.to_gpu(in_batch)
-            out_batch = cuda.to_gpu(out_batch)
-
-        return in_batch, out_batch
+            self.train = chainer.datasets.TupleDataset(x_train, y_train)
+            self.test = chainer.datasets.TupleDataset(x_test, y_test)
     
-    def unify_batch(self, batch):
-        batch_count, time_count, batchsize, channels, timesize = batch.shape
-        if self.isgpu:
-            batch = cuda.to_cpu(batch)
-        batch = self.postprocess(batch)
-        res = batch.reshape(batch_count * batchsize, time_count * channels * timesize)
-        return res
+    def set_trainer(self):
+        self.train_iter = chainer.iterators.SerialIterator(self.train, self.batchsize)
+        self.test_iter = chainer.iterators.SerialIterator(self.test, self.batchsize, repeat=False, shuffle=False)
 
-    def challenge(self, in_batch, out_batch, isTrain = False, noise_scale = 0.10):
-        train_status = chainer.config.train
-        chainer.config.train = isTrain
+        updater = chainer.training.updaters.StandardUpdater(self.train_iter, self.optimizer, device=self.device)
+        trainer = chainer.training.Trainer(updater, (self.n_epoch, 'epoch'), out='result/')
 
-        batch = in_batch
-        batch_count, time_count, batchsize, channels, timesize = batch.shape
-        prediction   = np.zeros(out_batch.shape)
-        if self.isgpu:
-            prediction = cuda.to_gpu(prediction)
-        sum_loss     = 0
-        perm = np.arange(batch_count)
-        if isTrain:
-            np.random.shuffle(perm)
-        for i in perm:
-            loss = 0
-            # initialize State
-            self.model.reset_state()
-            for j in np.arange(time_count):
-                # 勾配を初期化
-                self.model.cleargrads()
-                # ノイズを付加
-                if isTrain:
-                    noise = np.random.normal(scale = noise_scale, size = (batchsize, channels, timesize))
-                else:
-                    noise = np.zeros((batchsize, channels, timesize))
-                noise = np.array(noise, dtype = np.float32)
-                if self.isgpu:
-                    noise = cuda.to_gpu(noise)
-                    
-                # 順伝播させて誤差と精度を算出
-                x_data = batch[i,j,...]
-                y_data = out_batch[i,j,...]
-              # y = self.model(batch[i,j, ...] + noise)
-              # t = Variable(out_batch[i,j,...].argmax(axis=-1).reshape(-1))
-                if isTrain:
-                    error = self.model.error(x_data + noise, y_data)
-                    error.backward()
-                    self.optimizer.update()
-                    error.unchain_backward()
-                else:
-                    with chainer.no_backprop_mode():
-                        error = self.model.error(x_data + noise, y_data)
-              #     self.optimizer.update(F.softmax_cross_entropy, y, t)
-              # loss += F.softmax_cross_entropy(y,t).data
-                loss += error.data
+        self.extend_trainer(trainer)
+        self.trainer = trainer
 
-                prediction[i, j, ...] = self.model(x_data).data.reshape(y_data.shape)
-            sum_loss += loss
+    def extend_trainer(self, trainer):
+        extensions = chainer.training.extensions
+        trainer.extend(extensions.Evaluator(self.test_iter, self.model, device=self.device))
+        trainer.extend(extensions.snapshot(), trigger=(self.save_epoch, 'epoch'))
+        trainer.extend(extensions.LogReport())
+        trainer.extend(extensions.PrintReport([
+            'epoch', 'main/loss', 'validation/main/loss',
+            'main/accuracy', 'validation/main/accuracy', 'elapsed_time',
+        ]))
+        trainer.extend(extensions.ProgressBar())
 
-        chainer.config.train = train_status
-        gc.collect()
-        return float(sum_loss / batch_count / time_count), prediction
-
-    def visualize_loss(self, *args, **kwargs):
-        kernel = np.ones(5)/5
-
-        for i, s in enumerate(args):
-            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
-            plt.plot(range(len(tmp)), tmp, label = str(i))
-        for key in kwargs:
-            s = kwargs[key]
-            tmp = np.convolve(np.array(s), kernel, mode = 'valid')
-            plt.plot(range(len(tmp)), tmp, label = key)
-        plt.legend()
-        plt.yscale('log')
-        plt.show()
-
-    def __call__(self, mode, mvid = None, modelfile = None):
-        pass
+        if self.isgui and extensions.PlotReport.available():
+            trainer.extend(extensions.PlotReport(
+                ['main/loss', 'validation/main/loss'], 'epoch'
+            ))
+            trainer.extend(extensions.PlotReport(
+                ['main/accuracy', 'validation/main/accuracy'], 'epoch'
+            ))
 
     def learn(self):
-        startTime = time.time()
-
-        x_train_batch, y_train_batch = self.get_batch(
-            self.x_train,
-            self.y_train,
-            random = True
-        )
-        x_test_batch, y_test_batch = self.get_batch(
-            self.x_test,
-            self.y_test
-        )
-        train_loss  = []
-        test_loss   = []
-
-        try:
-            # Learning loop
-            for epoch in range(self.n_epoch):
-                print('epoch', epoch + 1, flush = True)
-
-                with chainer.using_config('train', True):
-                    res, pred = self.challenge(
-                        x_train_batch,
-                        y_train_batch,
-                        isTrain = True,
-                        noise_scale = 0.07 * np.log(epoch+10) - 0.07
-                    )
-                    # # 訓練データの誤差と、正解精度を表示
-                    print('train mean loss={}'.format(res))
-                    if issubclass(y_train_batch.dtype.type, np.integer):
-                        print('train accuracy={}'.format(
-                            F.accuracy(
-                                self.unify_batch( pred ),
-                                self.unify_batch( y_train_batch ).argmax(axis=-1)
-                            ).data
-                        ))
-                    train_loss.append(res)
-
-                # evaluation
-                # テストデータで誤差と、正解精度を算出し汎化性能を確認
-
-                with chainer.using_config('train', False):
-                    res, pred = self.challenge(x_test_batch, y_test_batch, isTrain = False)
-                    # # 訓練データの誤差と、正解精度を表示
-                    print('test mean loss={}'.format(res))
-                    if issubclass(y_test_batch.dtype.type, np.integer):
-                        print('test accuracy={}'.format(
-                            F.accuracy(
-                                self.unify_batch( pred ),
-                                self.unify_batch( y_test_batch ).argmax(axis=-1)
-                            ).data
-                        ))
-                    test_loss.append(res)
-
-                if epoch % self.save_epoch == 0:
-                    serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
-
-        except KeyboardInterrupt:
-            print('Interrupted')
-            gc.collect()
-
-        finally:
-            elapsedTime = time.time() - startTime
-            print('Total Time: {0}[min.]'.format(elapsedTime / 60))
-
-            serializers.save_npz('{0}_{1:04d}.model'.format(self.basename, epoch), self.model)
-
-            if self.isgui: 
-                # 精度と誤差をグラフ描画
-                # plt.plot(range(len(train_loss)), train_loss)
-                self.visualize_loss(
-                    train = train_loss,
-                    test  = test_loss,
-                )
-
-            self.examine({
-                'train': x_train_batch,
-                'test':  x_test_batch,
-            },{
-                'train': y_train_batch,
-                'test':  y_test_batch,
-            })
-
-            with open('{}.json'.format(self.basename), 'w') as f:
-                json.dump([train_loss, test_loss], f)
-
-        return train_loss, test_loss
-
-    def examine(self, x_batches, y_batches):
-        # trial: list/dict: list/dict for plot waveform and/or save wave if trial is None:
-
-        loss = {}
-        for key in x_batches:
-            x_batch = x_batches[key]
-            y_batch = y_batches[key]
-
-            with chainer.using_config('train', False):
-                loss[key], pred = self.challenge(x_batch, y_batch, isTrain = False)
-                print('{} mean loss={}'.format(key, loss[key]))
-                if issubclass(y_batch.dtype.type, np.integer):
-                    print('{} accuracy={}'.format(
-                        key,
-                        F.accuracy(
-                            self.unify_batch( pred ),
-                            self.unify_batch( y_batch ).argmax(axis=-1)
-                        ).data
-                    ))
-
-        return loss 
+        self.trainer.run()
 
 #    def analyze():
 #        model = ChartModel(n_units = n_units, layer = layer)

@@ -24,9 +24,9 @@ def sc_test(
         utako.analyzer.song_classifier.SongClassifier(
             structure = structure,
             x_train = wav[train_index, :],
-            y_train = label[train_index, :],
+            y_train = label[train_index],
             x_test  = wav[test_index, :],
-            y_test  = label[test_index, :],
+            y_test  = label[test_index],
             **kwargs
         )
     SC.learn()
@@ -39,6 +39,6 @@ if __name__ == '__main__':
         isgui = True,
 #       isgpu = False,
         n_epoch = 100,
-        batchsize = 25
+        batchsize = 100 
     )
 
