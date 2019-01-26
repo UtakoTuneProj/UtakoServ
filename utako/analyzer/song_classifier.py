@@ -43,8 +43,8 @@ class SongClassifierChain(ChainList):
 
             if 'init' in layer['link']:
                 X = np.load(layer['link']['init']['fname'])
-                args[ 'initialW' ] = X['{}/W'.format(layer['link']['init']['number'])]
-                args[ 'initial_bias' ] = X['{}/b'.format(layer['link']['init']['number'])]
+                args[ 'initialW' ] = X['updater/model:main/predictor/{}/W'.format(layer['link']['init']['number'])]
+                args[ 'initial_bias' ] = X['updater/model:main/predictor/{}/b'.format(layer['link']['init']['number'])]
 
             links.append(cls(
                 **args,
@@ -174,9 +174,8 @@ class SongClassifier:
         self.set_trainer()
 
     def set_model(self, modelclass, **kwargs):
-        self.model = L.Classifier(
-            modelclass(structure = self.structure, **kwargs),
-        )
+        self.predictor = modelclass(structure = self.structure, **kwargs)
+        self.model = L.Classifier(self.predictor)
 
         if self.isgpu:
             self.model.to_gpu(self.device)  # Copy the model to the GPU

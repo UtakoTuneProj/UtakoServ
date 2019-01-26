@@ -53,8 +53,9 @@ class SongAutoEncoder(sc.SongClassifier):
         )
     
     def set_model(self, modelclass, **kwargs):
+        self.predictor = modelclass(structure = self.structure, **kwargs)
         self.model = L.Classifier(
-            modelclass(structure = self.structure, **kwargs),
+            self.predictor,
             lossfun=F.mean_squared_error,
             accfun=F.mean_absolute_error,
         )
@@ -85,10 +86,26 @@ class SongAutoEncoder(sc.SongClassifier):
         plt.legend()
         plt.show()
 
-    def write_wave(self, wave, fname = None):
-        if fname is None:
-            fname = self.basename + '.wav'
-        librosa.output.write_wav(fname, wave, sr=5513)
+    def extend_trainer(self, trainer):
+        super().extend_trainer(trainer)
+        trainer.extend(write_wave(self.predictor, self.test_iter.next(), self.basename, isgpu=self.isgpu))
+
+def write_wave(model, waves, basename, isgpu=False):
+    @chainer.training.make_extension(trigger=(10, 'epoch'))
+    def write_wave(trainer):
+        for i, w in enumerate(waves):
+            x, y = map(lambda x: x.reshape(1,1,-1), w)
+            if isgpu:
+                x = chainer.cuda.to_gpu(x)
+            p = model(x)
+            if isgpu:
+                p.to_cpu()
+            fname = basename + '.{}.predict.wav'.format(i)
+            librosa.output.write_wav(fname, p.data.reshape(-1), sr=5513)
+            fname = basename + '.{}.teacher.wav'.format(i)
+            librosa.output.write_wav(fname, y.reshape(-1), sr=5513)
+
+    return write_wave
 
 #    def analyze():
 #        model = ChartModel(n_units = n_units, layer = layer)
