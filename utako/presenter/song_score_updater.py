@@ -33,7 +33,12 @@ class SongScoreUpdater:
             try:
                 ret = XmlReader()(mvid)
             except MovDeletedException:
-                return
+                return Status.update({
+                    Status.score: None,
+                    Status.score_status: -2
+                }).where(
+                    Status.id == mvid
+                )
             except NoResponseException:
                 return
                 

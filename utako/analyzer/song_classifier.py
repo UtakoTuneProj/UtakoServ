@@ -4,7 +4,6 @@
 from utako.common_import import *
 import gc
 import chainer
-import cupy.cuda.runtime as rt
 import functools
 import librosa
 import librosa.display
