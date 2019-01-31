@@ -1,4 +1,10 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 from utako.task import dl_songset
 
-dl_songset.dl_songset()
+dl_songset.dl_songset(
+    songs_limit=200,
+    length_limit=250,
+    sr=11050,
+    length=22100,
+    duplication=8,
+)
