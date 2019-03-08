@@ -6,6 +6,7 @@ from peewee import fn
 from utako.model.abstract_model import database
 from utako.model.chart import Chart
 from utako.model.status import Status
+from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.xml_reader import XmlReader
 from utako.exception.mov_deleted_exception import MovDeletedException
 from utako.exception.no_response_exception import NoResponseException
@@ -19,7 +20,14 @@ FORWARD_COMMENT_WEIGHT = np.array((0.20, 0.83, 0.068, -0.28, 0.70))
 FORWARD_MYLIST_WEIGHT = np.array((0.18, 0.022, 0.95, -0.26, 0.64))
 
 class SongScoreUpdater:
-    def __call__(self, mvid): #ランキング取得・キュー生成部
+    def __call__(self, mvid):
+        '''
+        SongScoreUpdater(mvid):
+        Updates status.score of target song
+        Args: mvid(str): nico id for target movie
+        Returns: status(StatusRecord): target status record
+        '''
+
         chart = Chart.select(
             Chart.view,
             Chart.comment,
@@ -29,21 +37,19 @@ class SongScoreUpdater:
             10140 < Chart.time,
             Chart.time < 10260,
         ).first()
-        if chart is None:
+        if chart is None: #if collect chart does not exist
             try:
                 ret = XmlReader()(mvid)
-            except MovDeletedException:
+            except MovDeletedException: #if deleted
                 return Status.update({
                     Status.score: None,
                     Status.score_status: -2
                 }).where(
                     Status.id == mvid
                 )
-            except NoResponseException:
-                return
                 
             days = (datetime.datetime.now() - ret["first_retrieve"]).days
-            if days >= 7:
+            if days >= 7: #Backward Predict
                 predict_args = np.array((
                     ret['view_counter'] + 1,
                     ret['comment_num'] + 1,
@@ -56,7 +62,7 @@ class SongScoreUpdater:
                 mylist = ( predict_args ** BACKWARD_MYLIST_WEIGHT ).prod()
                 score_status = -1
 
-            else:
+            else: #Forward Predict
                 minutes = (datetime.datetime.now() - ret["first_retrieve"]).total_seconds() / 60
                 predict_args = np.array((
                     ret['view_counter'] + 1,
@@ -85,6 +91,13 @@ class SongScoreUpdater:
         )
 
     def update(self, *status_ids):
+        '''
+        SongScoreUpdater.update(*status_ids)
+        batch update scores for specified ids
+        and throw it into AnalyzeQueue if conditions are satisfied.
+
+        In: *status_ids: target id(s)
+        '''
         queries = []
         pg = ProgressBar()
         for status_id in pg( status_ids ):
@@ -94,3 +107,16 @@ class SongScoreUpdater:
             for query in queries:
                 if query is not None:
                     query.execute()
+
+        analyze_queue = Status.select(Status.id).where(
+            ( Status.score > settings['analyze_score_limit'] )
+            & ( Status.id.in_(status_ids) )
+        )
+
+        AnalyzeQueue.insert_many(
+            [{
+                'movie_id': m.id,
+                'version': settings['model_version'],
+                'status': 0,
+            } for m in analyze_queue]
+        )
