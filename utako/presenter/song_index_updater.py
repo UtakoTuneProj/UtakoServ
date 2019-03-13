@@ -10,7 +10,7 @@ from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.song_indexer import SongIndexer
 
 class SongIndexUpdater:
-    def __call__(self, limit = 10, retries = 5): #ランキング取得・キュー生成部
+    def __call__(self, limit = 10, retries = 5, force = False): #ランキング取得・キュー生成部
         movies = AnalyzeQueue.select(
             AnalyzeQueue.movie_id,
         ).where(
@@ -21,6 +21,10 @@ class SongIndexUpdater:
         ).order_by(
             -fn.Count(AnalyzeQueue.movie_id)
         ).limit(limit)
+        if not force:
+            subquery = SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
+            movies = movies.where(AnalyzeQueue.movie_id.not_in(subquery))
+
         movie_list = [movie.movie_id for movie in movies]
         AnalyzeQueue.update(status=1).where(
             AnalyzeQueue.movie_id << movie_list
