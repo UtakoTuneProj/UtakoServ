@@ -6,6 +6,6 @@ from utako.model.status import Status
 from progressbar import ProgressBar
 
 if __name__== '__main__':
-    statuses = [ s.id for s in Status.select(Status.id).where(Status.score_status != 0) ]
+    statuses = [ s.id for s in Status.select(Status.id).where(Status.score_status.not_in([0, -1, -2])) ]
     pg = ProgressBar()
     utako.presenter.song_score_updater.SongScoreUpdater().update(*statuses)
