@@ -1,4 +1,7 @@
 .git/
-*.npy
 result/
-tmp/
+
+*.npy
+*.wav
+*.mp4
+*.mp4.part
