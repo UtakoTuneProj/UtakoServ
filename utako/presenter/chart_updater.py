@@ -5,8 +5,6 @@ from utako.common_import import *
 from utako.model.chart import Chart
 from utako.model.status import Status
 from utako.model.idtag import Idtag
-from utako.model.analyze_queue import AnalyzeQueue
-from utako.presenter.xml_fetcher import XmlFetcher
 from utako.presenter.xml_reader import XmlReader
 from utako.exception.no_response_exception import NoResponseException
 from utako.exception.mov_deleted_exception import MovDeletedException
@@ -45,22 +43,19 @@ class ChartUpdater:
 
         while True:
             try:
-               movfp = XmlFetcher()(mvid, force = True)
+                movf = XmlReader()(mvid)
             except NoResponseException:
+                time.wait(5)
                 continue
+            except MovDeletedException:
+                Status.update(
+                    validity = False
+                ).where(
+                    Status.id == mvid
+                ).execute()
+                return None
             else:
                 break
-            time.wait(5)
-
-        try:
-            movf = XmlReader()(movfp)
-        except MovDeletedException:
-            Status.update(
-                validity = False
-            ).where(
-                Status.id == mvid
-            ).execute()
-            return None
 
         passedmin = (
             datetime.datetime.now()
@@ -75,13 +70,6 @@ class ChartUpdater:
             comment   = movf['comment_num'],
             mylist    = movf['mylist_counter'],
         )
-
-        if movf['view_counter'] > 2000:
-            AnalyzeQueue.create(
-                movie_id = mvid,
-                version = settings['model_version'],
-                status = 0,
-            )
 
         isComplete = False
         status = True

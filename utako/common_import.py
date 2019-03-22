@@ -37,9 +37,9 @@ config = configparser.ConfigParser()
 try:
     py_env = os.environ["PYTHON_ENV"]
 except KeyError:
-    raise KeyError('You have to specify PYTHON_ENV.')
+    py_env = "test"
 
-if py_env in 'development':
+if py_env in [ 'development', 'develop', 'devel' ]:
     config.read('conf/auth.devel.conf')
 elif py_env == 'test':
     config.read('conf/auth.test.conf')

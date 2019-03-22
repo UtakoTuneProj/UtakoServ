@@ -1,1 +1,7 @@
 .git/
+result/
+
+*.npy
+*.wav
+*.mp4
+*.mp4.part

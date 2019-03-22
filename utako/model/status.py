@@ -11,6 +11,8 @@ class Status(BaseModel):
     iscomplete = IntegerField(db_column='isComplete')
     postdate = DateTimeField(null=True)
     validity = IntegerField()
+    score = FloatField(null=True)
+    score_status = IntegerField(null=True)
 
     class Meta:
         db_table = 'status'
