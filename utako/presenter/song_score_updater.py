@@ -119,4 +119,4 @@ class SongScoreUpdater:
                 'version': settings['model_version'],
                 'status': 0,
             } for m in analyze_queue]
-        )
+        ).execute()
