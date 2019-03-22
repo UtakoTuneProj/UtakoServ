@@ -37,7 +37,7 @@ class SongScoreUpdater:
             10140 < Chart.time,
             Chart.time < 10260,
         ).first()
-        if chart is None: #if collect chart does not exist
+        if len(chart) == 0: #if collect chart does not exist
             try:
                 ret = XmlReader()(mvid)
             except MovDeletedException: #if deleted
