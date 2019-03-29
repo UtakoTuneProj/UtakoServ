@@ -6,6 +6,7 @@ from peewee import fn
 from utako.model.abstract_model import database
 from utako.model.chart import Chart
 from utako.model.status import Status
+from utako.model.song_index import SongIndex
 from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.xml_reader import XmlReader
 from utako.exception.mov_deleted_exception import MovDeletedException
@@ -111,6 +112,9 @@ class SongScoreUpdater:
         analyze_queue = Status.select(Status.id).where(
             ( Status.score > settings['analyze_score_limit'] )
             & ( Status.id.in_(status_ids) )
+            & ( Status.id.not_in(
+                SongIndex.select(SongIndex.status_id)).where(SongIndex.version == settings['model_version']) 
+            )
         )
 
         AnalyzeQueue.insert_many(
