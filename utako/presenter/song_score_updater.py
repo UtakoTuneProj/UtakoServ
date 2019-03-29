@@ -29,7 +29,7 @@ class SongScoreUpdater:
         Returns: status(StatusRecord): target status record
         '''
 
-        chart = Chart.select(
+        charts = Chart.select(
             Chart.view,
             Chart.comment,
             Chart.mylist
@@ -37,8 +37,9 @@ class SongScoreUpdater:
             Chart.status_id == mvid,
             10140 < Chart.time,
             Chart.time < 10260,
-        ).first()
-        if len(chart) == 0: #if collect chart does not exist
+        )
+        chart = charts.first()
+        if len(charts) == 0: #if collect chart does not exist
             try:
                 ret = XmlReader()(mvid)
             except MovDeletedException: #if deleted
