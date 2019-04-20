@@ -1,4 +1,0 @@
-cron:
-  - description: "hourly job"
-    url: /task/hourly
-    schedule: every 1 hours from 00:48 to 23:49 synchronized
