@@ -2,9 +2,10 @@
 from utako.task import dl_songset
 
 dl_songset.dl_songset(
-    songs_limit=200,
-    length_limit=250,
+    songs_limit=1000,
+    length_limit=120,
     sr=11050,
     length=22100,
     duplication=8,
+    order_limit=50,
 )

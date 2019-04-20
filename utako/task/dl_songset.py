@@ -34,11 +34,12 @@ def dl_songset(
     sr=5513,
     length=8192,
     duplication=4,
+    order_limit=50
 ):
     movies = Status.select(
         Status.id
     ).where(
-        Status.score > 50
+        Status.score > order_limit
     ).order_by(-Status.postdate).limit(songs_limit)
 
     ndl = NicoDownloader()
