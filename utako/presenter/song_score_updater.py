@@ -114,8 +114,8 @@ class SongScoreUpdater:
             ( Status.score > settings['analyze_score_limit'] )
             & ( Status.id.in_(status_ids) )
             & ( Status.id.not_in(
-                SongIndex.select(SongIndex.status_id)).where(SongIndex.version == settings['model_version']) 
-            )
+                SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version']) 
+            ))
         )
 
         AnalyzeQueue.insert_many(
