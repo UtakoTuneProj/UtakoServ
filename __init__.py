@@ -9,10 +9,10 @@ import chainer
 from progressbar import ProgressBar
 import importlib as imp
 
-wav = np.load('wav.major.npy')
-tags_label = np.load('wav.tags.npy')
-songs_label = np.load('wav.major.npy.label.npy')
-with open('wav.tags.npy.order.super.json') as f:
+wav = np.load('datasets/wav.major.npy', mmap_mode='r')
+tags_label = np.load('datasets/wav.tags.npy', mmap_mode='r')
+songs_label = np.load('datasets/wav.major.npy.label.npy', mmap_mode='r')
+with open('datasets/wav.tags.npy.order.super.json') as f:
     sp_tags = json.load(f)
 
 import PUTC
