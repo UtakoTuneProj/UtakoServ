@@ -42,7 +42,7 @@ class WavNpyConverter:
         pos = 0
         jslist = []
         widths = tuple( map(lambda x: min( ( x[0].shape[-1] // length - 1 ) * duplication, length_limit ), arrays) )
-        npyarray = np.zeros([sum( widths ), 1, length], dtype = np.float32)
+        npyarray = np.memmap(writepath, mode='w+', dtype=np.float32, shape=(sum(widths),1,length))
         for array, mvid, w in zip(arrays, movies_use, widths):
             for j in range(duplication):
                 start_pos = length // duplication * j
@@ -60,10 +60,8 @@ class WavNpyConverter:
         
         with open(writepath+'.json', 'w') as f:
             json.dump(jslist, f, indent = 2)
-
-        np.save(writepath, npyarray)
         
-        index = np.zeros([sum(widths)], dtype = np.int8)
+        index = np.zeros([sum(widths)], dtype = np.int32)
         score = np.zeros([sum(widths)], dtype = np.float32)
         for i, song in enumerate(jslist):
             index[song[1]:song[2]] = i
