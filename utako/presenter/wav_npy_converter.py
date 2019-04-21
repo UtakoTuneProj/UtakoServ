@@ -41,7 +41,7 @@ class WavNpyConverter:
 
         pos = 0
         jslist = []
-        widths = tuple( map(lambda x: min( x[0].shape[-1] * duplication // length, length_limit ), arrays) )
+        widths = tuple( map(lambda x: min( ( x[0].shape[-1] // length - 1 ) * duplication, length_limit ), arrays) )
         npyarray = np.zeros([sum( widths ), 1, length], dtype = np.float32)
         for array, mvid, w in zip(arrays, movies_use, widths):
             for j in range(duplication):
