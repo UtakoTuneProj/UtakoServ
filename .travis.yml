@@ -6,7 +6,7 @@ python:
 
 env:
   global:
-    PYTHONPATH: ./
+    PYTHONPATH: .
     PYTHON_ENV: test
 
 addons:
