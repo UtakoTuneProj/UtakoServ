@@ -29,21 +29,22 @@ class WavNpyConverter:
             wavs = wavs[:songs_limit]
 
         pool_args = [{
-            'path': str(w),
-            'sr': sr,
-            'dtype': np.float32,
+            'librosa': {
+                'path': str(w),
+                'sr': sr,
+                'dtype': np.float32,
+            },
         } for w in wavs]
+        pool_results = []
         with mp.Pool() as pool:
-            arrays = pool.map(
-                self._wrap,
-                pool_args,
-            )
+            for _ in tqdm( pool.imap(self._wrap_load, pool_args), total=len(pool_args) ):
+                pool_results.append(_)
 
         pos = 0
         jslist = []
-        widths = tuple( map(lambda x: min( ( x[0].shape[-1] // length - 1 ) * duplication, length_limit ), arrays) )
+        widths = tuple( map(lambda x: min( ( x[0].shape[-1] // length - 1 ) * duplication, length_limit ), pool_results) )
         npyarray = np.memmap(writepath, mode='w+', dtype=np.float32, shape=(sum(widths),1,length))
-        for array, mvid, w in zip(arrays, movies_use, widths):
+        for array, mvid, w in zip(pool_results, movies_use, widths):
             for j in range(duplication):
                 start_pos = length // duplication * j
                 partial_count = (w-j-1) // duplication + 1
@@ -78,5 +79,5 @@ class WavNpyConverter:
         np.save(writepath + '.spectro.npy', spectro)
         del spectro
 
-    def _wrap(self, kwargs):
-        return librosa.core.load(**kwargs)
+    def _wrap_load(self, kwargs):
+        return librosa.core.load(**kwargs['librosa'])
