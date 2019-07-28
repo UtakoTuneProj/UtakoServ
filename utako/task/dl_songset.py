@@ -25,7 +25,7 @@ TAG_BLACKLIST = {
     'クロスフェードデモ'
 }
 
-pg = ProgressBar()
+pg = tqdm
 
 def dl_songset(
     writepath='songset/',

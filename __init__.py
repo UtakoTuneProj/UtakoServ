@@ -6,7 +6,6 @@ import json
 import numpy as np
 import gc
 import chainer
-from progressbar import ProgressBar
 import importlib as imp
 
 wav = np.load('datasets/wav.major.npy', mmap_mode='r')

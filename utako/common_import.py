@@ -7,7 +7,6 @@ import datetime
 import glob
 import json
 import os
-from progressbar import ProgressBar
 import random
 import re
 import sys
@@ -24,6 +23,7 @@ import chainer.links as L
 import MySQLdb
 import numpy as np
 import scipy.cluster
+from tqdm import tqdm
 import tweepy
 import yaml
 

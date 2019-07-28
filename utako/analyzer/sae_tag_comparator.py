@@ -83,7 +83,7 @@ class SaeTagComparator:
 
     def compare(self, song_data, song_partition, valid_tags):
         result = []
-        pb = ProgressBar()
+        pb = tqdm
         print('comparing...')
         for tag in pb( valid_tags ):
 

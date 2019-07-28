@@ -3,7 +3,6 @@
 
 import utako
 from utako.model.status import Status
-from progressbar import ProgressBar
 
 if __name__== '__main__':
     statuses = [ s.id for s in Status.select(Status.id).where(

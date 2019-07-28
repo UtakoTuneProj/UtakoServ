@@ -101,7 +101,7 @@ class SongScoreUpdater:
         In: *status_ids: target id(s)
         '''
         queries = []
-        pg = ProgressBar()
+        pg = tqdm
         for status_id in pg( status_ids ):
             queries.append(self(status_id))
 

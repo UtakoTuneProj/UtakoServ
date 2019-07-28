@@ -58,7 +58,7 @@ class SongRelationConstructor:
 
         Origin = StatusSongRelation.alias()
         Destination = StatusSongRelation.alias()
-        pb = ProgressBar()
+        pb = tqdm
         with database.atomic():
             for rel in pb( relations ):
                 origin_id = movies[rel[0]]
