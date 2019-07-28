@@ -4,12 +4,18 @@ logs
 tmp
 .coverage
 .pytest_cache
+/datasets/*
+!/datasets/.keep
+/result/*
+!/result/.keep
 
 auth.conf
 auth.devel.conf
 *.swp
 *.wav
 *.npy
+*.npy.json
 *.mp4
 *.model
-model_*.yaml
+conf/model_*.yaml
+conf/*.mxp.yaml
