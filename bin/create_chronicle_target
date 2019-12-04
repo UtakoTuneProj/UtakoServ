@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+from utako.task import dl_songset
+
+dl_songset.create_chronicle_songset(
+    year=2019,
+    songs_limit=150,
+    length_limit=200,
+    sr=8192,
+    length=65536,
+    duplication=8,
+)
