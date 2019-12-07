@@ -117,8 +117,8 @@ class WavNpyConverter:
 
         with open(dataset_path/'label.json', 'w') as f:
             json.dump(labels, f, indent = 2)
-        np.save(dataset_path/'label.npy',   self.constract_score(labels))
-        np.save(dataset_path/'index.npy',   self.constract_index(labels))
+        np.save(dataset_path/'score.npy',   self.constract_score(labels))
+        np.save(dataset_path/'label.npy',   self.constract_index(labels))
         np.save(dataset_path/'spectro.npy', self.constract_spectrogram(npyarray))
 
         generation_params = {
