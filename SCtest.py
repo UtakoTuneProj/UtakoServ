@@ -3,7 +3,7 @@
 from __init__ import utako, yaml, np, gc, wav, songs_label
 
 def sc_test(
-    fname = 'conf/sc.yaml',
+    fname,
     wav = wav,
     label = songs_label,
     n_train = 100000,
@@ -34,11 +34,57 @@ def sc_test(
 
     return SC, train_index, test_index
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Utako Tune Song Classifier Trainer"
+    )
+
+    parser.add_argument(
+        "modelfile_name",
+        help="*.yaml model file to define classifier architecture"
+    )
+    parser.add_argument(
+        "--use-gpu", "-g",
+        action="store_true",
+        help="use GPU acceleration in training if specified"
+    )
+    parser.add_argument(
+        "--skip-randomize", "-R",
+        action="store_true",
+        help="Do not randomize training data (not recommended)"
+    )
+    parser.add_argument(
+        "--epoch", "-e",
+        type=int, default=100,
+        help="number of training epochs"
+    )
+    parser.add_argument(
+        "--batchsize", "-b",
+        type=int, default=100,
+        help="size of training batch"
+    )
+    parser.add_argument(
+        "--train-samples", "-t",
+        type=int, default=800,
+        help="samples count of training data"
+    )
+    parser.add_argument(
+        "--test-samples", "-s",
+        type=int, default=200,
+        help="samples count of evaluation data"
+    )
+
+    args = parser.parse_args()
+
     sc_test(
-        isgui = True,
-#       isgpu = False,
-        n_epoch = 100,
-        batchsize = 100 
+        fname       = args.modelfile_name,
+        isgpu       = args.use_gpu,
+        randomize   = not args.skip_randomize,
+        n_epoch     = args.epoch,
+        n_train     = args.train_samples,
+        n_test      = args.test_samples,
+        batchsize   = args.batchsize,
     )
 
