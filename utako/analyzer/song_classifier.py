@@ -9,6 +9,8 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import scipy.fftpack as fft
+import datetime
+from pathlib import Path
 
 class SongClassifierChain(ChainList):
     def __init__(self, structure):
@@ -161,7 +163,12 @@ class SongClassifier:
         self.isgui      = isgui 
         self.preprocess = preprocess
         self.postprocess= postprocess
-        self.basename  = 'result/{}'.format(name)
+        self.result_path  = Path(
+            'result/{name}/{time:%Y}/{time:%m%d}/{time:%H%S}'.format(
+                name=name,
+                time=datetime.datetime.now()
+        ))
+        self.result_path.mkdir(parents=True)
         self.structure = structure
         self.modelclass = modelclass
         self.model_kwargs = kwargs
@@ -198,7 +205,7 @@ class SongClassifier:
         self.test_iter = chainer.iterators.SerialIterator(self.test, self.batchsize, repeat=False, shuffle=False)
 
         updater = chainer.training.updaters.StandardUpdater(self.train_iter, self.optimizer, device=self.device)
-        trainer = chainer.training.Trainer(updater, (self.n_epoch, 'epoch'), out='result/')
+        trainer = chainer.training.Trainer(updater, (self.n_epoch, 'epoch'), out=str( self.result_path ))
 
         self.extend_trainer(trainer)
         self.trainer = trainer
@@ -206,7 +213,20 @@ class SongClassifier:
     def extend_trainer(self, trainer):
         extensions = chainer.training.extensions
         trainer.extend(extensions.Evaluator(self.test_iter, self.model, device=self.device))
-        trainer.extend(extensions.snapshot(), trigger=(self.save_epoch, 'epoch'))
+        trainer.extend(extensions.snapshot(
+                filename='snapshot_epoch_{.updater.epoch}.model'
+            ), trigger=(
+                self.save_epoch,
+                'epoch'
+            )
+        )
+        trainer.extend(extensions.snapshot(
+                filename='final.model'
+            ), trigger=(
+                self.n_epoch,
+                'epoch'
+            )
+        )
         trainer.extend(extensions.LogReport())
         trainer.extend(extensions.PrintReport([
             'epoch', 'main/loss', 'validation/main/loss',
@@ -214,12 +234,16 @@ class SongClassifier:
         ]))
         trainer.extend(extensions.ProgressBar())
 
-        if self.isgui and extensions.PlotReport.available():
+        if extensions.PlotReport.available():
             trainer.extend(extensions.PlotReport(
-                ['main/loss', 'validation/main/loss'], 'epoch'
+                y_keys=['main/loss', 'validation/main/loss'],
+                x_key='epoch',
+                file_name='loss.png'
             ))
             trainer.extend(extensions.PlotReport(
-                ['main/accuracy', 'validation/main/accuracy'], 'epoch'
+                y_keys=['main/accuracy', 'validation/main/accuracy'],
+                x_key='epoch',
+                file_name='accuracy.png'
             ))
 
     def learn(self):
