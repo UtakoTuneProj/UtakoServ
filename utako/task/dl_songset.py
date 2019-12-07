@@ -78,7 +78,7 @@ def create_chronicle_songset(
         sr=sr,
         length=length,
         duplication=duplication,
-        writepath='chronicle.{year}.npy'.format(year=year),
+        dataset_basename='chronicle.{year}'.format(year=year),
     )
 
 def filter_movies(movies_list, blacklist_tags):
