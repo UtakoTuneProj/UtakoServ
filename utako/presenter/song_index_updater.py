@@ -55,6 +55,14 @@ class SongIndexUpdater:
                             raise
                     else:
                         raise
+                except youtube_dl.utils.DownloadError as e:
+                    e.exc_info[2].tb_next
+                    if re.compile("niconico reports error: invalid_v[123]$").search(e.args[0]):
+                        deleted.append(movie)
+                        failed.remove(movie)
+                        continue
+                    else:
+                        raise
                 else:
                     success.append(movie)
                     failed.remove(movie)
