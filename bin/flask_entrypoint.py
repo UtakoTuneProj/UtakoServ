@@ -8,6 +8,9 @@ import utako
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return "STATUS: OK"
 
 @app.route('/trigger/analyze_by_count', methods=['POST'])
 def analyze(movie_id):
