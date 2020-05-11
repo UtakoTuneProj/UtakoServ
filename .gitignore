@@ -4,6 +4,7 @@ logs
 tmp
 .coverage
 .pytest_cache
+.vscode/
 /datasets/*
 !/datasets/.keep
 /result/*
