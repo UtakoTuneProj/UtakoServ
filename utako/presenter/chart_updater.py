@@ -45,7 +45,7 @@ class ChartUpdater:
             try:
                 movf = XmlReader()(mvid)
             except NoResponseException:
-                time.wait(5)
+                time.sleep(5)
                 continue
             except MovDeletedException:
                 Status.update(
