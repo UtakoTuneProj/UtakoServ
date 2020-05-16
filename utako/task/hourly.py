@@ -7,8 +7,12 @@ from utako.presenter.chart_updater import ChartUpdater
 from utako.presenter.score_updater import ScoreUpdater
 
 def hourly():
-    StatusUpdater()()
-    ChartUpdater()()
-    ScoreUpdater()()
+    status_results = StatusUpdater()()
+    chart_results = ChartUpdater()()
+    score_results = ScoreUpdater()()
 
-    return None
+    return {
+        'status_results': status_results,
+        'chart_results': chart_results,
+        'score_results': score_results,
+    }

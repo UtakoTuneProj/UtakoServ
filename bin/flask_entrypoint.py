@@ -28,9 +28,10 @@ def analyze(movie_id):
 
 @app.route('/trigger/hourly', methods=['POST'])
 def hourly():
-    utako.task.hourly.hourly()
+    task_result = utako.task.hourly.hourly()
     return {
-        'status': 'complete'
+        'status': 'complete',
+        'result': task_result,
     }
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])

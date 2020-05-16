@@ -34,7 +34,10 @@ class ChartUpdater:
         for query in lastwks_mv:
             self._update(query)
 
-        return None
+        return {
+            'today': tuple(map(lambda x: x.id, todays_mv)),
+            'lastweek': tuple(map(lambda x: x.id, lastwks_mv)),
+        }
 
     def _update(self, query):
         mvid = query.id
