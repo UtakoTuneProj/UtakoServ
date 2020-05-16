@@ -34,7 +34,7 @@ class SongScoreUpdater:
             Chart.comment,
             Chart.mylist
         ).where(
-            Chart.status_id == mvid,
+            Chart.status == mvid,
             10140 < Chart.time,
             Chart.time < 10260,
         )

@@ -63,7 +63,7 @@ class ChartUpdater:
         ).total_seconds() / 60
 
         Chart.create(
-            status_id = mvid,
+            status    = mvid,
             epoch     = epoch,
             time      = passedmin,
             view      = movf['view_counter'],
