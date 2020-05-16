@@ -41,3 +41,8 @@ def recreate_song_relations():
         'status': 'complete'
     }
 
+if __name__ == '__main__':
+    app.run(host="127.0.0.1", port=8193, debug=True)
+else:
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
