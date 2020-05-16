@@ -5,12 +5,18 @@ from flask import Flask, request
 import yaml
 
 import utako
+import logging
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return "STATUS: OK"
+
+@app.route('/log')
+def logger_test():
+    app.logger.info('Hello, logging.')
+    return "Log sent"
 
 @app.route('/trigger/analyze_by_count', methods=['POST'])
 def analyze(movie_id):
