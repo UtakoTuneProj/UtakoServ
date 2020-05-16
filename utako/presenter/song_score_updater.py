@@ -93,7 +93,7 @@ class SongScoreUpdater:
             'score': status_record.score,
             'score_status': status_record.score_status
         }
-        return map(result_map_func, score_update_models)
+        return tuple(map(result_map_func, score_update_models))
 
     def _fetch_target_records(self, status_ids):
         '''

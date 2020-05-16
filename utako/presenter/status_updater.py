@@ -26,7 +26,7 @@ class StatusUpdater:
             } for movie in raw_rank ])
 
         with database.atomic():
-            inserted_rows = Status.insert_many(inserted_data).on_conflict_ignore().execute()
+            inserted_row_counts = Status.insert_many(inserted_data).on_conflict_ignore().execute()
 
         for j in range(i+1):
             os.remove("tmp/ranking/" + str(j) + ".json")
@@ -35,7 +35,8 @@ class StatusUpdater:
             'id': x.id,
             'postdate': x.postdate.strftime('%Y-%m-%dT%H:%M:%S')
         }
-        return tuple(map(map_func, inserted_rows))
+
+        return {'inserted_row_counts': inserted_row_counts}
 
     def _rankfilereq(self, searchtag = "VOCALOID", page = 0):
     #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
