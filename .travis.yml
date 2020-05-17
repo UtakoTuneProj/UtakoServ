@@ -2,8 +2,6 @@ dist: 'bionic'
 language: python
 python:
   - "3.6"
-  - "3.7"
-  - "3.8"
 
 env:
   global:
@@ -17,7 +15,8 @@ addons:
       - libmysqlclient-dev
 
 install:
-  - pip install -r dependencies.dat
+  - pip install pipenv
+  - pipenv sync
 
 script:
-  - pytest
+  - pipenv run pytest
