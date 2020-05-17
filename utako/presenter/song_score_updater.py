@@ -89,8 +89,8 @@ class SongScoreUpdater:
         ).execute()
 
         result_map_func = lambda status_record: {
-            'id': status_record.id,
-            'score': status_record.score,
+            'id':           status_record.id,
+            'score':        status_record.score,
             'score_status': status_record.score_status
         }
         return tuple(map(result_map_func, score_update_models))
@@ -202,7 +202,7 @@ class SongScoreUpdater:
         def calculate_score(view: float, comment: float, mylist: float):
             return np.sqrt(view) * (1 - 0.5 * 10**(-20 * comment / view)) * (1 - 0.5 * 10**(-20 * mylist / view))
 
-        target_status = Status.select().where(Status.id == status_id)
+        target_status = Status.get(Status.id == status_id)
         days = (datetime.datetime.now() - movie_first_retrieve).days
 
         if days > 7:
