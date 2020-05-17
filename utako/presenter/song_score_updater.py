@@ -141,7 +141,7 @@ class SongScoreUpdater:
         return [ self._create_update_model(**args) for args in
             map(
                 lambda record: {
-                    'status_id':               record.status.id,
+                    'status_id':            record.status.id,
                     'movie_first_retrieve': record.status.postdate,
                     'view':                 record.view,
                     'comment':              record.comment,
