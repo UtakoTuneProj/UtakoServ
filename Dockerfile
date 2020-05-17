@@ -8,10 +8,10 @@ RUN apt-get update &&\
 RUN pip3 install pipenv
 COPY  ./Pipfile ./Pipfile.lock /UtakoServ/
 WORKDIR /UtakoServ
-RUN pipenv sync
+RUN pipenv install --system --deploy
 
 COPY ./ /UtakoServ/
 
-ENTRYPOINT ["pipenv", "run", "gunicorn"]
+ENTRYPOINT ["gunicorn"]
 CMD ["-c", "conf/gunicorn.conf.py", "bin.flask_entrypoint:app"]
 ENV PYTHON_ENV=development
