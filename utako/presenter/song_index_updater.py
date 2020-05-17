@@ -8,6 +8,7 @@ from utako.model.abstract_model import database
 from utako.model.song_index import SongIndex
 from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.song_indexer import SongIndexer
+from utako.exception.restricted_movie_exception import RestrictedMovieException
 
 class SongIndexUpdater:
     def __call__(self, limit = 10, retries = 5, force = False): #ランキング取得・キュー生成部
@@ -55,6 +56,11 @@ class SongIndexUpdater:
                             raise
                     else:
                         raise
+                except RestrictedMovieException as e:
+                    print(e.message)
+                    deleted.append(movie)
+                    failed.remove(movie)
+                    continue
                 else:
                     success.append(movie)
                     failed.remove(movie)

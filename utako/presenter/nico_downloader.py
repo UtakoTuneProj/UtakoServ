@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from utako.common_import import *
+from utako.exception.restricted_movie_exception import RestrictedMovieException
 import subprocess as sbproc
 import youtube_dl
 
@@ -14,8 +15,9 @@ class NicoDownloader:
                 'http://www.nicovideo.jp/watch/{}'.format(mvid)
             ])
         except youtube_dl.utils.DownloadError as e:
-            print(e.exc_info)
-            if retries <= 1:
+            if re.compile("niconico reports error: invalid_v[123]$").search(e.args[0]):
+                raise RestrictedMovieException(mvid)
+            elif retries < 1:
                 raise
             else:
                 time.sleep(10)
