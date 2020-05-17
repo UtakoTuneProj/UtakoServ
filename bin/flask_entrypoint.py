@@ -36,8 +36,12 @@ def hourly():
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])
 def recreate_song_relations():
-    task = utako.presenter.song_relation_constructor.SongRelationConstructor()
-    task(max_relations=13)
+    try:
+        task = utako.presenter.song_relation_constructor.SongRelationConstructor()
+        task(max_relations=13)
+    finally:
+        utako.model.abstract_model.database.close()
+
     return {
         'status': 'complete'
     }
