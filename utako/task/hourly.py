@@ -5,11 +5,15 @@ from utako.common_import import *
 from utako.presenter.status_updater import StatusUpdater
 from utako.presenter.chart_updater import ChartUpdater
 from utako.presenter.score_updater import ScoreUpdater
+from utako.model.abstract_model import database
 
 def hourly():
-    status_results = StatusUpdater()()
-    chart_results = ChartUpdater()()
-    score_results = ScoreUpdater()()
+    try:
+        status_results = StatusUpdater()()
+        chart_results = ChartUpdater()()
+        score_results = ScoreUpdater()()
+    finally:
+        database.close()
 
     return {
         'status_results': status_results,
