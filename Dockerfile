@@ -15,3 +15,4 @@ COPY ./ /UtakoServ/
 ENTRYPOINT ["gunicorn"]
 CMD ["-c", "conf/gunicorn.conf.py", "bin.flask_entrypoint:app"]
 ENV PYTHON_ENV=development
+ENV TZ=Asia/Tokyo
