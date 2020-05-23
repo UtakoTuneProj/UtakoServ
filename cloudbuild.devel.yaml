@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: ['-c', 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.devel.conf']
+- name: 'gcr.io/cloud-builders/cloud-sdk'
+  args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.model', 'conf/model_0.model']
+- name: 'gcr.io/cloud-builders/cloud-sdk'
+  args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.yaml', 'conf/model_0.yaml']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest', '.']
+images: ['asia.gcr.io/$PROJECT_ID/utako-jobrunner:latest']
