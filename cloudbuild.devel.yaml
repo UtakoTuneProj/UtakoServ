@@ -8,4 +8,4 @@ steps:
   args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.yaml', 'conf/model_0.yaml']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest', '.']
-images: ['asia.gcr.io/$PROJECT_ID/utako-jobrunner:latest']
+images: ['asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
