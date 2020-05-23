@@ -11,6 +11,8 @@ steps:
 
 # build and push container
 - name: 'gcr.io/cloud-builders/docker'
+  args: ['pull', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
+- name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
