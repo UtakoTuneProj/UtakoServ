@@ -5,3 +5,5 @@ result/
 *.wav
 *.mp4
 *.mp4.part
+
+./cloudbuild.*.yaml
