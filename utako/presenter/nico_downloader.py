@@ -15,7 +15,9 @@ class NicoDownloader:
                 'http://www.nicovideo.jp/watch/{}'.format(mvid)
             ])
         except youtube_dl.utils.DownloadError as e:
-            if re.compile("niconico reports error: invalid_v[123]$").search(e.args[0]):
+            if re.compile(
+                "niconico reports error: (invalid_v[123]|domestic_video)"
+            ).search(e.args[0]):
                 raise RestrictedMovieException(mvid)
             elif retries < 1:
                 raise
