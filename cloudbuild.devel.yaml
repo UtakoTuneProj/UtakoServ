@@ -36,5 +36,5 @@ steps:
   - '--platform'
   - 'managed'
   - '--region'
-  - 'asia-northeast-1'
+  - 'asia-northeast1'
   - '--no-allow-unauthenticated'
