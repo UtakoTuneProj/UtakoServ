@@ -3,7 +3,9 @@ steps:
 # fetch config and analyze model
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
-  args: ['-c', 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.devel.conf']
+  args:
+    - '-c'
+    - 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.devel.conf'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.model', 'conf/model_0.model']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -11,12 +13,16 @@ steps:
 
 # build container
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - "docker pull asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest || exit 0"
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}',
+    '--cache-from', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
     '-f', 'Dockerfile', '.']
 
 # push container
