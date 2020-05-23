@@ -9,17 +9,21 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.yaml', 'conf/model_0.yaml']
 
-# build and push container
+# build container
 - name: 'gcr.io/cloud-builders/docker'
   args: ['pull', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
-    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}',
+    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}',
     '-f', 'Dockerfile', '.']
+
+# push container
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}']
+  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}']
 
 # deploy to cloud run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -28,11 +32,9 @@ steps:
   - 'deploy'
   - 'utako-jobrunner-edge'
   - '--image'
-  - 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}'
+  - 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}'
   - '--platform'
   - 'managed'
   - '--region'
   - 'asia-northeast-1'
   - '--no-allow-unauthenticated'
-
-images: ['asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
