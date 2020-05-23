@@ -1,4 +1,6 @@
 steps:
+
+# fetch config and analyze model
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args: ['-c', 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.devel.conf']
@@ -6,6 +8,29 @@ steps:
   args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.model', 'conf/model_0.model']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: ['gsutil', 'cp', 'gs://utako-jobrunner-artifacts/model/model_0.yaml', 'conf/model_0.yaml']
+
+# build and push container
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest', '.']
+  args: [
+    'build',
+    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
+    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}',
+    '-f', 'Dockerfile', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}']
+
+# deploy to cloud run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'utako-jobrunner-edge'
+  - '--image'
+  - 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${COMMIT_SHA}'
+  - '--platform'
+  - 'managed'
+  - '--region'
+  - 'asia-northeast-1'
+  - '--no-allow-unauthenticated'
+
 images: ['asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
