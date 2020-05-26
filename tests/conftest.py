@@ -11,19 +11,53 @@ from utako.model.status_song_relation import StatusSongRelation
 from utako.model.tagcolor import Tagcolor
 from utako.model.tagpair import Tagpair
 
-@pytest.fixture()
+MODELS = [
+    AnalyzeQueue,
+    Chart,
+    Idtag,
+    Status,
+    SongIndex,
+    SongRelation,
+    StatusSongRelation,
+    Tagcolor,
+    Tagpair,
+]
+
+@pytest.fixture(autouse=True)
 def initialize_db():
-    database.create_tables([
-        AnalyzeQueue,
-        Chart,
-        Idtag,
-        Status,
-        SongIndex,
-        SongRelation,
-        StatusSongRelation,
-        Tagcolor,
-        Tagpair,
-    ])
+    database.create_tables(MODELS)
+    yield
+    database.drop_tables(MODELS)
+
+@pytest.fixture()
+def inject_status():
+    def _inject(
+        records,
+        fields=[
+            Status.id,
+            Status.epoch,
+            Status.iscomplete,
+            Status.validity,
+            Status.analyzegroup,
+            Status.postdate,
+        ]):
+        Status.insert_many(records, fields).execute()
+    return _inject
+
+@pytest.fixture()
+def inject_chart():
+    def _inject(
+        records,
+        fields=[
+            Chart.status,
+            Chart.epoch,
+            Chart.time,
+            Chart.view,
+            Chart.comment,
+            Chart.mylist,
+        ]):
+        Chart.insert_many(records, fields).execute()
+    return _inject
 
 @pytest.fixture()
 def inject_mock_rankfilereq(monkeypatch):
