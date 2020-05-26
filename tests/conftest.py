@@ -36,3 +36,16 @@ def inject_mock_rankfilereq(monkeypatch):
         )
     monkeypatch.setattr(StatusUpdater, '_rankfilereq', _mock_rankfilereq)
 
+@pytest.fixture()
+def inject_mock_getthumbinfo(monkeypatch):
+    from utako.presenter.xml_reader import XmlReader
+    def _mock_getthumbinfo(self, mvid):
+        from xml.etree import ElementTree
+        with open('tests/mockfiles/thumbinfo/sm98765432.xml'.format(mvid)) as f:
+            root = ElementTree.parse(f).getroot()
+        return root
+    monkeypatch.setattr(
+        XmlReader,
+        '_fetch_thumb_root',
+        _mock_getthumbinfo
+    )

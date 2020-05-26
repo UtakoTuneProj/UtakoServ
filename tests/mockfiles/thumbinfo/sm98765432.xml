@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>sm98765432</video_id>
+    <title>だみー</title>
+    <description>これはだみーのだみーだみー</description>
+    <thumbnail_url>http://example.com/thumbnails/98765432/98765432</thumbnail_url>
+    <first_retrieve>2020-05-01T00:00:00+09:00</first_retrieve>
+    <length>3:34</length>
+    <movie_type>mp4</movie_type>
+    <size_high>33038994</size_high>
+    <size_low>12891791</size_low>
+    <view_counter>42</view_counter>
+    <comment_num>42</comment_num>
+    <mylist_counter>42</mylist_counter>
+    <last_res_body>こめ こめ こめこめ</last_res_body>
+    <watch_url>https://www.example.com/watch/sm98765432</watch_url>
+    <thumb_type>video</thumb_type>
+    <embeddable>1</embeddable>
+    <no_live_play>0</no_live_play>
+    <tags domain="jp">
+      <tag category="1" lock="1">VOCALOID</tag>
+      <tag lock="1">Test</tag>
+      <tag>テスト</tag>
+    </tags>
+    <genre>音楽・サウンド</genre>
+    <user_id>334334</user_id>
+    <user_nickname>だれか</user_nickname>
+    <user_icon_url>https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank_s.jpg</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>
