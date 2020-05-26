@@ -24,3 +24,15 @@ def initialize_db():
         Tagcolor,
         Tagpair,
     ])
+
+@pytest.fixture()
+def inject_mock_rankfilereq(monkeypatch):
+    from utako.presenter.status_updater import StatusUpdater
+    def _mock_rankfilereq(searchtag="VOCALOID", page=0):
+        import shutil
+        shutil.copy(
+            'tests/mockfiles/rankings/{}.json'.format(page),
+            'tmp/ranking/{}.json'.format(page)
+        )
+    monkeypatch.setattr(StatusUpdater, '_rankfilereq', _mock_rankfilereq)
+
