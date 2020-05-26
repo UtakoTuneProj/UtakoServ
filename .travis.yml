@@ -13,10 +13,11 @@ addons:
     packages:
       - python3-tk
       - libmysqlclient-dev
+      - libsndfile
 
 install:
   - pip install pipenv
-  - pipenv sync
+  - pipenv install --system --deploy
 
 script:
   - pipenv run pytest
