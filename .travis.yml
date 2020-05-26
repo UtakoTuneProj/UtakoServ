@@ -13,7 +13,7 @@ addons:
     packages:
       - python3-tk
       - libmysqlclient-dev
-      - libsndfile
+      - libsndfile1
 
 install:
   - pip install pipenv

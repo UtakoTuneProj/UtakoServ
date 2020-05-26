@@ -3,7 +3,7 @@ LABEL MAINTAINER="nanamachi<7machi@nanamachi.net>"
 
 RUN mkdir /UtakoServ
 RUN apt-get update &&\
-    apt-get install -y --no-install-recommends ffmpeg python3-tk libsndfile &&\
+    apt-get install -y --no-install-recommends ffmpeg python3-tk libsndfile1 &&\
     apt-get install -y --no-install-recommends gcc musl g++ gfortran libpng-dev
 RUN pip3 install pipenv
 COPY  ./Pipfile ./Pipfile.lock /UtakoServ/
