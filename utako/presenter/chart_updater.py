@@ -23,7 +23,7 @@ class ChartUpdater:
 
         lastwks_mv = Status.select().where(
             Status.postdate
-            < datetime.datetime.now()
+            <= datetime.datetime.now()
             - datetime.timedelta(days=7, hours=1),
             Status.validity == 1,
             Status.iscomplete == 0
