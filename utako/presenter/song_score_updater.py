@@ -170,7 +170,7 @@ class SongScoreUpdater:
         self.logger.debug('Target ID: {}'.format(status_id))
         self.logger.debug('score seeds: V,C,M: {}, {}, {}'.format(view, comment, mylist))
 
-        def forward_predict(view: int, comment: int, mylist: int):
+        def backward_predict(view: int, comment: int, mylist: int):
             predict_seeds = np.array((
                 view + 1,
                 comment + 1,
@@ -184,7 +184,7 @@ class SongScoreUpdater:
 
             return ( view, comment, mylist )
 
-        def backward_predict(view: int, comment: int, mylist: int):
+        def forward_predict(view: int, comment: int, mylist: int):
             minutes = (datetime.datetime.now() - movie_first_retrieve).total_seconds() / 60
             predict_seeds = np.array((
                 view + 1,
