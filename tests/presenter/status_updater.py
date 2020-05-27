@@ -10,6 +10,7 @@ class CaptiveStatusUpdater:
             (4, 8),
     ])
     def should_update_status_from_rankfile(
+        self,
         initialize_db,
         inject_mock_rankfilereq,
         limit,
