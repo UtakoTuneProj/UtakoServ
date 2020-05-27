@@ -70,7 +70,7 @@ class SongScoreUpdater:
         chart_records = self._fetch_target_records(status_ids)
         score_update_models = self._create_update_models(chart_records)
         with database.atomic():
-            map(lambda record: record.save(), score_update_models)
+            [ record.save() for record in score_update_models ]
 
         analyze_queue = Status.select(Status.id).where(
             ( Status.score > settings['analyze_score_limit'] )
