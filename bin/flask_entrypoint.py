@@ -28,7 +28,15 @@ def analyze(movie_id):
 
 @app.route('/trigger/hourly', methods=['POST'])
 def hourly():
-    task_result = utako.task.hourly.hourly()
+    task_result = utako.task.check_status_chart.check_status_chart()
+    return {
+        'status': 'complete',
+        'result': task_result,
+    }
+
+@app.route('/trigger/update_song_score', methods=['POST'])
+def update_song_score():
+    task_result = utako.task.update_song_score.update_song_score()
     return {
         'status': 'complete',
         'result': task_result,
