@@ -4,6 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
+pytest-env = "*"
+freezegun = "*"
 
 [packages]
 chainer = "*"
@@ -14,8 +17,6 @@ numpy = "*"
 peewee = "*"
 progressbar2 = "*"
 pyyaml = "*"
-pytest = "*"
-pytest-env = "*"
 scipy = "*"
 sklearn = "*"
 tweepy = "*"

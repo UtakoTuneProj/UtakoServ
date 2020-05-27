@@ -17,7 +17,7 @@ addons:
 
 install:
   - pip install pipenv
-  - pipenv install --system --deploy
+  - pipenv install --dev --system --deploy
 
 script:
   - pipenv run pytest
