@@ -9,6 +9,27 @@ import logging
 
 app = Flask(__name__)
 
+def validate_pubsub(func, required=[]):
+    def wrapper(*args, **kwargs):
+        envelope = request.get_json()
+        if not envelope:
+            err_msg = 'No Pub/Sub message'
+        elif not ( isinstance(envelope, dict) ) or ( 'message' not in envelope ):
+            err_msg = 'Invalid Pub/Sub message'
+        else:
+            for key in required:
+                if not key in envelope:
+                    err_msg = 'Missing required param {} '.format(key)
+            else:
+                err_msg = None
+
+        if err_msg:
+            app.logger.warning(err_msg)
+            return {'status': 'error', 'message': err_msg}, 400
+
+        return func(*args, **kwargs)
+    return wrapper
+
 @app.route('/')
 def index():
     return "STATUS: OK"
@@ -43,6 +64,7 @@ def update_song_score():
     }
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])
+@validate_pubsub
 def recreate_song_relations():
     try:
         task = utako.presenter.song_relation_constructor.SongRelationConstructor()
