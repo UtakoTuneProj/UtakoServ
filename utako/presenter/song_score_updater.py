@@ -33,7 +33,7 @@ class SongScoreUpdater:
         Returns: status(StatusRecord): target status record
         '''
 
-        charts = self._fetch_target_records((mvid))
+        charts = self._fetch_target_records(([mvid]))
 
         if len(charts) == 0: #if collect chart does not exist
             ret = XmlReader()(mvid)
@@ -46,7 +46,7 @@ class SongScoreUpdater:
             }
 
         else:
-            record = charts.first
+            record = charts[0]
             score_seeds = {
                 'status_id':            record.status.id,
                 'movie_first_retrieve': record.status.postdate,
