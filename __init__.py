@@ -10,7 +10,7 @@ import importlib as imp
 from pathlib import Path
 
 DATASET_DIR="datasets"
-DATASET_NAME="chronicle.2019.03"
+DATASET_NAME="chronicle.2019.04"
 
 basedir=Path(DATASET_DIR) / DATASET_NAME
 dataset_info = json.load((basedir/'info.json').open())
@@ -19,11 +19,11 @@ wav = np.memmap(
     str( basedir/'wav.memmap' ),
     mode='r',
     dtype=np.float32
-).reshape((-1,1,dataset_info['length_per_sample']))
+).reshape((-1,1,dataset_info['length_per_sample']))[:10000,...]
 songs_label = np.load(
     str(basedir/'label.npy'),
     mmap_mode='r'
-)
+)[:10000]
 
 tags_label = np.load('datasets/wav.tags.npy', mmap_mode='r')
 with open('datasets/wav.tags.npy.order.super.json') as f:

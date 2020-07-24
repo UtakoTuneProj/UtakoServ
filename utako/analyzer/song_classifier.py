@@ -44,8 +44,8 @@ class SongClassifierChain(ChainList):
 
             if 'init' in layer['link']:
                 X = np.load(layer['link']['init']['fname'])
-                args[ 'initialW' ] = X['updater/model:main/predictor/{}/W'.format(layer['link']['init']['number'])]
-                args[ 'initial_bias' ] = X['updater/model:main/predictor/{}/b'.format(layer['link']['init']['number'])]
+                args[ 'initialW' ] = X['predictor/{}/W'.format(layer['link']['init']['number'])]
+                args[ 'initial_bias' ] = X['predictor/{}/b'.format(layer['link']['init']['number'])]
 
             links.append(cls(
                 **args,
@@ -164,7 +164,7 @@ class SongClassifier:
         self.preprocess = preprocess
         self.postprocess= postprocess
         self.result_path  = Path(
-            'result/{name}/{time:%Y}/{time:%m%d}/{time:%H%S}'.format(
+            'result/{name}/{time:%Y}/{time:%m%d}/{time:%H%M}'.format(
                 name=name,
                 time=datetime.datetime.now()
         ))

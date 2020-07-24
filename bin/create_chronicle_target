@@ -4,8 +4,8 @@ from utako.task import dl_songset
 dl_songset.create_chronicle_songset(
     year=2019,
     songs_limit=150,
-    length_limit=200,
+    length_limit=2000,
     sr=8192,
-    length=65536,
-    duplication=8,
+    length=32768,
+    duplication=32,
 )
