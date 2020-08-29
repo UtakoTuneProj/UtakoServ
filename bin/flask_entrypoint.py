@@ -41,7 +41,14 @@ def logger_test():
 
 @app.route('/trigger/test', methods=['POST'])
 def trigger_test():
-    app.logger.info(request.get_json())
+    try:
+        data = parse_pubsub(request_body, ['text'])
+    except InvalidPubSubMessageError as e:
+        app.logger.warning(e.message)
+        return {'status': 'error', 'message': e.message}, 400
+
+    app.logger.info(data['text'])
+    print(data['text'])
     return {'status': 'ok'}
 
 @app.route('/trigger/analyze_by_count', methods=['POST'])
