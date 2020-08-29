@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import time
 import json
+from functools import wraps
 
 from flask import Flask, request
 import yaml
@@ -14,23 +15,27 @@ class InvalidRequestBodyError(Exception):
     def __init__(self, message):
         self.message = message
 
-def parse_data(required=[]):
-    data = json.loads(request.get_data(as_text=True))
+def validate_request(required=[]):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            data = json.loads(request.get_data(as_text=True))
+            err_msg = None
+            if len(required) is not 0:
+                if not data:
+                    err_msg = 'No message body'
+                else:
+                    for key in required:
+                        if not key in data:
+                            err_msg = 'Missing required param {} '.format(key)
 
-    err_msg = None
-    if len(required) is not 0:
-        if not data:
-            err_msg = 'No message body'
-        else:
-            for key in required:
-                if not key in data:
-                    err_msg = 'Missing required param {} '.format(key)
+            if err_msg:
+                app.logger.warning(err_msg)
+                return {'status': 'error', 'message': err_msg}, 400
 
-    if err_msg:
-        app.logger.warning(err_msg)
-        raise InvalidRequestBodyError(err_msg)
-
-    return data
+            return func(data, *args, **kwargs)
+        return wrapper
+    return decorator
 
 @app.route('/')
 def index():
@@ -42,19 +47,15 @@ def logger_test():
     return "Log sent"
 
 @app.route('/trigger/test', methods=['POST'])
-def trigger_test():
-    try:
-        data = parse_data(['text'])
-    except InvalidRequestBodyError as e:
-        app.logger.warning(e.message)
-        return {'status': 'error', 'message': e.message}, 400
-
+@validate_request(['text'])
+def trigger_test(data):
     app.logger.debug(data['text'])
     return {'status': 'ok'}
 
-@app.route('/trigger/analyze_by_count', methods=['POST'])
-def analyze(movie_id):
-    count = request.args.get('count', 1, type=int)
+@app.route('/trigger/analyze/by_count', methods=['POST'])
+@validate_request(['count'])
+def analyze_by_count(data):
+    count = data['count']
     utako.presenter.song_index_updater.SongIndexUpdater()(limit = count)
     return {
         'status': 'complete'
@@ -78,12 +79,6 @@ def update_song_score():
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])
 def recreate_song_relations():
-    try:
-        data = parse_data()
-    except InvalidRequestBodyError as e:
-        app.logger.warning(e.message)
-        return {'status': 'error', 'message': e.message}, 400
-
     try:
         task = utako.presenter.song_relation_constructor.SongRelationConstructor()
         task(max_relations=13)
