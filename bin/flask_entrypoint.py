@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import time
+import json
 
 from flask import Flask, request
 import yaml
@@ -13,18 +14,23 @@ class InvalidRequestBodyError(Exception):
     def __init__(self, message):
         self.message = message
 
-def validate_request(request_body, required=[]):
-    if not isinstance(request_body, dict):
-        err_msg = 'Invalid request body'
-    else:
-        for key in required:
-            if not key in request_body:
-                err_msg = 'Missing required param {} '.format(key)
+def parse_data(required=[]):
+    data = json.loads(request.get_data(as_text=True))
+
+    err_msg = None
+    if len(required) is not 0:
+        if not data:
+            err_msg = 'No message body'
         else:
-            err_msg = None
+            for key in required:
+                if not key in data:
+                    err_msg = 'Missing required param {} '.format(key)
 
     if err_msg:
+        app.logger.warning(err_msg)
         raise InvalidRequestBodyError(err_msg)
+
+    return data
 
 @app.route('/')
 def index():
@@ -37,18 +43,13 @@ def logger_test():
 
 @app.route('/trigger/test', methods=['POST'])
 def trigger_test():
-    data = request.get_json()
-
-    import json
-    print(json.dumps(data))
-    app.logger.info(data)
-
     try:
-        validate_request(data, ['text'])
+        data = parse_data(['text'])
     except InvalidRequestBodyError as e:
         app.logger.warning(e.message)
         return {'status': 'error', 'message': e.message}, 400
 
+    app.logger.debug(data['text'])
     return {'status': 'ok'}
 
 @app.route('/trigger/analyze_by_count', methods=['POST'])
@@ -77,10 +78,8 @@ def update_song_score():
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])
 def recreate_song_relations():
-    data = request.get_json()
-
     try:
-        validate_request(data)
+        data = parse_data()
     except InvalidRequestBodyError as e:
         app.logger.warning(e.message)
         return {'status': 'error', 'message': e.message}, 400
