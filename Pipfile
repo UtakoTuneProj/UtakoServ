@@ -27,6 +27,7 @@ tweepy = "*"
 gunicorn = "*"
 flask = "*"
 youtube-dl = {git = "https://github.com/UtakoTuneProj/youtube-dl.git"}
+google-cloud-pubsub = "*"
 
 [requires]
 python_version = "3.6"
