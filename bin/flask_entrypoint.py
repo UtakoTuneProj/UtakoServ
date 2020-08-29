@@ -39,7 +39,7 @@ def validate_request(required=[]):
 
 @app.route('/')
 def index():
-    return "STATUS: OK"
+    return {'status': 'ok'}
 
 @app.route('/log')
 def logger_test():
