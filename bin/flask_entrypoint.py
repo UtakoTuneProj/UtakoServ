@@ -40,13 +40,9 @@ def logger_test():
     return "Log sent"
 
 @app.route('/trigger/test', methods=['POST'])
+@validate_pubsub(['text'])
 def trigger_test():
     request_body = request.get_json()
-    try:
-        validate_pubsub(request_body, ['text'])
-    except InvalidPubSubMessageError as e:
-        app.logger.warning(e.message)
-        return {'status': 'error', 'message': e.message}, 400
 
     app.logger.info(request_body['text'])
     print(request_body['text'])
