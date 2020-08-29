@@ -17,6 +17,9 @@
     user        = usermail
     password    = password
 
-[pubsub]
-    PROJECT_ID = GCP project ID
-    TOPIC_ANALYZE_ID = GCP pubsub topic ID
+[gcp]
+    PROJECT_ID          = GCP project ID
+    LOCATION            = GCP location
+    TOPIC_ANALYZE_ID    = topic_id
+    TASK_BASE_URL       = https://cloud_run.job_server.endpoint.example.com
+    TASK_ACCOUNT        = cloudtasks-jobrunner@my-project.iam.gserviceaccount.com

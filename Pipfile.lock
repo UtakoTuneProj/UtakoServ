@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6edb09a072477446762fb85676b46e25355142da0d146085297664991ac60c46"
+            "sha256": "ad79444ad4bacc3c0d521345b98f22a012fb9c0e58ddfd7261312bc2ef97d7e3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -150,6 +150,14 @@
             ],
             "index": "pypi",
             "version": "==1.7.0"
+        },
+        "google-cloud-tasks": {
+            "hashes": [
+                "sha256:36aa16f0c52aa9a292b1f919d2582725731e9760393c9ca98ce599c68cbf9996",
+                "sha256:d751b97c1e84980a1646702d3fc1b45bab3284bc3388181f1dc9ba3d204b5a39"
+            ],
+            "index": "pypi",
+            "version": "==1.5.0"
         },
         "googleapis-common-protos": {
             "extras": [

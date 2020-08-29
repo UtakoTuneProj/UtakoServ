@@ -28,6 +28,7 @@ gunicorn = "*"
 flask = "*"
 youtube-dl = {git = "https://github.com/UtakoTuneProj/youtube-dl.git"}
 google-cloud-pubsub = "*"
+google-cloud-tasks = "*"
 
 [requires]
 python_version = "3.6"

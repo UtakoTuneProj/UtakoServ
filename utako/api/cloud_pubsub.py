@@ -4,8 +4,7 @@ import utako.common_import as common
 
 class CloudPubSubSender:
     def __init__(self, topic_id):
-        project_id = common.config['pubsub']['PROJECT_ID']
-        topic_id = topic_id
+        project_id = common.config['gcp']['PROJECT_ID']
 
         if project_id is None or topic_id is None:
             raise NotImplementedError
