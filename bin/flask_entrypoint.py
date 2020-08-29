@@ -9,26 +9,22 @@ import logging
 
 app = Flask(__name__)
 
-def validate_pubsub(func, required=[]):
-    def wrapper(*args, **kwargs):
-        envelope = request.get_json()
-        if not envelope:
-            err_msg = 'No Pub/Sub message'
-        elif not ( isinstance(envelope, dict) ) or ( 'message' not in envelope ):
-            err_msg = 'Invalid Pub/Sub message'
+class InvalidRequestBodyError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+def validate_request(request_body, required=[]):
+    if not isinstance(request_body, dict):
+        err_msg = 'Invalid request body'
+    else:
+        for key in required:
+            if not key in request_body:
+                err_msg = 'Missing required param {} '.format(key)
         else:
-            for key in required:
-                if not key in envelope:
-                    err_msg = 'Missing required param {} '.format(key)
-            else:
-                err_msg = None
+            err_msg = None
 
-        if err_msg:
-            app.logger.warning(err_msg)
-            return {'status': 'error', 'message': err_msg}, 400
-
-        return func(*args, **kwargs)
-    return wrapper
+    if err_msg:
+        raise InvalidRequestBodyError(err_msg)
 
 @app.route('/')
 def index():
@@ -40,12 +36,19 @@ def logger_test():
     return "Log sent"
 
 @app.route('/trigger/test', methods=['POST'])
-@validate_pubsub(['text'])
 def trigger_test():
-    request_body = request.get_json()
+    data = request.get_json()
 
-    app.logger.info(request_body['text'])
-    print(request_body['text'])
+    import json
+    print(json.dumps(data))
+    app.logger.info(data)
+
+    try:
+        validate_request(data, ['text'])
+    except InvalidRequestBodyError as e:
+        app.logger.warning(e.message)
+        return {'status': 'error', 'message': e.message}, 400
+
     return {'status': 'ok'}
 
 @app.route('/trigger/analyze_by_count', methods=['POST'])
@@ -73,8 +76,15 @@ def update_song_score():
     }
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])
-@validate_pubsub
 def recreate_song_relations():
+    data = request.get_json()
+
+    try:
+        validate_request(data)
+    except InvalidRequestBodyError as e:
+        app.logger.warning(e.message)
+        return {'status': 'error', 'message': e.message}, 400
+
     try:
         task = utako.presenter.song_relation_constructor.SongRelationConstructor()
         task(max_relations=13)
