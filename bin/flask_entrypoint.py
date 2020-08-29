@@ -39,6 +39,11 @@ def logger_test():
     app.logger.info('Hello, logging.')
     return "Log sent"
 
+@app.route('/trigger/test', methods=['POST'])
+def trigger_test():
+    app.logger.info(request.get_json())
+    return {'status': 'ok'}
+
 @app.route('/trigger/analyze_by_count', methods=['POST'])
 def analyze(movie_id):
     count = request.args.get('count', 1, type=int)
