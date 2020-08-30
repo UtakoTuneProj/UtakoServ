@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from utako.common_import import *
+from utako import root_logger
 from peewee import fn
 import youtube_dl
 
@@ -12,6 +13,11 @@ from utako.exception.restricted_movie_exception import RestrictedMovieException
 
 class SongIndexUpdater:
     def __call__(self, limit = 10, retries = 5, force = False): #ランキング取得・キュー生成部
+        movie_ids = self._fetch_analyze_queue(limit)
+        version = settings['model_version']
+        return self.index_by_movie_ids(movie_ids, version=version, retries=retries, is_forced=force)
+
+    def _fetch_analyze_queue(self, limit):
         movies = AnalyzeQueue.select(
             AnalyzeQueue.movie_id,
         ).where(
@@ -22,14 +28,37 @@ class SongIndexUpdater:
         ).order_by(
             -fn.Count(AnalyzeQueue.movie_id)
         ).limit(limit)
-        if not force:
-            subquery = SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
-            movies = movies.where(AnalyzeQueue.movie_id.not_in(subquery))
 
-        movie_list = [movie.movie_id for movie in movies]
-        AnalyzeQueue.update(status=1).where(
-            AnalyzeQueue.movie_id << movie_list
+        return [movie.movie_id.id for movie in movies]
+
+    def index_by_movie_ids(
+        self,
+        movie_ids,
+        version=settings['model_version'],
+        retries=5,
+        is_forced=False
+    ):
+
+        queue_records = AnalyzeQueue.select(
+            AnalyzeQueue.movie_id
+        ).where(
+            AnalyzeQueue.movie_id << movie_ids,
+            AnalyzeQueue.status == 1,
         ).execute()
+
+        skipped = [queue.movie_id.id for queue in queue_records]
+
+        if not is_forced:
+            index_records = SongIndex.select(
+                SongIndex.status_id
+            ).where(
+                SongIndex.version == version,
+                SongIndex.status_id << movie_ids
+            ).execute()
+
+            skipped += [song_index.status_id.id for song_index in index_records]
+
+        filtered_movie_ids = tuple(set(movie_ids) - set(skipped))
 
         with open(settings[ 'model_structure' ]) as f:
             structure = yaml.load(f)
@@ -37,18 +66,21 @@ class SongIndexUpdater:
 
         success = []
         deleted = []
-        failed = movie_list[:]
+        failed = filtered_movie_ids[:]
         si_update = []
+
         try:
-            for movie in movie_list:
+            for movie_id in filtered_movie_ids:
+                root_logger.debug('Analyzing for {}'.format(movie_id))
                 try:
-                    song_index = si(movie, retries = retries)
+                    song_index = si(movie_id, retries = retries)
                 except youtube_dl.utils.YoutubeDLError as e:
+                    root_logger.warning(e.message)
                     if e.exc_info[0] == urllib.error.HTTPError:
                         http_err = e.exc_info[1]
                         if http_err.code == 404:
-                            deleted.append(movie)
-                            failed.remove(movie)
+                            deleted.append(movie_id)
+                            failed.remove(movie_id)
                             continue
                         elif http_err.code == 403:
                             continue
@@ -57,15 +89,16 @@ class SongIndexUpdater:
                     else:
                         raise
                 except RestrictedMovieException as e:
-                    print(e.message)
-                    deleted.append(movie)
-                    failed.remove(movie)
+                    root_logger.warning(e.message)
+                    deleted.append(movie_id)
+                    failed.remove(movie_id)
                     continue
                 else:
-                    success.append(movie)
-                    failed.remove(movie)
+                    root_logger.debug('Analyze complete for {}'.format(movie_id))
+                    success.append(movie_id)
+                    failed.remove(movie_id)
                     si_update.append(
-                        [ movie ] + song_index.tolist() + [ settings['model_version'] ],
+                        [ movie_id ] + song_index.tolist() + [ settings['model_version'] ],
                     )
         finally:
             with database.atomic():
@@ -86,3 +119,10 @@ class SongIndexUpdater:
                         SongIndex.value7,
                         SongIndex.version,
                     ]).on_conflict_replace().execute()
+
+        return {
+            'succeeded': success,
+            'failed': failed,
+            'deleted': deleted,
+            'skipped': skipped
+        }
