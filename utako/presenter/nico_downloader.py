@@ -11,6 +11,7 @@ class NicoDownloader:
             youtube_dl.YoutubeDL({
                 'outtmpl': 'tmp/mp4/%(id)s.mp4',
                 'retries': retries,
+                'format': 'worstaudio/worst',
             }).download([
                 'http://www.nicovideo.jp/watch/{}'.format(mvid)
             ])
