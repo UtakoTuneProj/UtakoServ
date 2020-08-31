@@ -56,9 +56,10 @@ def trigger_test(data):
 @validate_request(['count'])
 def analyze_by_count(data):
     count = data['count']
-    utako.presenter.song_index_updater.SongIndexUpdater()(limit = count)
+    result = utako.presenter.song_index_updater.SongIndexUpdater()(limit = count)
     return {
-        'status': 'complete'
+        'status': 'complete',
+        'result': result
     }
 
 @app.route('/trigger/hourly', methods=['POST'])
