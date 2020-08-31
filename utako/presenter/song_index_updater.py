@@ -61,6 +61,11 @@ class SongIndexUpdater:
             skipped += [song_index.status_id.id for song_index in index_records]
 
         filtered_movie_ids = list(set(movie_ids) - set(skipped))
+        AnalyzeQueue.update(
+            status=1
+        ).where(
+            AnalyzeQueue.movie_id << filtered_movie_ids
+        ).execute()
 
         with open(settings[ 'model_structure' ]) as f:
             structure = yaml.load(f)
