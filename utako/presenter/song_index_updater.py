@@ -30,13 +30,16 @@ class SongIndexUpdater:
 
         return [movie.movie_id.id for movie in movies]
 
-    def index_by_movie_ids(
-        self,
-        movie_ids,
-        retries=5,
-        is_forced=False
-    ):
+    def _fetch_already_analyzed_movies(self, movie_ids, version):
+        index_records = SongIndex.select(
+            SongIndex.status_id
+        ).where(
+            SongIndex.version == version,
+            SongIndex.status_id << movie_ids
+        ).execute()
+        return [song_index.status_id.id for song_index in index_records]
 
+    def _fetch_queue_ongoing_movies(self, movie_ids):
         queue_records = AnalyzeQueue.select(
             AnalyzeQueue.movie_id
         ).where(
@@ -45,19 +48,19 @@ class SongIndexUpdater:
         ).group_by(
             AnalyzeQueue.movie_id
         ).execute()
+        return [queue.movie_id.id for queue in queue_records]
 
-        skipped = [queue.movie_id.id for queue in queue_records]
+    def index_by_movie_ids(
+        self,
+        movie_ids,
+        retries=5,
+        is_forced=False
+    ):
 
         version = settings['model_version']
+        skipped = self._fetch_queue_ongoing_movies(movie_ids)
         if not is_forced:
-            index_records = SongIndex.select(
-                SongIndex.status_id
-            ).where(
-                SongIndex.version == version,
-                SongIndex.status_id << movie_ids
-            ).execute()
-
-            skipped += [song_index.status_id.id for song_index in index_records]
+            skipped += self._fetch_already_analyzed_movies(movie_ids, version)
 
         filtered_movie_ids = list(set(movie_ids) - set(skipped))
         AnalyzeQueue.update(
