@@ -44,6 +44,8 @@ class SongIndexUpdater:
         ).where(
             AnalyzeQueue.movie_id << movie_ids,
             AnalyzeQueue.status == 1,
+        ).group_by(
+            AnalyzeQueue.movie_id
         ).execute()
 
         skipped = [queue.movie_id.id for queue in queue_records]
