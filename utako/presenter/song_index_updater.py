@@ -58,7 +58,7 @@ class SongIndexUpdater:
 
             skipped += [song_index.status_id.id for song_index in index_records]
 
-        filtered_movie_ids = tuple(set(movie_ids) - set(skipped))
+        filtered_movie_ids = list(set(movie_ids) - set(skipped))
 
         with open(settings[ 'model_structure' ]) as f:
             structure = yaml.load(f)
