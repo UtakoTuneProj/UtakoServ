@@ -14,8 +14,7 @@ from utako.exception.restricted_movie_exception import RestrictedMovieException
 class SongIndexUpdater:
     def __call__(self, limit = 10, retries = 5, force = False): #ランキング取得・キュー生成部
         movie_ids = self._fetch_analyze_queue(limit)
-        version = settings['model_version']
-        return self.index_by_movie_ids(movie_ids, version=version, retries=retries, is_forced=force)
+        return self.index_by_movie_ids(movie_ids, retries=retries, is_forced=force)
 
     def _fetch_analyze_queue(self, limit):
         movies = AnalyzeQueue.select(
@@ -34,7 +33,6 @@ class SongIndexUpdater:
     def index_by_movie_ids(
         self,
         movie_ids,
-        version=settings['model_version'],
         retries=5,
         is_forced=False
     ):
@@ -50,6 +48,7 @@ class SongIndexUpdater:
 
         skipped = [queue.movie_id.id for queue in queue_records]
 
+        version = settings['model_version']
         if not is_forced:
             index_records = SongIndex.select(
                 SongIndex.status_id
@@ -105,7 +104,7 @@ class SongIndexUpdater:
                     success.append(movie_id)
                     failed.remove(movie_id)
                     si_update.append(
-                        [ movie_id ] + song_index.tolist() + [ settings['model_version'] ],
+                        [ movie_id ] + song_index.tolist() + [ version ],
                     )
         finally:
             with database.atomic():
