@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 import time
 import json
+import logging
 from functools import wraps
 
 from flask import Flask, request
 import yaml
 
 import utako
-import logging
+from utako.delegator.song_analyze import SongAnalyzeReceiver
 
 app = Flask(__name__)
 
@@ -60,6 +61,17 @@ def analyze_by_count(data):
     return {
         'status': 'complete',
         'result': result
+    }
+
+@app.route('/trigger/analyze/by_movie_id', methods=['POST'])
+@validate_request(['movie_id', 'model_version'])
+def analyze_by_movie_id(data):
+    job = SongAnalyzeReceiver()
+    status = job.receive(data)
+
+    return {
+        'status': 'complete',
+        'job_result': status
     }
 
 @app.route('/trigger/hourly', methods=['POST'])

@@ -20,6 +20,6 @@
 [gcp]
     PROJECT_ID          = GCP project ID
     LOCATION            = GCP location
-    TOPIC_ANALYZE_ID    = topic_id
     TASK_BASE_URL       = https://cloud_run.job_server.endpoint.example.com
     TASK_ACCOUNT        = cloudtasks-jobrunner@my-project.iam.gserviceaccount.com
+    TASK_ANALYZE_QUEUE  = task_queue_name
