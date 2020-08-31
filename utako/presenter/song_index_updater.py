@@ -8,8 +8,10 @@ import youtube_dl
 from utako.model.abstract_model import database
 from utako.model.song_index import SongIndex
 from utako.model.analyze_queue import AnalyzeQueue
+from utako.model.status import Status
 from utako.presenter.song_indexer import SongIndexer
 from utako.exception.restricted_movie_exception import RestrictedMovieException
+from utako.exception.index_core_not_found_exception import IndexCoreNotFoundException
 
 class SongIndexUpdater:
     def __call__(self, limit = 10, retries = 5, force = False): #ランキング取得・キュー生成部
@@ -102,6 +104,11 @@ class SongIndexUpdater:
                     deleted.append(movie_id)
                     failed.remove(movie_id)
                     continue
+                except IndexCoreNotFoundException as e:
+                    root_logger.warning(e.message)
+                    deleted.append(movie_id)
+                    failed.remove(movie_id)
+                    continue
                 else:
                     root_logger.debug('Analyze complete for {}'.format(movie_id))
                     success.append(movie_id)
@@ -115,6 +122,8 @@ class SongIndexUpdater:
                     AnalyzeQueue.delete().where(AnalyzeQueue.movie_id << success + deleted).execute()
                 if len(failed) > 0:
                     AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed).execute()
+                if len(deleted) > 0:
+                    Status.update(validity=0).where(Status.id << deleted).execute()
                 if len(si_update) > 0:
                     SongIndex.insert_many(si_update,fields=[
                         SongIndex.status_id,
