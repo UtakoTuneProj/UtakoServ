@@ -49,4 +49,4 @@ else:
     raise ValueError("env variable PYTHON_ENV must be 'development', 'test' or 'prodcution', not {}".format(py_env))
 
 with open('conf/settings.yaml') as f:
-    settings = yaml.load(f)
+    settings = yaml.safe_load(f)

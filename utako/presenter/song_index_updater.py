@@ -72,7 +72,7 @@ class SongIndexUpdater:
         ).execute()
 
         with open(settings[ 'model_structure' ]) as f:
-            structure = yaml.load(f)
+            structure = yaml.safe_load(f)
         si = SongIndexer(structure)
 
         success = []

@@ -3,7 +3,7 @@
 
 from utako.common_import import *
 from utako.analyzer.song_auto_encoder import SongAutoEncoder
-from utako.model.idtag import Idtag 
+from utako.model.idtag import Idtag
 from scipy import stats
 import peewee
 import gc
@@ -13,7 +13,7 @@ class SaeTagComparator:
         if conf_file is None:
             conf_file = 'conf/sae.yaml'
         with open(conf_file) as f:
-            structure = yaml.load(f)
+            structure = yaml.safe_load(f)
         self.sae = SongAutoEncoder(structure, **kwargs)
 
     def __call__(self, trial, song_partition_file='train.json'):
@@ -47,7 +47,7 @@ class SaeTagComparator:
         for song in song_partition:
             song_data = np.average(encoded[song[1]:song[2], :], axis = 0)
             ret = np.append(ret, song_data.reshape(1,-1), axis = 0)
-        
+
         return ret
 
     def get_tags(self, min_limit = 5):
@@ -110,7 +110,7 @@ class SaeTagComparator:
             for i in range(len(res[3].pvalue)):
                 if res[3].pvalue[i] > pvalue_limit:
                     continue
-                
+
                 cell = {
                     'tagname': res[0],
                     'pvalue': res[3].pvalue[i],
