@@ -11,6 +11,7 @@ from utako.model.analyze_queue import AnalyzeQueue
 from utako.presenter.xml_reader import XmlReader
 from utako.exception.mov_deleted_exception import MovDeletedException
 from utako.exception.no_response_exception import NoResponseException
+from utako.delegator.song_analyze import SongAnalyzeSender
 
 from utako import root_logger
 
@@ -59,7 +60,7 @@ class SongScoreUpdater:
             self._create_update_model(**score_seeds)
         ], fields=[Status.score, Status.score_status])
 
-    def update(self, *status_ids):
+    def update(self, *status_ids, enqueue=True):
         '''
         SongScoreUpdater.update(*status_ids)
         batch update scores for specified ids
@@ -80,13 +81,8 @@ class SongScoreUpdater:
             ))
         )
 
-        AnalyzeQueue.insert_many(
-            [{
-                'movie_id': m.id,
-                'version': settings['model_version'],
-                'status': 0,
-            } for m in analyze_queue]
-        ).execute()
+        if enqueue:
+            [ SongAnalyzeSender().send(movie_id=m.id) for m in analyze_queue ]
 
         result_map_func = lambda status_record: {
             'id':           status_record.id,
