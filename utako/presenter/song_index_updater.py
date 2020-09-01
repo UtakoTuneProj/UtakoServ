@@ -75,9 +75,10 @@ class SongIndexUpdater:
             structure = yaml.safe_load(f)
         si = SongIndexer(structure)
 
+        failed = filtered_movie_ids[:]
         success = []
         deleted = []
-        failed = filtered_movie_ids[:]
+        timeout = []
         si_update = []
 
         try:
@@ -110,6 +111,8 @@ class SongIndexUpdater:
                     failed.remove(movie_id)
                     continue
                 except TimeoutError as e:
+                    timeout.append(movie_id)
+                    failed.remove(movie_id)
                     continue
                 else:
                     root_logger.debug('Analyze complete for {}'.format(movie_id))
@@ -122,8 +125,8 @@ class SongIndexUpdater:
             with database.atomic():
                 if len(success + deleted) > 0:
                     AnalyzeQueue.delete().where(AnalyzeQueue.movie_id << success + deleted).execute()
-                if len(failed) > 0:
-                    AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed).execute()
+                if len(failed + timeout) > 0:
+                    AnalyzeQueue.update(status=0).where(AnalyzeQueue.movie_id << failed + timeout).execute()
                 if len(deleted) > 0:
                     Status.update(validity=0).where(Status.id << deleted).execute()
                 if len(si_update) > 0:
@@ -143,6 +146,7 @@ class SongIndexUpdater:
         return {
             'succeeded': success,
             'failed': failed,
+            'timeout': timeout,
             'deleted': deleted,
             'skipped': skipped
         }

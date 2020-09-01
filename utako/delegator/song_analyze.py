@@ -19,6 +19,6 @@ class SongAnalyzeReceiver(UtakoDelegateReceiver):
         updater = SongIndexUpdater()
         result  = updater.index_by_movie_ids([movie_id])
 
-        for status in ['succeeded', 'failed', 'deleted', 'skipped']:
+        for status in result:
             if result[status]:
                 return status

@@ -69,10 +69,16 @@ def analyze_by_movie_id(data):
     job = SongAnalyzeReceiver()
     status = job.receive(data)
 
-    return {
-        'status': 'complete',
-        'job_result': status
-    }
+    if status in ['succeeded', 'skipped', 'deleted']:
+        return {
+            'status': 'complete',
+            'job_result': status
+        }
+    else:
+        return {
+            'status': 'failure',
+            'job_result': status
+        }, 504
 
 @app.route('/trigger/hourly', methods=['POST'])
 def hourly():
