@@ -109,6 +109,8 @@ class SongIndexUpdater:
                     deleted.append(movie_id)
                     failed.remove(movie_id)
                     continue
+                except TimeoutError as e:
+                    continue
                 else:
                     root_logger.debug('Analyze complete for {}'.format(movie_id))
                     success.append(movie_id)
