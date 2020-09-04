@@ -13,6 +13,7 @@ class CaptiveSongScoreUpdater:
         self,
         initialize_db,
         inject_mock_getthumbinfo,
+        inject_mock_cloudtask,
         inject_status,
         inject_chart,
     ):

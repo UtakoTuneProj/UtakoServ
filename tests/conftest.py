@@ -83,3 +83,16 @@ def inject_mock_getthumbinfo(monkeypatch):
         '_fetch_thumb_root',
         _mock_getthumbinfo
     )
+
+@pytest.fixture()
+def inject_mock_cloudtask(monkeypatch):
+    def _mock_cloudtask(self, parent, task, *args):
+        assert isinstance(parent, str)
+        assert isinstance(task, dict)
+
+    from google.cloud.tasks_v2 import CloudTasksClient
+    monkeypatch.setattr(
+        CloudTasksClient,
+        'create_task',
+        _mock_cloudtask
+    )
