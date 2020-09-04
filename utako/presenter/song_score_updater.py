@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from typing import Tuple, Union
+
 from utako.common_import import *
 from peewee import fn
 
@@ -53,7 +55,8 @@ class SongScoreUpdater:
                 'movie_first_retrieve': record.status.postdate,
                 'view':                 record.view,
                 'comment':              record.comment,
-                'mylist':               record.mylist
+                'mylist':               record.mylist,
+                'minutes':              record.time,
             }
 
         return Status.bulk_update([
@@ -152,7 +155,8 @@ class SongScoreUpdater:
         movie_first_retrieve: datetime.datetime,
         view: int,
         comment: int,
-        mylist: int
+        mylist: int,
+        minutes: Union[float, None]=None,
     ):
         '''
         In:
@@ -166,7 +170,12 @@ class SongScoreUpdater:
         self.logger.debug('Target ID: {}'.format(status_id))
         self.logger.debug('score seeds: V,C,M: {}, {}, {}'.format(view, comment, mylist))
 
-        def backward_predict(view: int, comment: int, mylist: int):
+        def backward_predict(
+            view: int,
+            comment: int,
+            mylist: int,
+            days: float,
+        ) -> Tuple[float, float, float]:
             predict_seeds = np.array((
                 view + 1,
                 comment + 1,
@@ -180,8 +189,12 @@ class SongScoreUpdater:
 
             return ( view, comment, mylist )
 
-        def forward_predict(view: int, comment: int, mylist: int):
-            minutes = (datetime.datetime.now() - movie_first_retrieve).total_seconds() / 60
+        def forward_predict(
+            view: int,
+            comment: int,
+            mylist: int,
+            minutes: float,
+        ) -> Tuple[float, float, float]:
             predict_seeds = np.array((
                 view + 1,
                 comment + 1,
@@ -195,17 +208,23 @@ class SongScoreUpdater:
 
             return ( view, comment, mylist )
 
-        def calculate_score(view: float, comment: float, mylist: float):
+        def calculate_score(view: float, comment: float, mylist: float) -> float:
             return np.sqrt(view) * (1 - 0.5 * 10**(-20 * comment / view)) * (1 - 0.5 * 10**(-20 * mylist / view))
 
         target_status = Status.get(Status.id == status_id)
-        days = (datetime.datetime.now() - movie_first_retrieve).days
 
-        if days > 7:
-            score_seed = backward_predict(view, comment, mylist)
+        if minutes is None:
+            _minutes = (datetime.datetime.now() - movie_first_retrieve).total_seconds() / 60
+        else:
+            _minutes = minutes
+
+        _days = _minutes / 60 / 24
+
+        if _days > 7:
+            score_seed = backward_predict(view, comment, mylist, _days)
             score_status = -1
-        elif days < 7:
-            score_seed = forward_predict(view, comment, mylist)
+        elif _days < 7:
+            score_seed = forward_predict(view, comment, mylist, minutes)
             score_status = 1
         else:
             score_seed = (view, comment, mylist)
