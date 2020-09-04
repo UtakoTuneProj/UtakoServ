@@ -144,7 +144,8 @@ class SongScoreUpdater:
                     'movie_first_retrieve': record.status.postdate,
                     'view':                 record.view,
                     'comment':              record.comment,
-                    'mylist':               record.mylist
+                    'mylist':               record.mylist,
+                    'minutes':              record.time,
                 },
                 chart_records
             )
@@ -224,7 +225,7 @@ class SongScoreUpdater:
             score_seed = backward_predict(view, comment, mylist, _days)
             score_status = -1
         elif _days < 7:
-            score_seed = forward_predict(view, comment, mylist, minutes)
+            score_seed = forward_predict(view, comment, mylist, _minutes)
             score_status = 1
         else:
             score_seed = (view, comment, mylist)
