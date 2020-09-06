@@ -1,5 +1,6 @@
 import utako.common_import as common
 from utako.delegator.abstract_delegator import UtakoDelegateSender, UtakoDelegateReceiver
+from utako.delegator.create_song_relation import CreateSongRelationSender
 from utako.presenter.song_index_updater import SongIndexUpdater
 
 class SongAnalyzeSender(UtakoDelegateSender):
@@ -21,4 +22,9 @@ class SongAnalyzeReceiver(UtakoDelegateReceiver):
 
         for status in result:
             if result[status]:
-                return status
+                job_result = status
+
+        if job_result == 'succeeded':
+            CreateSongRelationSender.send(movie_id)
+
+        return job_result
