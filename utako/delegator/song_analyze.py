@@ -25,6 +25,6 @@ class SongAnalyzeReceiver(UtakoDelegateReceiver):
                 job_result = status
 
         if job_result == 'succeeded':
-            CreateSongRelationSender.send(movie_id)
+            CreateSongRelationSender().send(movie_id)
 
         return job_result
