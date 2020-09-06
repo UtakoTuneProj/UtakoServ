@@ -23,4 +23,5 @@
     TASK_BASE_URL           = https://cloud_run.job_server.endpoint.example.com
     TASK_ACCOUNT            = cloudtasks-jobrunner@my-project.iam.gserviceaccount.com
     TASK_ANALYZE_QUEUE      = task_queue_name
+    TASK_CREATETREE_QUEUE   = task_queue_name
     STORAGE_PARTIAL_BUCKET  = bucket-name-for-save-partial-download-files

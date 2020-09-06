@@ -9,6 +9,7 @@ import yaml
 
 import utako
 from utako.delegator.song_analyze import SongAnalyzeReceiver
+from utako.delegator.create_song_relation import CreateSongRelationReceiver
 
 app = Flask(__name__)
 
@@ -79,6 +80,17 @@ def analyze_by_movie_id(data):
             'status': 'failure',
             'job_result': status
         }, 504
+
+@app.route('/trigger/recreate_song_relations/by_movie_id', methods=['POST'])
+@validate_request(['movie_id'])
+def recreate_song_relations_by_movie_id(data):
+    job = CreateSongRelationReceiver()
+    count = job.receive(data)
+
+    return {
+        'status': 'complete',
+        'inserted_relations': count
+    }
 
 @app.route('/trigger/hourly', methods=['POST'])
 def hourly():
