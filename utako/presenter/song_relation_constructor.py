@@ -11,20 +11,14 @@ class SongRelationConstructor:
     def __call__(self, max_relations = 11):
         movies, positions = self.fetch_indexes()
         relations = self.get_relations(positions, max_relations)
-        self.store_relations(movies, relations)
+        self.store_all_relations(movies, relations)
 
     def fetch_indexes(self):
         query = SongIndex.select().where(
             SongIndex.version == settings['model_version']
         ).tuples()
-        movies = []
-        positions = []
-        for q in query:
-            print(q)
-            movies.append(q[1])
-            positions.append(q[2:10])
-        movies = np.array(movies, dtype = str)
-        positions = np.array(positions, dtype = np.float64)
+        movies = np.array([q[1] for q in query], dtype=str)
+        positions = np.array([q[2:10] for q in query], dtype=np.float64)
         return movies, positions
 
     def get_relations(self, positions, k):
@@ -41,30 +35,42 @@ class SongRelationConstructor:
                 for k in relations]
         return relations[mask]
 
-    def store_relations(self, movies, relations):
+    def store_all_relations(self, movies, relations):
+        '''
+        In:
+            movies: np.array(dtype=str)
+                nparray for movie_ids
+            relations: np.array(dtype=np.int32, shape=(3, -1))
+                nparray contains origin, destinations, distance
+                each origin/destinations value are indices of movie
+        Out: (None)
+        '''
         ssr_target = []
         def create(movies, rel):
-            r = SongRelation.create(
+            record = SongRelation.create(
                 distance = rel[2],
                 version = settings['model_version']
             )
             return [{
                 'status': movies[rel[0]],
-                'song_relation': r.id
+                'song_relation': record.id
             },{
                 'status': movies[rel[1]],
-                'song_relation': r.id
+                'song_relation': record.id
             }]
 
         Origin = StatusSongRelation.alias()
         Destination = StatusSongRelation.alias()
         pb = ProgressBar()
+
         with database.atomic():
-            for rel in pb( relations ):
-                origin_id = movies[rel[0]]
-                destination_id = movies[rel[1]]
-                query = Origin.select(
-                    Origin.status, Destination.status, SongRelation
+            for movie in pb( movies ):
+                origin_id = movie
+                movie_id_index = pb.value
+                related_relations = relations[relations[...,0] == movie_id_index]
+
+                existing_relations = Origin.select(
+                    Destination.status
                 ).join(
                     SongRelation
                 ).join(
@@ -72,16 +78,18 @@ class SongRelationConstructor:
                         Origin.song_relation == Destination.song_relation
                     )
                 ).where(
-                    ( Origin.status != Destination.status )
-                    & ( Origin.status == origin_id )
-                    & ( Destination.status == destination_id )
-                )
-                if not query.exists():
-                    ssr_target += create(movies, rel)
-                else:
-                    for obj in query:
-                        if obj.song_relation.version != settings['model_version']:
-                            ssr_target += create(movies, rel)
+                    Origin.status == origin_id,
+                    SongRelation.version == settings['model_version'],
+                ).tuples()
+                existing_movie_id_indices = np.argwhere(np.isin(movies, tuple(existing_relations)))
+
+                new_relation = related_relations[
+                    np.logical_not(np.isin(related_relations[...,1], existing_movie_id_indices))
+                ]
+
+                flatten = lambda l: sum(l, [])
+                ssr_target += flatten([ create(movies, rel) for rel in new_relation ])
 
             if len(ssr_target) != 0:
                 StatusSongRelation.insert_many(ssr_target).execute()
+
