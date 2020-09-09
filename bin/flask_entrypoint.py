@@ -121,6 +121,7 @@ def recreate_song_relations():
     }
 
 if __name__ == '__main__':
+    app.logger = utako.root_logger
     app.run(host="127.0.0.1", port=8193, debug=True)
 else:
     gunicorn_logger = logging.getLogger('gunicorn.error')
