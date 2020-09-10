@@ -25,6 +25,8 @@ class NicoDownloader:
             'outtmpl': self.output_filename_template,
             'retries': retries,
             'format': 'worstaudio/worst',
+            'logger': root_logger,
+            'noprogress': True,
         })
         pipe_receiver, pipe_sender = Pipe()
         dl_process = self._create_download_process(pipe_sender, mvid)
@@ -75,9 +77,10 @@ class NicoDownloader:
                 '-ar', #sampling rate
                 '44100',
                 'tmp/wav/{}.wav'.format(mvid),#outfile name
-            ], stderr=sbproc.STDOUT)
+            ], stderr=sbproc.PIPE)
             if process.returncode != 0: # if process does not stop accurately
                 os.remove('tmp/mp4/{}.mp4'.format(mvid))
+                root_logger.warning(process.stderr)
                 time.sleep(10)
                 self(mvid, retries = retries, force = force)
 
