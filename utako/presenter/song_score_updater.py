@@ -168,8 +168,7 @@ class SongScoreUpdater:
             mylist: int: Chart.mylist
         Out: peewee.Model() (to update)
         '''
-        self.logger.debug('Target ID: {}'.format(status_id))
-        self.logger.debug('score seeds: V,C,M: {}, {}, {}'.format(view, comment, mylist))
+        self.logger.debug('Target ID: {}, score seeds: V,C,M,T: {}, {}, {}, {}.'.format(status_id, view, comment, mylist, minutes))
 
         def backward_predict(
             view: int,
