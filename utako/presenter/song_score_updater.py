@@ -121,6 +121,7 @@ class SongScoreUpdater:
             Chart.view,
             Chart.comment,
             Chart.mylist,
+            Chart.time,
         ).join(
             subquery,
             on=(Chart.status == newestChartStatus)
