@@ -5,7 +5,7 @@ steps:
   entrypoint: 'bash'
   args:
     - '-c'
-    - 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.develop.conf'
+    - 'gcloud secrets versions access latest --secret=utako-jobrunner-${_ENVIRONMENT}-secret > conf/auth.${_ENVIRONMENT}.conf'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
     - 'gsutil'
@@ -45,7 +45,7 @@ steps:
     - 'gcloud'
     - 'run'
     - 'deploy'
-    - 'utako-jobrunner-edge'
+    - '${_CLOUDRUN_TARGET}'
     - '--image'
     - 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}'
     - '--platform'
