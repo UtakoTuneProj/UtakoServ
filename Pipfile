@@ -1,0 +1,36 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[scripts]
+serve = "gunicorn --reload -c conf/gunicorn.conf.py bin.flask_entrypoint:app"
+
+[dev-packages]
+pytest = "*"
+pytest-env = "*"
+freezegun = "*"
+pytest-cov = "*"
+
+[packages]
+chainer = "*"
+librosa = "*"
+matplotlib = "*"
+mysqlclient = "*"
+numpy = "*"
+peewee = "*"
+progressbar2 = "*"
+pyyaml = "*"
+scipy = "*"
+sklearn = "*"
+tweepy = "*"
+gunicorn = "*"
+flask = "*"
+youtube-dl = {git = "https://github.com/UtakoTuneProj/youtube-dl.git"}
+google-cloud-pubsub = "*"
+google-cloud-tasks = "~=1.5"
+google-cloud-storage = "*"
+python-json-logger = "*"
+
+[requires]
+python_version = "3.6"

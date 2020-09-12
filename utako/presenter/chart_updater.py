@@ -23,7 +23,7 @@ class ChartUpdater:
 
         lastwks_mv = Status.select().where(
             Status.postdate
-            < datetime.datetime.now()
+            <= datetime.datetime.now()
             - datetime.timedelta(days=7, hours=1),
             Status.validity == 1,
             Status.iscomplete == 0
@@ -34,7 +34,10 @@ class ChartUpdater:
         for query in lastwks_mv:
             self._update(query)
 
-        return None
+        return {
+            'today': tuple(map(lambda x: x.id, todays_mv)),
+            'lastweek': tuple(map(lambda x: x.id, lastwks_mv)),
+        }
 
     def _update(self, query):
         mvid = query.id
@@ -45,7 +48,7 @@ class ChartUpdater:
             try:
                 movf = XmlReader()(mvid)
             except NoResponseException:
-                time.wait(5)
+                time.sleep(5)
                 continue
             except MovDeletedException:
                 Status.update(
@@ -63,7 +66,7 @@ class ChartUpdater:
         ).total_seconds() / 60
 
         Chart.create(
-            status_id = mvid,
+            status    = mvid,
             epoch     = epoch,
             time      = passedmin,
             view      = movf['view_counter'],

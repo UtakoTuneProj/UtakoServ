@@ -12,7 +12,7 @@ def putc_test(
     **kwargs
 ):
     with open(fname) as f:
-        structure = yaml.load(f)
+        structure = yaml.safe_load(f)
 
     if randomize:
         index = np.random.permutation(wav.shape[0])

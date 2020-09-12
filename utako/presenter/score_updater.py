@@ -10,4 +10,4 @@ class ScoreUpdater:
         )
 
         target_ids = [m.id for m in target_mvs]
-        SongScoreUpdater().update(*target_ids)
+        return SongScoreUpdater().update(*target_ids)

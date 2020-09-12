@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from utako.common_import import *
 from utako.analyzer.song_classifier import SongClassifierChain
-from utako.analyzer import song_classifier_postprocess as scpost 
+from utako.analyzer import song_classifier_postprocess as scpost
 from .nico_downloader import NicoDownloader as NDL
 import librosa
 
@@ -18,7 +18,7 @@ class SongIndexer:
         )
         return score.reshape(-1)
     def fetch_npyarray(self, mvid, sr, length, retries = 5, cleanup = True):
-        NDL()(mvid, retries = retries)
+        NDL()(mvid, retries = retries, dl_timeout_sec=200, use_partial=True)
         wav_raw = librosa.core.load(
             path = 'tmp/wav/{}.wav'.format(mvid),
             sr = sr,

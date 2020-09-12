@@ -11,8 +11,8 @@ def sae_test(
     **kwargs
 ):
     with open(fname) as f:
-        structure = yaml.load(f)
-    
+        structure = yaml.safe_load(f)
+
     if wav is None:
         print('loading wav.npy')
         wav = np.load('wav.npy')
