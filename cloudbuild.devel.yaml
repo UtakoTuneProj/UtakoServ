@@ -5,7 +5,7 @@ steps:
   entrypoint: 'bash'
   args:
     - '-c'
-    - 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.devel.conf'
+    - 'gcloud secrets versions access latest --secret=utako-jobrunner-develop-secret > conf/auth.develop.conf'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
     - 'gsutil'
