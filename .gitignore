@@ -1,8 +1,10 @@
 *~
 __pycache__
+*.pyc
 logs
 tmp
-.coverage
+/.coverage
+/htmlcov/
 .pytest_cache
 .vscode/
 /datasets/*
@@ -10,8 +12,6 @@ tmp
 /result/*
 !/result/.keep
 
-auth.conf
-auth.devel.conf
 *.swp
 *.wav
 *.npy
@@ -20,3 +20,5 @@ auth.devel.conf
 *.model
 conf/model_*.yaml
 conf/*.mxp.yaml
+conf/auth.*.conf
+!conf/auth.test.conf

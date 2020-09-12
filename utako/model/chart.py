@@ -8,7 +8,7 @@ from .status import Status
 class Chart(BaseModel):
     id = AutoField()
     comment = IntegerField(db_column='Comment')
-    status_id = ForeignKeyField(Status, db_column='status_id')
+    status = ForeignKeyField(Status, db_column='status_id')
     mylist = IntegerField(db_column='Mylist')
     time = FloatField(db_column='Time')
     view = IntegerField(db_column='View')

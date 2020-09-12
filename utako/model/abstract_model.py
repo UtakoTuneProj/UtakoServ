@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from peewee import *
+from peewee import MySQLDatabase, SqliteDatabase, Model
 from utako.common_import import config
 
 dbtype = config['database_type']['dbtype']

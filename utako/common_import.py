@@ -40,13 +40,13 @@ except KeyError:
     py_env = "test"
 
 if py_env in [ 'development', 'develop', 'devel' ]:
-    config.read('conf/auth.devel.conf')
+    config.read('conf/auth.develop.conf')
 elif py_env == 'test':
     config.read('conf/auth.test.conf')
 elif py_env == 'production':
-    config.read('conf/auth.conf')
+    config.read('conf/auth.production.conf')
 else:
     raise ValueError("env variable PYTHON_ENV must be 'development', 'test' or 'prodcution', not {}".format(py_env))
 
 with open('conf/settings.yaml') as f:
-    settings = yaml.load(f)
+    settings = yaml.safe_load(f)

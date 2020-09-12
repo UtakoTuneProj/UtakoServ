@@ -1,22 +1,31 @@
-dist: xenial
+dist: 'bionic'
 language: python
 python:
-  - "3.5"
   - "3.6"
 
 env:
   global:
-    PYTHONPATH: .
-    PYTHON_ENV: test
+    PYTHONPATH: "."
+    PYTHON_ENV: "test"
 
 addons:
   apt:
     packages:
       - python3-tk
       - libmysqlclient-dev
+      - libsndfile1
+
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install codecov
+  - pip install pipenv
 
 install:
-  - pip install -r dependencies.dat
+  - pipenv install --dev --system --deploy
 
 script:
-  - pytest
+  - pipenv run pytest --cov=utako -r a -v
+
+after_success:
+  - codecov

@@ -1,7 +1,10 @@
 .git/
 result/
+tests/
 
 *.npy
 *.wav
 *.mp4
 *.mp4.part
+
+./cloudbuild.*.yaml
