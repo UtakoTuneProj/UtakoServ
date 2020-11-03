@@ -38,7 +38,7 @@ steps:
 
 # build container
 - name: 'docker'
-  entrypoint: 'bash'
+  entrypoint: 'sh'
   args:
     - '-c'
     - "docker pull asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest || exit 0"
