@@ -6,9 +6,11 @@ RUN apt-get update &&\
     apt-get install -y --no-install-recommends ffmpeg python3-tk libsndfile1 &&\
     apt-get install -y --no-install-recommends gcc musl g++ gfortran libpng-dev
 RUN pip3 install pipenv
-COPY  ./Pipfile ./Pipfile.lock /UtakoServ/
+COPY  ./Pipfile ./Pipfile.lock ./.gitcookies /UtakoServ/
 WORKDIR /UtakoServ
-RUN pipenv install --system --deploy
+RUN git config --global http.cookiefile .gitcookies &&\
+    pipenv install --system --deploy &&\
+    rm -rf ~/.gitcookies
 
 COPY ./ /UtakoServ/
 
