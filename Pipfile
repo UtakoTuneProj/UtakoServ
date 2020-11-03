@@ -26,7 +26,7 @@ sklearn = "*"
 tweepy = "*"
 gunicorn = "*"
 flask = "*"
-youtube-dl = {git = "https://github.com/UtakoTuneProj/youtube-dl.git"}
+youtube-dl = {git = "https://source.developers.google.com/p/utako-197022/r/youtube-dl"}
 google-cloud-pubsub = "*"
 google-cloud-tasks = "~=1.5"
 google-cloud-storage = "*"
