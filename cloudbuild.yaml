@@ -19,6 +19,15 @@ steps:
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
 
+# Invoke git command to enable google cloud source repositories
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'git'
+  args:
+    - 'config'
+    - '--global'
+    - 'credential."https://source.developers.google.com".helper'
+    - 'gcloud.sh'
+
 # build container
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
@@ -28,6 +37,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
+    '--network=cloudbuild',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}',
     '--cache-from', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
