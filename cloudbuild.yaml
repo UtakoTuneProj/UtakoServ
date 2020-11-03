@@ -37,12 +37,12 @@ steps:
       eval 'set -o history' 2>/dev/null || unsetopt HIST_IGNORE_SPACE 2>/dev/null
 
 # build container
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   entrypoint: 'bash'
   args:
     - '-c'
     - "docker pull asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest || exit 0"
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: [
     'build',
     '--network=cloudbuild',
@@ -52,9 +52,9 @@ steps:
     '-f', 'Dockerfile', '.']
 
 # push container
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}']
 
 # deploy to cloud run
