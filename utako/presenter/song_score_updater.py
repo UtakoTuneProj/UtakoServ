@@ -78,7 +78,11 @@ class SongScoreUpdater:
         chart_records = self._fetch_target_records(status_ids)
         score_update_models = self._create_update_models(chart_records)
         with database.atomic():
-            [ record.save() for record in score_update_models ]
+            Status.bulk_update(
+                score_update_models,
+                fields=[Status.score, Status.score_status],
+                batch_size=50
+            )
 
         analyze_queue = Status.select(Status.id).where(
             ( Status.score > settings['analyze_score_limit'] )
@@ -142,19 +146,22 @@ class SongScoreUpdater:
         '''
         self.logger.info('Number of chart_records = {}'.format(len(chart_records)))
 
-        return [ self._create_update_model(**args) for args in
-            map(
-                lambda record: {
-                    'status_id':            record.status.id,
-                    'movie_first_retrieve': record.status.postdate,
-                    'view':                 record.view,
-                    'comment':              record.comment,
-                    'mylist':               record.mylist,
-                    'minutes':              record.time,
-                },
-                chart_records
+        # FIXME: consider faster implements
+        # (Batch Operation, Operation Without Record Fetch...)
+        returned_models = []
+        for r in chart_records:
+            update_model = self._create_update_model(
+                status_id=r.status.id,
+                movie_first_retrieve=r.status.postdate,
+                view=r.view,
+                comment=r.comment,
+                mylist=r.mylist,
+                minutes=r.time,
             )
-        ]
+            update_model.save()
+            returned_models.append(update_model)
+
+        return returned_models
 
     def _create_update_model(self,
         status_id: str,
