@@ -75,7 +75,7 @@ class SongScoreUpdater:
 
         In: *status_ids: target id(s)
         '''
-        batch_count = ( len(status_ids) // batch_size ) + 1
+        batch_count = ( ( len(status_ids) - 1 ) // batch_size ) + 1
 
         results = []
         for i in range(batch_count):

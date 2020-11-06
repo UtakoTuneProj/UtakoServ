@@ -7,15 +7,12 @@ from utako.presenter.score_updater import ScoreUpdater
 from utako.model.abstract_model import database
 
 def update_song_score():
-    try:
-        score_results = ScoreUpdater()()
-        logger.info(
-            'ScoreUpdater finished. Updated Score: %i',
-            len(score_results)
-        )
-    finally:
-        database.close()
+    sent_movies = ScoreUpdater()()
+    logger.info(
+        'ScoreUpdater triggered. Queued Movie: %i',
+        sent_movies
+    )
 
     return {
-        'score_results': score_results,
+        sent_movies
     }
