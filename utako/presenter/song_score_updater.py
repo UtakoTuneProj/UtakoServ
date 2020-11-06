@@ -67,7 +67,7 @@ class SongScoreUpdater:
             self._create_update_model(**score_seeds)
         ], fields=[Status.score, Status.score_status])
 
-    def update(self, *status_ids, enqueue=True):
+    def update(self, *status_ids, enqueue=True, batch_size=50):
         '''
         SongScoreUpdater.update(*status_ids)
         batch update scores for specified ids
@@ -75,8 +75,20 @@ class SongScoreUpdater:
 
         In: *status_ids: target id(s)
         '''
+        batch_count = ( len(status_ids) // batch_size ) + 1
+
+        results = []
+        for i in range(batch_count):
+            results.extend(
+                self._batch_update(*status_ids[batch_size*i:batch_size*(i+1)])
+            )
+
+        return results
+
+    def _batch_update(self, *status_ids, enqueue=True):
         chart_records = self._fetch_target_records(status_ids)
         score_update_models = self._create_update_models(chart_records)
+
         with database.atomic():
             Status.bulk_update(
                 score_update_models,
@@ -84,16 +96,16 @@ class SongScoreUpdater:
                 batch_size=50
             )
 
-        analyze_queue = Status.select(Status.id).where(
-            ( Status.score > settings['analyze_score_limit'] )
-            & ( Status.id.in_(status_ids) )
-            & ( Status.id.not_in(
-                SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
-            ))
-        )
+            analyze_queue = Status.select(Status.id).where(
+                ( Status.score > settings['analyze_score_limit'] )
+                & ( Status.id.in_(status_ids) )
+                & ( Status.id.not_in(
+                    SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
+                ))
+            )
 
-        if enqueue:
-            [ SongAnalyzeSender().send(movie_id=m.id) for m in analyze_queue ]
+            if enqueue:
+                [ SongAnalyzeSender().send(movie_id=m.id) for m in analyze_queue ]
 
         result_map_func = lambda status_record: {
             'id':           status_record.id,
@@ -148,20 +160,19 @@ class SongScoreUpdater:
 
         # FIXME: consider faster implements
         # (Batch Operation, Operation Without Record Fetch...)
-        returned_models = []
-        for r in chart_records:
-            update_model = self._create_update_model(
-                status_id=r.status.id,
-                movie_first_retrieve=r.status.postdate,
-                view=r.view,
-                comment=r.comment,
-                mylist=r.mylist,
-                minutes=r.time,
+        return [ self._create_update_model(**args) for args in
+            map(
+                lambda record: {
+                    'status_id':            record.status.id,
+                    'movie_first_retrieve': record.status.postdate,
+                    'view':                 record.view,
+                    'comment':              record.comment,
+                    'mylist':               record.mylist,
+                    'minutes':              record.time,
+                },
+                chart_records
             )
-            update_model.save()
-            returned_models.append(update_model)
-
-        return returned_models
+        ]
 
     def _create_update_model(self,
         status_id: str,
