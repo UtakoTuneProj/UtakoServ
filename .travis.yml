@@ -5,9 +5,9 @@ python:
 
 env:
   global:
-    PYTHONPATH: "."
-    PYTHON_ENV: "test"
-    secure: v5FqFMeRDb17rHl/AcBpn//HwV+UXv4Yc0/0S5ewCktl5Pzd7kHhpEP7JdH60rRNS5zhW4WMq564EosZZuBkhIdv9uw/ixK/R1CQGuOj0nH+Cx5kHY/2EenpcEpXiF8g1+lpHfKmP6WyZr1hVy+Zp+NdfAdROPxKMUJPt2tIYThh79C30C457iGQW9FbRixf8R2FRuM596HEGl0GPwt8g3fNYp3pQArnlGYwGhip+aL+1T5jENTzCd88itMK4HU37FGq28ZYxF2LwbJFqZYs579bGjBuDpwXRP6kEUyT5/Qeisu64NpSAi7FXCLDyQv/H77XFp1HGqbt+SICLok2F44F7Qtud3k7O4OGptgd8LCq2h3qvFxC4qQ24EhtAkqur+THBuVx7IJTIeOdiCJJAyERXxP6gg7jq8gXeEi0WTL/YU3j6Ud7t5obHJOW9fr8g0hvSsNhvFyIQZvnKvLkOdlJN1Zs4WUgDmQ7LlPct97PvevRbjbVzfPT19jW4VpzbRCE9HFKPldFLwXgTBIkNvkjzgNwRRGgYdkD54ogEldCuOJ0Jz+US10A7See+M4McRJfkiBFWGlJ1GYZh4UMLliU/fBpLLR37Ln98XfuSniv7MhYXfhA8AJJIC2VCUerIQBVgU6H++tHIqBhOoE+FyuyzPBXHFF91kNiWTQIJhk=
+    - PYTHONPATH=.
+    - PYTHON_ENV=test
+    - secure: "v5FqFMeRDb17rHl/AcBpn//HwV+UXv4Yc0/0S5ewCktl5Pzd7kHhpEP7JdH60rRNS5zhW4WMq564EosZZuBkhIdv9uw/ixK/R1CQGuOj0nH+Cx5kHY/2EenpcEpXiF8g1+lpHfKmP6WyZr1hVy+Zp+NdfAdROPxKMUJPt2tIYThh79C30C457iGQW9FbRixf8R2FRuM596HEGl0GPwt8g3fNYp3pQArnlGYwGhip+aL+1T5jENTzCd88itMK4HU37FGq28ZYxF2LwbJFqZYs579bGjBuDpwXRP6kEUyT5/Qeisu64NpSAi7FXCLDyQv/H77XFp1HGqbt+SICLok2F44F7Qtud3k7O4OGptgd8LCq2h3qvFxC4qQ24EhtAkqur+THBuVx7IJTIeOdiCJJAyERXxP6gg7jq8gXeEi0WTL/YU3j6Ud7t5obHJOW9fr8g0hvSsNhvFyIQZvnKvLkOdlJN1Zs4WUgDmQ7LlPct97PvevRbjbVzfPT19jW4VpzbRCE9HFKPldFLwXgTBIkNvkjzgNwRRGgYdkD54ogEldCuOJ0Jz+US10A7See+M4McRJfkiBFWGlJ1GYZh4UMLliU/fBpLLR37Ln98XfuSniv7MhYXfhA8AJJIC2VCUerIQBVgU6H++tHIqBhOoE+FyuyzPBXHFF91kNiWTQIJhk="
 addons:
   apt:
     packages:
@@ -21,9 +21,11 @@ before_install:
   - pip install codecov
   - pip install pipenv
   - |-
-      tr , \\t <<\__END__ >>.gitcookies
+    bash -c '
+      tr , \t << __END__ >> .gitcookies
       ${GIT_COOKIE_SECRET}
       __END__
+    '
   - git config --global http.cookiefile .gitcookies
 
 install:
