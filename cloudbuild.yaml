@@ -29,8 +29,6 @@ steps:
       touch .gitcookies
       chmod 0600 .gitcookies
 
-      git config --global http.cookiefile .gitcookies
-
       tr , \\t <<\__END__ >>.gitcookies
       ${_GIT_COOKIE_SECRET}
       __END__
