@@ -19,7 +19,7 @@ before_install:
   - pip install -U pip
   - pip install codecov
   - pip install pipenv
-  - openssl aes-256-cbc -K $encrypted_ddc939ecf3a5_key -iv $encrypted_ddc939ecf3a5_iv -in .gitcookie.enc -out .gitcookie -d
+  - openssl aes-256-cbc -K $encrypted_ddc939ecf3a5_key -iv $encrypted_ddc939ecf3a5_iv -in .gitcookies.enc -out .gitcookies -d
   - git config --global http.cookiefile .gitcookies
 
 install:
