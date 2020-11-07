@@ -156,7 +156,7 @@ class SongScoreUpdater:
         In: chart_records: list[Chart]: latest chart records used to update status scores
         Out: list[UpdateQuery]
         '''
-        self.logger.info('Number of chart_records = {}'.format(len(chart_records)))
+        self.logger.debug('SongScoreUpdater: Number of chart_records = {}'.format(len(chart_records)))
 
         # FIXME: consider faster implements
         # (Batch Operation, Operation Without Record Fetch...)
