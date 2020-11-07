@@ -10,7 +10,7 @@ COPY  ./Pipfile ./Pipfile.lock ./.gitcookies /UtakoServ/
 WORKDIR /UtakoServ
 RUN git config --global http.cookiefile .gitcookies &&\
     pipenv install --system --deploy &&\
-    rm -rf ~/.gitcookies
+    rm -rf .gitcookies
 
 COPY ./ /UtakoServ/
 
