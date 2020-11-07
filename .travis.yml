@@ -20,10 +20,7 @@ before_install:
   - pip install -U pip
   - pip install codecov
   - pip install pipenv
-  - |-
-      tr , \t << __END__ >> .gitcookies
-      ${GIT_COOKIE_SECRET}
-      __END__
+  - echo $GIT_COOKIE_SECRET | tr , \t >> .gitcookies
   - git config --global http.cookiefile .gitcookies
 
 install:
