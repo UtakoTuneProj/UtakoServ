@@ -20,21 +20,13 @@ before_install:
   - pip install -U pip
   - pip install codecov
   - pip install pipenv
-
-install:
   - |-
-    bash -c '
-      eval 'set +o history' 2>/dev/null || setopt HIST_IGNORE_SPACE 2>/dev/null
-      touch .gitcookies
-      chmod 0600 .gitcookies
-
-      git config --global http.cookiefile .gitcookies
-
       tr , \\t <<\__END__ >>.gitcookies
       ${GIT_COOKIE_SECRET}
       __END__
-      eval 'set -o history' 2>/dev/null || unsetopt HIST_IGNORE_SPACE 2>/dev/null
-    '
+  - git config --global http.cookiefile .gitcookies
+
+install:
   - pipenv install --dev --system --deploy
   - rm -rf .gitcookies
 
