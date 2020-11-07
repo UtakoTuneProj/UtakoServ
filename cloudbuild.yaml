@@ -18,7 +18,7 @@ steps:
     - 'cp'
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
-- name: 'gcr.io/google.com/cloudsdktook/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args:
     - '-c'
