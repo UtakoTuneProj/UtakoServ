@@ -13,6 +13,4 @@ def update_song_score():
         sent_movies
     )
 
-    return {
-        sent_movies
-    }
+    return sent_movies
