@@ -18,21 +18,11 @@ steps:
     - 'cp'
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
-
-# Inject gitcookie to enable google cloud source repositories
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktook/cloud-sdk'
   entrypoint: 'bash'
   args:
     - '-c'
-    - |-
-      eval 'set +o history' 2>/dev/null || setopt HIST_IGNORE_SPACE 2>/dev/null
-      touch .gitcookies
-      chmod 0600 .gitcookies
-
-      tr , \\t <<\__END__ >>.gitcookies
-      ${_GIT_COOKIE_SECRET}
-      __END__
-      eval 'set -o history' 2>/dev/null || unsetopt HIST_IGNORE_SPACE 2>/dev/null
+    - 'gcloud secrets versions access latest --secret=utako-git-cookie-${_ENVIRONMENT}-secret > .gitcookies'
 
 # build container
 - name: 'docker'
