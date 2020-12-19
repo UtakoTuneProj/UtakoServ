@@ -18,25 +18,31 @@ steps:
     - 'cp'
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
-
-# build container
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args:
     - '-c'
+    - 'gcloud secrets versions access latest --secret=utako-git-cookie-${_ENVIRONMENT}-secret > .gitcookies'
+
+# build container
+- name: 'docker'
+  entrypoint: 'sh'
+  args:
+    - '-c'
     - "docker pull asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest || exit 0"
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: [
     'build',
+    '--network=cloudbuild',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
     '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}',
     '--cache-from', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
     '-f', 'Dockerfile', '.']
 
 # push container
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker'
   args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}']
 
 # deploy to cloud run

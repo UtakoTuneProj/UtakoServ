@@ -10,6 +10,7 @@ import yaml
 import utako
 from utako.delegator.song_analyze import SongAnalyzeReceiver
 from utako.delegator.create_song_relation import CreateSongRelationReceiver
+from utako.delegator.song_score import SongScoreReceiver
 
 app = Flask(__name__)
 
@@ -102,10 +103,20 @@ def hourly():
 
 @app.route('/trigger/update_song_score', methods=['POST'])
 def update_song_score():
-    task_result = utako.task.update_song_score.update_song_score()
+    sent_movies = utako.task.update_song_score.update_song_score()
     return {
         'status': 'complete',
-        'result': task_result,
+        'result': sent_movies,
+    }
+
+@app.route('/worker/score', methods=['POST'])
+@validate_request(['movie_ids'])
+def song_score_worker(data):
+    job = SongScoreReceiver()
+    result = job.receive(data)
+    return {
+        'status': 'complete',
+        'result': result,
     }
 
 @app.route('/trigger/recreate_song_relations', methods=['POST'])

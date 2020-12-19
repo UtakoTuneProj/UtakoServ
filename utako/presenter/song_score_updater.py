@@ -17,13 +17,17 @@ from utako.delegator.song_analyze import SongAnalyzeSender
 
 from utako import root_logger
 
-BACKWARD_VIEW_WEIGHT = np.array((0.68, 0.16, 0.017, -0.15, 0.69))
-BACKWARD_COMMENT_WEIGHT = np.array((-0.066, 0.86, 0.064, -0.041, 0.19))
-BACKWARD_MYLIST_WEIGHT = np.array((-0.04, 0.14, 0.8, -0.03, 0.14))
+BACKWARD_PREDICT_MATRIX = np.array((
+    ( 0.68 , 0.16, 0.017, -0.15 , 0.69),
+    (-0.066, 0.86, 0.064, -0.041, 0.19),
+    (-0.04 , 0.14, 0.8  , -0.03 , 0.14),
+))
 
-FORWARD_VIEW_WEIGHT = np.array((0.90, 0.028, 0.19, -0.41, 1.62))
-FORWARD_COMMENT_WEIGHT = np.array((0.20, 0.83, 0.068, -0.28, 0.70))
-FORWARD_MYLIST_WEIGHT = np.array((0.18, 0.022, 0.95, -0.26, 0.64))
+FORWARD_PREDICT_MATRIX = np.array((
+    (0.90, 0.028, 0.19 , -0.41, 1.62),
+    (0.20, 0.83 , 0.068, -0.28, 0.70),
+    (0.18, 0.022, 0.95 , -0.26, 0.64),
+))
 
 class SongScoreUpdater:
     logger = root_logger.getChild('presenter.song_score_updater')
@@ -63,7 +67,7 @@ class SongScoreUpdater:
             self._create_update_model(**score_seeds)
         ], fields=[Status.score, Status.score_status])
 
-    def update(self, *status_ids, enqueue=True):
+    def update(self, *status_ids, enqueue=True, batch_size=50):
         '''
         SongScoreUpdater.update(*status_ids)
         batch update scores for specified ids
@@ -71,21 +75,37 @@ class SongScoreUpdater:
 
         In: *status_ids: target id(s)
         '''
+        batch_count = ( ( len(status_ids) - 1 ) // batch_size ) + 1
+
+        results = []
+        for i in range(batch_count):
+            results.extend(
+                self._batch_update(*status_ids[batch_size*i:batch_size*(i+1)])
+            )
+
+        return results
+
+    def _batch_update(self, *status_ids, enqueue=True):
         chart_records = self._fetch_target_records(status_ids)
         score_update_models = self._create_update_models(chart_records)
+
         with database.atomic():
-            [ record.save() for record in score_update_models ]
+            Status.bulk_update(
+                score_update_models,
+                fields=[Status.score, Status.score_status],
+                batch_size=50
+            )
 
-        analyze_queue = Status.select(Status.id).where(
-            ( Status.score > settings['analyze_score_limit'] )
-            & ( Status.id.in_(status_ids) )
-            & ( Status.id.not_in(
-                SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
-            ))
-        )
+            analyze_queue = Status.select(Status.id).where(
+                ( Status.score > settings['analyze_score_limit'] )
+                & ( Status.id.in_(status_ids) )
+                & ( Status.id.not_in(
+                    SongIndex.select(SongIndex.status_id).where(SongIndex.version == settings['model_version'])
+                ))
+            )
 
-        if enqueue:
-            [ SongAnalyzeSender().send(movie_id=m.id) for m in analyze_queue ]
+            if enqueue:
+                [ SongAnalyzeSender().send(movie_id=m.id) for m in analyze_queue ]
 
         result_map_func = lambda status_record: {
             'id':           status_record.id,
@@ -136,8 +156,10 @@ class SongScoreUpdater:
         In: chart_records: list[Chart]: latest chart records used to update status scores
         Out: list[UpdateQuery]
         '''
-        self.logger.info('Number of chart_records = {}'.format(len(chart_records)))
+        self.logger.debug('SongScoreUpdater: Number of chart_records = {}'.format(len(chart_records)))
 
+        # FIXME: consider faster implements
+        # (Batch Operation, Operation Without Record Fetch...)
         return [ self._create_update_model(**args) for args in
             map(
                 lambda record: {
@@ -177,18 +199,16 @@ class SongScoreUpdater:
             mylist: int,
             days: float,
         ) -> Tuple[float, float, float]:
-            predict_seeds = np.array((
+            predict_seeds = np.log10(np.array((
                 view + 1,
                 comment + 1,
                 mylist + 1,
                 days,
                 10
-            ))
-            view = ( predict_seeds ** BACKWARD_VIEW_WEIGHT ).prod()
-            comment = ( predict_seeds ** BACKWARD_COMMENT_WEIGHT ).prod()
-            mylist = ( predict_seeds ** BACKWARD_MYLIST_WEIGHT ).prod()
+            )))
+            predict_result = 10 ** (np.dot(BACKWARD_PREDICT_MATRIX, predict_seeds))
 
-            return ( view, comment, mylist )
+            return tuple(predict_result)
 
         def forward_predict(
             view: int,
@@ -196,18 +216,16 @@ class SongScoreUpdater:
             mylist: int,
             minutes: float,
         ) -> Tuple[float, float, float]:
-            predict_seeds = np.array((
+            predict_seeds = np.log10(np.array((
                 view + 1,
                 comment + 1,
                 mylist + 1,
                 minutes + 1,
                 10
-            ))
-            view = ( predict_seeds ** FORWARD_VIEW_WEIGHT ).prod()
-            comment = ( predict_seeds ** FORWARD_COMMENT_WEIGHT ).prod()
-            mylist = ( predict_seeds ** FORWARD_MYLIST_WEIGHT ).prod()
+            )))
+            predict_result = 10 ** (np.dot(FORWARD_PREDICT_MATRIX, predict_seeds))
 
-            return ( view, comment, mylist )
+            return tuple(predict_result)
 
         def calculate_score(view: float, comment: float, mylist: float) -> float:
             return np.sqrt(view) * (1 - 0.5 * 10**(-20 * comment / view)) * (1 - 0.5 * 10**(-20 * mylist / view))
