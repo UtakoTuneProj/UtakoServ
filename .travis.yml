@@ -19,12 +19,9 @@ before_install:
   - pip install -U pip
   - pip install codecov
   - pip install pipenv
-  - openssl aes-256-cbc -K $encrypted_5f73c6d3fd42_key -iv $encrypted_5f73c6d3fd42_iv -in .gitcookies.enc -out .gitcookies -d
-  - git config --global http.cookiefile .gitcookies
 
 install:
   - pipenv install --dev --system --deploy
-  - rm -rf .gitcookies
 
 script:
   - pipenv run pytest --cov=utako -r a -v

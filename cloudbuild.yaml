@@ -18,11 +18,6 @@ steps:
     - 'cp'
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - 'gcloud secrets versions access latest --secret=utako-git-cookie-${_ENVIRONMENT}-secret > .gitcookies'
 
 # build container
 - name: 'docker'
