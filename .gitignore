@@ -24,3 +24,4 @@ conf/auth.*.conf
 !conf/auth.test.conf
 
 .env
+conf/credentials.json
