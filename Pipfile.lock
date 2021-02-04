@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "99eec59a82cdc9fc53a3eabada4dc642def9882ca567a3497004956cfde329e4"
+            "sha256": "69342cc98ec11838ea60a6a825199eed0c211977de1f19e7d8762de2337dd8fb"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6"
+            "python_version": "3.8"
         },
         "sources": [
             {
@@ -221,7 +221,7 @@
                 "sha256:ea170341a4a9078a067b431044cd56c73553425833a7c2bb81734777a230ad4b",
                 "sha256:ef2ed6d0ac4de4ac602903e203eccd25ec8e37f1446fe1a3d2953a658035e0a5"
             ],
-            "markers": "python_full_version >= '3.5.0'",
+            "markers": "python_version >= '3.5'",
             "version": "==1.1.2"
         },
         "google-resumable-media": {
@@ -917,7 +917,7 @@
                 "sha256:38b74ca20ff3bb42caca8b00055111d74159ee95c4370882bbff2b93d24da725",
                 "sha256:ddc57c96a38beb63db45d6c159b5ab07b6bced12c45a1f07b2b92f272aebfa6b"
             ],
-            "markers": "python_full_version >= '3.5.0'",
+            "markers": "python_version >= '3.5'",
             "version": "==2.1.0"
         },
         "tweepy": {
