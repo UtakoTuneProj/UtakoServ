@@ -22,3 +22,5 @@ conf/model_*.yaml
 conf/*.mxp.yaml
 conf/auth.*.conf
 !conf/auth.test.conf
+
+.env
