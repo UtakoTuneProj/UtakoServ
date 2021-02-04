@@ -55,7 +55,7 @@ class SongIndexUpdater:
     def index_by_movie_ids(
         self,
         movie_ids,
-        retries=5,
+        retries=0,
         is_forced=False
     ):
 
@@ -87,7 +87,7 @@ class SongIndexUpdater:
                 try:
                     song_index = si(movie_id, retries = retries)
                 except youtube_dl.utils.YoutubeDLError as e:
-                    root_logger.warning(e.message)
+                    root_logger.warning(e)
                     if e.exc_info[0] == urllib.error.HTTPError:
                         http_err = e.exc_info[1]
                         if http_err.code == 404:

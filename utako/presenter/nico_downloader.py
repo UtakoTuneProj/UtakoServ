@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from pathlib import Path
-from multiprocessing import Process, Pipe
-from queue import Empty
 import subprocess as sbproc
+import signal
 
 from google.cloud import storage
 import youtube_dl
@@ -28,25 +27,17 @@ class NicoDownloader:
             'logger': root_logger,
             'noprogress': True,
         })
-        pipe_receiver, pipe_sender = Pipe()
-        dl_process = self._create_download_process(pipe_sender, mvid)
+
+        def timeout_handler():
+            raise TimeoutError
+        signal.signal(signal.SIGALRM, timeout_handler)
 
         try:
-            dl_process.start()
-
-            for t in range(dl_timeout_sec):
-                if pipe_receiver.poll(1):
-                    result = pipe_receiver.recv()
-                    root_logger.debug(result)
-                    break
-            else:
-                dl_process.terminate()
-                raise TimeoutError
-
-            if not result['success']:
-                raise result['error']['type'](*result['error']['args'])
+            signal.alarm(dl_timeout_sec)
+            self.downloader.download(['http://www.nicovideo.jp/watch/{}'.format(mvid)])
 
         except youtube_dl.utils.DownloadError as e:
+            signal.alarm(0)
             if re.compile(
                 "niconico reports error: (invalid_v[123]|domestic_video)"
             ).search(e.args[0]):
@@ -58,6 +49,7 @@ class NicoDownloader:
                 self(mvid, retries=retries - 1, dl_timeout_sec=dl_timeout_sec, force=force)
 
         except TimeoutError as e:
+            signal.alarm(0)
             dl_process.terminate()
             root_logger.warning('Downloading Video {} has been timed out'.format(mvid))
             if use_partial:
@@ -65,6 +57,7 @@ class NicoDownloader:
             raise e
 
         else:
+            signal.alarm(0)
             process = sbproc.run([
                 'ffmpeg',
                 '-i', #infile
@@ -83,26 +76,6 @@ class NicoDownloader:
                 root_logger.warning(process.stderr)
                 time.sleep(10)
                 self(mvid, retries=retries, dl_timeout_sec=dl_timeout_sec, force=force)
-
-    def _create_download_process(self, pipe, movie_id):
-        def wrapper(pipe, movie_id):
-            try:
-                self.downloader.download(['http://www.nicovideo.jp/watch/{}'.format(movie_id)])
-            except Exception as e:
-                pipe.send({
-                    'success': False,
-                    'error': {
-                        'type': type(e),
-                        'args': e.args
-                    }
-                })
-            else:
-                pipe.send({'success': True})
-
-        return Process(
-            target=wrapper,
-            args=(pipe, movie_id)
-        )
 
     def _save_partial_file(self, movie_id):
         src_path = Path(self.output_filename_template % { 'id': movie_id } + '.part')
