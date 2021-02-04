@@ -18,7 +18,7 @@ class NicoDownloader:
         self.partial_file_bucket = client.get_bucket(config['gcp']['STORAGE_PARTIAL_BUCKET'])
         self.output_filename_template = 'tmp/mp4/%(id)s.mp4'
 
-    def __call__(self, mvid, retries=5, force=False, dl_timeout_sec=0, use_partial=False): #ランキング取得・キュー生成部
+    def __call__(self, mvid, retries=1, force=False, dl_timeout_sec=60, use_partial=False): #ランキング取得・キュー生成部
         if use_partial:
             self._load_partial_file(mvid)
         self.downloader = youtube_dl.YoutubeDL({
@@ -37,7 +37,7 @@ class NicoDownloader:
             for t in range(dl_timeout_sec):
                 if pipe_receiver.poll(1):
                     result = pipe_receiver.recv()
-                    print(result)
+                    root_logger.debug(result)
                     break
             else:
                 dl_process.terminate()
@@ -52,10 +52,10 @@ class NicoDownloader:
             ).search(e.args[0]):
                 raise RestrictedMovieException(mvid)
             elif retries < 1:
-                raise result
+                raise e
             else:
                 time.sleep(10)
-                self(mvid, retries = retries - 1, force = force)
+                self(mvid, retries=retries - 1, dl_timeout_sec=dl_timeout_sec, force=force)
 
         except TimeoutError as e:
             dl_process.terminate()
@@ -82,18 +82,17 @@ class NicoDownloader:
                 os.remove('tmp/mp4/{}.mp4'.format(mvid))
                 root_logger.warning(process.stderr)
                 time.sleep(10)
-                self(mvid, retries = retries, force = force)
+                self(mvid, retries=retries, dl_timeout_sec=dl_timeout_sec, force=force)
 
     def _create_download_process(self, pipe, movie_id):
         def wrapper(pipe, movie_id):
             try:
                 self.downloader.download(['http://www.nicovideo.jp/watch/{}'.format(movie_id)])
             except Exception as e:
-                import sys
                 pipe.send({
                     'success': False,
                     'error': {
-                        'type':type(e),
+                        'type': type(e),
                         'args': e.args
                     }
                 })
