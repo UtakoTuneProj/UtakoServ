@@ -21,7 +21,6 @@ import xml.etree.ElementTree as ET
 from chainer import cuda, Variable, optimizers, serializers, Chain, ChainList
 import chainer.functions  as F
 import chainer.links as L
-import MySQLdb
 import numpy as np
 import scipy.cluster
 import tweepy
