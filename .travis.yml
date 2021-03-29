@@ -24,7 +24,7 @@ install:
   - pipenv install --dev --system --deploy
 
 script:
-  - pipenv run pytest --cov=utako -r a -v
+  - pipenv run test
 
 after_success:
   - codecov

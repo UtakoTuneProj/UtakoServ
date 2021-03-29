@@ -9,6 +9,7 @@ pull-devel-secrets = "bash -c 'gcloud secrets versions access latest --secret=${
 pull-prod-secrets = "bash -c 'gcloud secrets versions access latest --secret=${SECRET_NAME_PRODUCTION} > conf/auth.production.conf'"
 push-devel-secrets = "bash -c 'gcloud secrets versions add ${SECRET_NAME_DEVELOP} --data-file=conf/auth.develop.conf'"
 push-prod-secrets = "bash -c 'gcloud secrets versions add ${SECRET_NAME_PRODUCTION} --data-file=conf/auth.production.conf'"
+test = "bash -c 'PYTHONPATH=. PYTHON_ENV=test pytest --cov=utako -r a -v'"
 
 [dev-packages]
 pytest = "*"
