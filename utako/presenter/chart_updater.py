@@ -15,9 +15,7 @@ class ChartUpdater:
     #statusDBを読みチャートを更新
 
         todays_mv = Status.select().where(
-            Status.postdate
-            > datetime.datetime.now()
-            - datetime.timedelta(days = 1),
+            Status.epoch < 24,
             Status.validity == 1
         ).execute()
 
@@ -76,14 +74,6 @@ class ChartUpdater:
 
         isComplete = False
         status = True
-
-        if epoch < 24:
-            if passedmin < epoch*60 or ((epoch+1)*60 + 30 < passedmin):
-                status = False
-        elif epoch > 24:
-            status = False
-        elif passedmin < 10140 or 10200 + 30 < passedmin:
-            status = False
 
         if status and epoch == 24:
             source = []
