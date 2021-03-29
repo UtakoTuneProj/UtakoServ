@@ -95,7 +95,15 @@ def recreate_song_relations_by_movie_id(data):
 
 @app.route('/trigger/hourly', methods=['POST'])
 def hourly():
-    task_result = utako.task.check_status_chart.check_status_chart()
+    task_result = utako.task.check_chart.check_chart()
+    return {
+        'status': 'complete',
+        'result': task_result,
+    }
+
+@app.route('/trigger/daily', methods=['POST'])
+def daily():
+    task_result = utako.task.check_status.check_status()
     return {
         'status': 'complete',
         'result': task_result,
