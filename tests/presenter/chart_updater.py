@@ -27,12 +27,12 @@ class CaptiveChartUpdater:
         ([  # first retrieved (over delay margin)
             'sm98765432', 0, 0, 1, None,
             NOW - timedelta(hours=1, minutes=30, seconds=1)
-        ],  True, False),
+        ],  True, True),
 
         ([  # too early update
             'sm98765432', 23, 0, 1, None,
             NOW - timedelta(hours=23, seconds=-1)
-        ],  True, False),
+        ],  True, True),
 
         ([  # last epoch at postday
             'sm98765432', 23, 0, 1, None,
@@ -62,7 +62,7 @@ class CaptiveChartUpdater:
         ([  # too late for update on after a week
             'sm98765432', 24, 0, 1, None,
             NOW - timedelta(days=7, hours=2, minutes=30, seconds=1)
-        ],  True, False),
+        ],  True, True),
         ])
     def should_insert_chart_record_from_thumb(
         self,

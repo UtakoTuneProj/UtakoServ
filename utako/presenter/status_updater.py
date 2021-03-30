@@ -38,19 +38,38 @@ class StatusUpdater:
 
         return {'inserted_row_counts': inserted_row_counts}
 
-    def _rankfilereq(self, searchtag = "VOCALOID", page = 0):
-    #searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
-        rankreqbase="http://api.search.nicovideo.jp/api/v2/video/contents/search" + \
-                    "?q={}".format(urllib.parse.quote(searchtag)) + \
-                    "&targets=tags" + \
-                    "&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime" + \
-                    "&_sort=-startTime" + \
-                    "&_offset={}".format(page*100) + \
-                    "&_limit=100" + \
-                    "&_context=UtakoOrihara(VocaloidRankingBot)"
+    def _rankfilereq(
+        self,
+        searchtag="VOCALOID",
+        limit=100,
+        page=0
+    ):
+        '''
+        searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
+        '''
+
+        search_endpoint="https://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search" + \
+                "?q={}".format(urllib.parse.quote(searchtag)) + \
+                "&targets=tags" + \
+                "&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime" + \
+                "&_sort=-startTime" + \
+                "&_offset={}".format(page*limit) + \
+                "&_limit={}".format(limit) + \
+                "&_context=UtakoOrihara(VocaloidRankingBot)"
+
+        request = urllib.request.Request(
+                    url=search_endpoint,
+                    headers={
+                        "User-Agent": "UtakoTuneProject",
+                    },
+                    method="GET",
+                )
 
         try:
-            urllib.request.urlretrieve(rankreqbase, "tmp/ranking/" + str(page) + ".json")
+            with urllib.request.urlopen(request) as response:
+                with open("tmp/ranking/" + str(page) + ".json", mode="wb") as f:
+                    f.write(response.read())
+
         except urllib.error.URLError:
             print("Search query for",searchtag,"is failed. Maybe overloaded.")
 
