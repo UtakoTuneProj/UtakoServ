@@ -49,9 +49,9 @@ steps:
   args: [
     'build',
     '--network=cloudbuild',
-    '-t', '${_IMAGE_JOBRUNNER}:latest',
-    '-t', '${_IMAGE_JOBRUNNER}:${SHORT_SHA}',
-    '--cache-from', '${_IMAGE_JOBRUNNER}:latest',
+    '-t', '${_IMAGE_ANALYZER}:latest',
+    '-t', '${_IMAGE_ANALYZER}:${SHORT_SHA}',
+    '--cache-from', '${_IMAGE_ANALYZER}:latest',
     '-f', 'Dockerfile', '.']
 
 # push container
