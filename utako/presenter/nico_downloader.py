@@ -5,7 +5,7 @@ import subprocess as sbproc
 import signal
 
 from google.cloud import storage
-import youtube_dl
+import yt_dlp
 
 from utako import root_logger
 from utako.common_import import *
@@ -20,7 +20,7 @@ class NicoDownloader:
     def __call__(self, mvid, retries=1, force=False, dl_timeout_sec=60, use_partial=False): #ランキング取得・キュー生成部
         if use_partial:
             self._load_partial_file(mvid)
-        self.downloader = youtube_dl.YoutubeDL({
+        self.downloader = yt_dlp.YoutubeDL({
             'outtmpl': self.output_filename_template,
             'retries': retries,
             'format': 'worstaudio/worst',
@@ -36,7 +36,7 @@ class NicoDownloader:
             signal.alarm(dl_timeout_sec)
             self.downloader.download(['http://www.nicovideo.jp/watch/{}'.format(mvid)])
 
-        except youtube_dl.utils.DownloadError as e:
+        except yt_dlp.utils.DownloadError as e:
             signal.alarm(0)
             if re.compile(
                 "niconico reports error: (invalid_v[123]|domestic_video)"
