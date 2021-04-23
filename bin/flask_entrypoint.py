@@ -71,7 +71,7 @@ def analyze_by_movie_id(data):
     job = SongAnalyzeReceiver()
     status = job.receive(data, host=request.host)
 
-    if status in ['succeeded', 'skipped', 'deleted']:
+    if status in ['succeeded', 'skipped', 'deleted', 'redirect']:
         return {
             'status': 'complete',
             'job_result': status
