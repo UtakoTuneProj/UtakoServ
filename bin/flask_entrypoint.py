@@ -68,7 +68,6 @@ def analyze_by_count(data):
 @app.route('/trigger/analyze/by_movie_id', methods=['POST'])
 @validate_request(['movie_id', 'model_version'])
 def analyze_by_movie_id(data):
-    print(request.host)
     job = SongAnalyzeReceiver()
     status = job.receive(data, host=request.host)
 
