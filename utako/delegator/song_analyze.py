@@ -27,7 +27,7 @@ class SongAnalyzeReceiver(UtakoDelegateReceiver):
     def receive(self, data, host=None):
         movie_id = data['movie_id']
 
-        if host is not None and host != common.config['gcp']['TASK_ANALYZE_URL']:
+        if host is not None and host not in common.config['gcp']['TASK_ANALYZE_URL']:
             SongAnalyzeSender().send(movie_id=data['movie_id'])
             return 'redirect'
 
