@@ -1,5 +1,4 @@
 substitutions:
-  _IMAGE_JOBRUNNER: 'asia.gcr.io/${PROJECT_ID}/utako-jobrunner-${_ENVIRONMENT}'
   _IMAGE_ANALYZER: 'asia.gcr.io/${PROJECT_ID}/utako-analyzer-${_ENVIRONMENT}'
 steps:
 
@@ -15,21 +14,6 @@ steps:
     - 'cp'
     - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
     - 'conf/model_0.yaml'
-
-# build jobrunner
-- name: 'docker'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - "docker pull ${_IMAGE_JOBRUNNER}:latest || exit 0"
-- name: 'docker'
-  args: [
-    'build',
-    '--network=cloudbuild',
-    '-t', '${_IMAGE_JOBRUNNER}:latest',
-    '-t', '${_IMAGE_JOBRUNNER}:${SHORT_SHA}',
-    '--cache-from', '${_IMAGE_JOBRUNNER}:latest',
-    '-f', 'Dockerfile', '.']
 
 # fetch analyze model
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -56,28 +40,11 @@ steps:
 
 # push container
 - name: 'docker'
-  args: ['push', '${_IMAGE_JOBRUNNER}:latest']
-- name: 'docker'
-  args: ['push', '${_IMAGE_JOBRUNNER}:${SHORT_SHA}']
-- name: 'docker'
   args: ['push', '${_IMAGE_ANALYZER}:latest']
 - name: 'docker'
   args: ['push', '${_IMAGE_ANALYZER}:${SHORT_SHA}']
 
 # deploy to cloud run
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-    - 'gcloud'
-    - 'run'
-    - 'deploy'
-    - '${_CLOUDRUN_JOBRUNNER_TARGET}'
-    - '--image'
-    - '${_IMAGE_JOBRUNNER}:${SHORT_SHA}'
-    - '--platform'
-    - 'managed'
-    - '--region'
-    - 'asia-northeast1'
-    - '--no-allow-unauthenticated'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
     - 'gcloud'
