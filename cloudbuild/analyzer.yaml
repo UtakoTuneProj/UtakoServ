@@ -1,3 +1,5 @@
+substitutions:
+  _IMAGE_ANALYZER: 'asia.gcr.io/${PROJECT_ID}/utako-analyzer-${_ENVIRONMENT}'
 steps:
 
 # fetch config and analyze model
@@ -10,35 +12,37 @@ steps:
   args:
     - 'gsutil'
     - 'cp'
-    - 'gs://utako-jobrunner-artifacts/model/model_0.model'
-    - 'conf/model_0.model'
+    - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
+    - 'conf/model_0.yaml'
+
+# fetch analyze model
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
     - 'gsutil'
     - 'cp'
-    - 'gs://utako-jobrunner-artifacts/model/model_0.yaml'
-    - 'conf/model_0.yaml'
+    - 'gs://utako-jobrunner-artifacts/model/model_0.model'
+    - 'conf/model_0.model'
 
-# build container
+# build analyzer
 - name: 'docker'
   entrypoint: 'sh'
   args:
     - '-c'
-    - "docker pull asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest || exit 0"
+    - "docker pull ${_IMAGE_ANALYZER}:latest || exit 0"
 - name: 'docker'
   args: [
     'build',
     '--network=cloudbuild',
-    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
-    '-t', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}',
-    '--cache-from', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest',
+    '-t', '${_IMAGE_ANALYZER}:latest',
+    '-t', '${_IMAGE_ANALYZER}:${SHORT_SHA}',
+    '--cache-from', '${_IMAGE_ANALYZER}:latest',
     '-f', 'Dockerfile', '.']
 
 # push container
 - name: 'docker'
-  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:latest']
+  args: ['push', '${_IMAGE_ANALYZER}:latest']
 - name: 'docker'
-  args: ['push', 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}']
+  args: ['push', '${_IMAGE_ANALYZER}:${SHORT_SHA}']
 
 # deploy to cloud run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -46,9 +50,9 @@ steps:
     - 'gcloud'
     - 'run'
     - 'deploy'
-    - '${_CLOUDRUN_TARGET}'
+    - '${_CLOUDRUN_ANALYZER_TARGET}'
     - '--image'
-    - 'asia.gcr.io/$PROJECT_ID/utako-jobrunner-${BRANCH_NAME}:${SHORT_SHA}'
+    - '${_IMAGE_ANALYZER}:${SHORT_SHA}'
     - '--platform'
     - 'managed'
     - '--region'

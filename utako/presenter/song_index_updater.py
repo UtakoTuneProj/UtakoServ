@@ -3,7 +3,7 @@
 from utako.common_import import *
 from utako import root_logger
 from peewee import fn
-import youtube_dl
+import yt_dlp
 
 from utako.model.abstract_model import database
 from utako.model.song_index import SongIndex
@@ -86,7 +86,7 @@ class SongIndexUpdater:
                 root_logger.debug('Analyzing for {}'.format(movie_id))
                 try:
                     song_index = si(movie_id, retries = retries)
-                except youtube_dl.utils.YoutubeDLError as e:
+                except yt_dlp.utils.YoutubeDLError as e:
                     root_logger.warning(e)
                     if e.exc_info[0] == urllib.error.HTTPError:
                         http_err = e.exc_info[1]

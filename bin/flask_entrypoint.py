@@ -24,7 +24,7 @@ def validate_request(required=[]):
         def wrapper(*args, **kwargs):
             data = json.loads(request.get_data(as_text=True))
             err_msg = None
-            if len(required) is not 0:
+            if len(required) != 0:
                 if not data:
                     err_msg = 'No message body'
                 else:
@@ -69,9 +69,9 @@ def analyze_by_count(data):
 @validate_request(['movie_id', 'model_version'])
 def analyze_by_movie_id(data):
     job = SongAnalyzeReceiver()
-    status = job.receive(data)
+    status = job.receive(data, host=request.host)
 
-    if status in ['succeeded', 'skipped', 'deleted']:
+    if status in ['succeeded', 'skipped', 'deleted', 'redirect']:
         return {
             'status': 'complete',
             'job_result': status
