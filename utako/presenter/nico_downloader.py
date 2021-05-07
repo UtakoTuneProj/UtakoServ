@@ -3,6 +3,7 @@
 from pathlib import Path
 import subprocess as sbproc
 import signal
+from pathlib import Path
 
 from google.cloud import storage
 import yt_dlp
@@ -32,9 +33,13 @@ class NicoDownloader:
             raise TimeoutError
         signal.signal(signal.SIGALRM, timeout_handler)
 
+        download_target_path = Path(self.output_filename_template % { 'id': mvid })
+
         try:
             signal.alarm(dl_timeout_sec)
             self.downloader.download(['http://www.nicovideo.jp/watch/{}'.format(mvid)])
+            if not download_target_path.is_file():
+                raise TimeoutError
 
         except yt_dlp.utils.DownloadError as e:
             signal.alarm(0)
@@ -50,7 +55,6 @@ class NicoDownloader:
 
         except TimeoutError as e:
             signal.alarm(0)
-            dl_process.terminate()
             root_logger.warning('Downloading Video {} has been timed out'.format(mvid))
             if use_partial:
                 self._save_partial_file(mvid)
@@ -61,7 +65,7 @@ class NicoDownloader:
             process = sbproc.run([
                 'ffmpeg',
                 '-i', #infile
-                'tmp/mp4/{}.mp4'.format(mvid),
+                download_target_path.as_posix(),
                 '-y' if force else '-n', #overwrite if force is True
                 '-aq', #bitrate
                 '128k',
@@ -72,7 +76,7 @@ class NicoDownloader:
                 'tmp/wav/{}.wav'.format(mvid),#outfile name
             ], stderr=sbproc.PIPE)
             if process.returncode != 0: # if process does not stop accurately
-                os.remove('tmp/mp4/{}.mp4'.format(mvid))
+                download_target_path.unlink(missing_ok=True)
                 root_logger.warning(process.stderr)
                 time.sleep(10)
                 self(mvid, retries=retries, dl_timeout_sec=dl_timeout_sec, force=force)
