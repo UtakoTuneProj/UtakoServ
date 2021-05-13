@@ -62,6 +62,7 @@ class NicoDownloader:
 
         else:
             signal.alarm(0)
+            root_logger.info('Formatting Video {} '.format(mvid))
             process = sbproc.run([
                 'ffmpeg',
                 '-i', #infile
@@ -80,6 +81,7 @@ class NicoDownloader:
                 root_logger.warning(process.stderr)
                 time.sleep(10)
                 self(mvid, retries=retries, dl_timeout_sec=dl_timeout_sec, force=force)
+            root_logger.info('Formatted Video {} '.format(mvid))
 
     def _save_partial_file(self, movie_id):
         src_path = Path(self.output_filename_template % { 'id': movie_id } + '.part')
