@@ -5,8 +5,10 @@ from utako.delegator.song_score import SongScoreSender
 class ScoreUpdater:
     def __call__(self, batch_size=50):
         target_mvs = Status.select(Status.id).where(
-            ( Status.score_status == 1 )
-            | (Status.score_status == None),
+            (
+                ( Status.score_status == 1 )
+                | (Status.score_status == None)
+            ) & Status.validity == True,
         )
         batch_count = ( ( len(target_mvs) - 1 ) // batch_size ) + 1
 
