@@ -26,26 +26,35 @@ class CloudTasksSender:
         ])):
             raise NotImplementedError
 
-        if endpoint[0] is not '/':
+        if endpoint[0] != '/':
             raise ValueError('endpoint must begin with slash')
 
+        self.queue_name = "projects/{}/locations/{}/queues/{}".format(
+            self.project_id,
+            self.location,
+            queue
+        )
         self.client = tasks_v2.CloudTasksClient()
-        self.parent = self.client.queue_path(self.project_id, self.location, queue)
         self.url = self.task_host + endpoint
         self.method = method
 
     def send(self, payload):
-        task = {
-            'http_request': {
-                'http_method': self.method,
-                'url': self.url,
-                'oidc_token': {
-                    'service_account_email': self.task_account
-                }
-            }
-        }
+        task = tasks_v2.Task(
+            http_request=tasks_v2.HttpRequest(
+                http_method=self.method,
+                url=self.url,
+                oidc_token=tasks_v2.OidcToken(
+                    service_account_email=self.task_account
+                )
+             )
+        )
 
         if payload is not None:
-            task['http_request']['body'] = json.dumps(payload).encode("utf-8")
+            task.http_request.body = json.dumps(payload).encode("utf-8")
 
-        return self.client.create_task(self.parent, task)
+        request = tasks_v2.CreateTaskRequest(
+            parent=self.queue_name,
+            task=task
+        )
+
+        return self.client.create_task(request=request)
