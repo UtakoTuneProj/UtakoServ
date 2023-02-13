@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONPATH: '.'
+  PYTHON_ENV: 'test'
+
 jobs:
   build:
 
