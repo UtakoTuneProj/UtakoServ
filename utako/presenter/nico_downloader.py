@@ -29,7 +29,7 @@ class NicoDownloader:
             'noprogress': True,
         })
 
-        def timeout_handler():
+        def timeout_handler(_sig_num, _stackframe):
             raise TimeoutError
         signal.signal(signal.SIGALRM, timeout_handler)
 

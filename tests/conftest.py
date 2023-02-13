@@ -91,6 +91,15 @@ def inject_mock_cloudtask(monkeypatch):
     def _mock_cloudtask(self, request, *args):
         assert isinstance(request, CreateTaskRequest)
 
+    def _mock_init(self, *args, **kwargs):
+        pass
+
+    monkeypatch.setattr(
+        CloudTasksClient,
+        '__init__',
+        _mock_init
+    )
+
     monkeypatch.setattr(
         CloudTasksClient,
         'create_task',
