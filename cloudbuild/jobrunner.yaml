@@ -21,7 +21,7 @@ steps:
   args:
     - '-c'
     - "docker pull ${_IMAGE_JOBRUNNER}:latest || exit 0"
-- name: 'docker'
+- name: 'docker:20'
   args: [
     'build',
     '--network=cloudbuild',
