@@ -45,7 +45,7 @@ class NicoDownloader:
         except yt_dlp.utils.DownloadError as e:
             signal.alarm(0)
             if re.compile(
-                "niconico reports error: (invalid_v[123]|domestic_video)"
+                "niconico reports error: (invalid_v[123]|domestic_video)|非公開設定"
             ).search(e.args[0]):
                 raise RestrictedMovieException(mvid)
             if re.compile(
