@@ -48,7 +48,7 @@ class StatusUpdater:
         searchtagに指定したタグのランキングを取得、指定のない場合はVOCALOIDタグ
         '''
 
-        search_endpoint="https://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search" + \
+        search_endpoint="https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search" + \
                 "?q={}".format(urllib.parse.quote(searchtag)) + \
                 "&targets=tags" + \
                 "&fields=contentId,title,tags,categoryTags,viewCounter,mylistCounter,commentCounter,startTime" + \
