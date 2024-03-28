@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from __init__ import utako, yaml, np, gc, wav
+from __init__ import utako, yaml, np, gc, load_datasets
+
+datasets = load_datasets()
 
 def sae_test(
     fname = 'conf/sae.yaml',
-    wav = wav,
+    wav = datasets['wav'],
     n_train = 90000,
     n_test = 10000,
     randomize = True,

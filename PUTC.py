@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from __init__ import utako, yaml, np, gc, wav, tags_label
+from __init__ import utako, yaml, np, gc, load_datasets
+
+datasets = load_datasets()
 
 def putc_test(
     fname = 'conf/putc.yaml',
-    wav = wav,
-    label = tags_label,
+    wav = datasets['wav'],
+    label = datasets['tags_label'],
     n_train = 90000,
     n_test = 10000,
     randomize = True,
