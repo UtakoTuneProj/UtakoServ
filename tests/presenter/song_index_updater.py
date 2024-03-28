@@ -26,3 +26,17 @@ class CaptiveSongIndexUpdater:
 
         status_record = Status.select().where(Status.id == 'sm98765432').first()
         assert status_record.validity == 0
+
+    @freezegun.freeze_time(NOW)
+    def should_skip_invalid_movies_by_default(
+        self,
+        inject_status,
+    ):
+        inject_status([[
+            'sm98765432', 0, 0, 0, None,
+            NOW - datetime.timedelta(minutes=30)
+        ]])
+
+        result = SongIndexUpdater().index_by_movie_ids(['sm98765432'])
+        assert len(result['skipped']) == 1
+        assert result['skipped'][0] == 'sm98765432'

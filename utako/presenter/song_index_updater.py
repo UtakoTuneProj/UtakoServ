@@ -54,6 +54,15 @@ class SongIndexUpdater:
         ).execute()
         return [queue.movie_id.id for queue in queue_records]
 
+    def _fetch_deleted_movies(self, movie_ids):
+        status_records = Status.select(
+            Status.id
+        ).where(
+            Status.id << movie_ids,
+            Status.validity == 0,
+        ).execute()
+        return [movie.id for movie in status_records]
+
     def index_by_movie_ids(
         self,
         movie_ids,
@@ -62,9 +71,11 @@ class SongIndexUpdater:
     ):
 
         version = settings['model_version']
-        skipped = self._fetch_queue_ongoing_movies(movie_ids)
+        skipped = set(self._fetch_queue_ongoing_movies(movie_ids))
         if not is_forced:
-            skipped += self._fetch_already_analyzed_movies(movie_ids, version)
+            skipped |= set(self._fetch_already_analyzed_movies(movie_ids, version))
+            skipped |= set(self._fetch_deleted_movies(movie_ids))
+        skipped = list(skipped)
 
         filtered_movie_ids = list(set(movie_ids) - set(skipped))
         AnalyzeQueue.update(
