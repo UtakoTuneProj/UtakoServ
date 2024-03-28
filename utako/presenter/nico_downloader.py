@@ -11,6 +11,7 @@ import yt_dlp
 from utako import root_logger
 from utako.common_import import *
 from utako.exception.restricted_movie_exception import RestrictedMovieException
+from utako.exception.mov_deleted_exception import MovDeletedException
 
 class NicoDownloader:
     def __init__(self):
@@ -44,9 +45,13 @@ class NicoDownloader:
         except yt_dlp.utils.DownloadError as e:
             signal.alarm(0)
             if re.compile(
-                "niconico reports error: (invalid_v[123]|domestic_video)"
+                "niconico reports error: (invalid_v[123]|domestic_video)|非公開設定"
             ).search(e.args[0]):
                 raise RestrictedMovieException(mvid)
+            if re.compile(
+                "存在しない|削除された"
+            ).search(e.args[0]):
+                raise MovDeletedException(mvid)
             elif retries < 1:
                 raise e
             else:
