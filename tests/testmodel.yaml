@@ -1,0 +1,11 @@
+#(1,8192)
+-
+  link:
+    type: 'linear'
+    args:
+      in_size: 16
+      out_size: 16
+  func:
+    -
+      type: 'pass'
+      args: {}

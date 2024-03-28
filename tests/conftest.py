@@ -105,3 +105,48 @@ def inject_mock_cloudtask(monkeypatch):
         'create_task',
         _mock_cloudtask
     )
+
+@pytest.fixture()
+def inject_mock_cloudbucket(monkeypatch):
+    from google.cloud.storage.client import Client as GCSclient
+
+    class MockBucket():
+        def __init__(self, name):
+            self.name = name
+        def blob(self, filename):
+            return MockBlob(filename)
+
+    class MockBlob():
+        def __init__(self, name):
+            self.name = name
+        def exists(self):
+            return False
+        def upload_from_file(self, f):
+            return
+        def download_to_file(self, f):
+            return
+
+    monkeypatch.setattr(
+        GCSclient,
+        '__init__',
+        lambda _s, _n: None
+    )
+
+    monkeypatch.setattr(
+        GCSclient,
+        'get_bucket',
+        lambda _s, name: MockBucket(name)
+    )
+
+@pytest.fixture()
+def inject_mock_movie_deleted_exception(monkeypatch):
+    import yt_dlp
+
+    def _mock_throw_error(self, movie_ids):
+        raise yt_dlp.utils.DownloadError('削除された')
+
+    monkeypatch.setattr(
+        yt_dlp.YoutubeDL,
+        'download',
+        _mock_throw_error
+    )

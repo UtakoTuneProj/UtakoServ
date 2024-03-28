@@ -38,14 +38,29 @@ try:
 except KeyError:
     py_env = "test"
 
-if py_env in [ 'development', 'develop', 'devel' ]:
-    config.read('conf/auth.develop.conf')
-elif py_env == 'test':
-    config.read('conf/auth.test.conf')
-elif py_env == 'production':
-    config.read('conf/auth.production.conf')
-else:
-    raise ValueError("env variable PYTHON_ENV must be 'development', 'test' or 'prodcution', not {}".format(py_env))
+conf_files = {
+    'development': {
+        'auth': 'conf/auth.develop.conf',
+        'settings': 'conf/settings.yaml',
+    },
+    'production': {
+        'auth': 'conf/auth.production.conf',
+        'settings': 'conf/settings.yaml',
+    },
+    'test': {
+        'auth': 'conf/auth.test.conf',
+        'settings': 'conf/settings.test.yaml',
+    }
+}
 
-with open('conf/settings.yaml') as f:
+if py_env in [ 'development', 'develop', 'devel' ]:
+    conf_file = conf_files['development']
+else:
+    try:
+        conf_file = conf_files[py_env]
+    except IndexError:
+        raise ValueError("env variable PYTHON_ENV must be 'development', 'test' or 'prodcution', not {}".format(py_env))
+
+config.read(conf_file['auth'])
+with open(conf_file['settings']) as f:
     settings = yaml.safe_load(f)
