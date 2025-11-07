@@ -1,4 +1,4 @@
-FROM python:3.8-buster
+FROM python:3.11-slim-trixie
 LABEL MAINTAINER="nanamachi<7machi@nanamachi.net>"
 
 RUN mkdir /UtakoServ
