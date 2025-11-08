@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from __init__ import utako, yaml, np, gc, wav, songs_label
+from __init__ import utako, yaml, np, gc, load_datasets
+
+datasets = load_datasets()
 
 def sc_test(
     fname = 'conf/sc.yaml',
-    wav = wav,
-    label = songs_label,
+    wav = datasets['wav'],
+    label = datasets['songs_label'],
     n_train = 100000,
     n_test = 10000,
     randomize = True,
     **kwargs
 ):
+
     with open(fname) as f:
         structure = yaml.safe_load(f)
 
